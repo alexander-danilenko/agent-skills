@@ -1,12 +1,12 @@
-# AI Skills Collection
+# ✨ AI Skills Collection
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-Personal skills library for AI coding assistants (Claude Code, Cursor, Codex, OpenCode, GitHub Copilot).
+> 🚀 Personal skills library for AI coding assistants (Claude Code, Cursor, Codex, OpenCode, GitHub Copilot)
 
-## Installation
+## 📦 Installation
 
-Install all skills from this repo:
+Install all skills:
 
 ```bash
 npx skills add alexander-danilenko/ai-skills --skill '*'
@@ -18,33 +18,15 @@ Install a single skill:
 npx skills add alexander-danilenko/ai-skills --skill agents-md-pro
 ```
 
-## Available Skills
+To view the list of available skills, run:
 
-### `agents-md-pro`
+```bash
+npx skills add alexander-danilenko/ai-skills --list
+```
 
-Create, optimize, update, and validate AGENTS.md files with maximum token efficiency.
+## 🌟 Contrib Skills
 
-**Use when:**
-
-- Creating new AGENTS.md files for any repository
-- Optimizing/condensing existing AGENTS.md to reduce token count
-- Updating/refreshing AGENTS.md to sync with codebase changes
-- Validating AGENTS.md quality and completeness
-- Improving AGENTS.md files to be more effective for AI agents
-
-**Core Principles:**
-
-- Token efficiency - every word justifies its cost
-- Commands over explanations - show, don't tell
-- Reference configs - point to files, never duplicate
-- Model-agnostic - universal terminology only
-- Condensed default - always minimal output
-
-[View skill documentation →](./agents-md-pro/SKILL.md)
-
-## Contrib skills
-
-Skills from other repos I use on my daily AI coding workflow:
+Skills from other repos I use daily:
 
 ```bash
 ARGUMENTS=(--agent claude-code --global) && \
@@ -52,11 +34,11 @@ npx skills add anthropics/skills --skill skill-creator "${ARGUMENTS[@]}" && \
 npx skills add Jeffallan/claude-skills --skill '*' "${ARGUMENTS[@]}"
 ```
 
-## Contributing
+## 🤝 Contributing
 
 These are personal skills for my workflow. Feel free to fork and adapt for your own use.
 
-When adding or updating skills, use [Anthropic’s skill-creator skill](https://github.com/anthropics/skills/tree/main/skills/skill-creator) so new skills match the expected format and conventions.
+When adding or updating skills, use [Anthropic's skill-creator skill](https://github.com/anthropics/skills/tree/main/skills/skill-creator) so new skills match the expected format and conventions.
 
 ## License
 
