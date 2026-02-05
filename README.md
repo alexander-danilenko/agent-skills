@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/logo.svg" width="200" alt="AI Skills — code brackets in a badge with skill nodes" />
+  <img src="./assets/logo.svg" width="160" alt="AI Skills — robot" />
 </p>
 
 <h1 align="center">✨ AI Skills Collection</h1>
