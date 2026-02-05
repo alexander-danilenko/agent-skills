@@ -9,7 +9,7 @@ Personal skills library for AI coding assistants (Claude Code, Cursor, Codex, Op
 Install all skills from this repo:
 
 ```bash
-npx skills add alexander-danilenko/ai-skills
+npx skills add alexander-danilenko/ai-skills --skill '*'
 ```
 
 Install a single skill:
@@ -41,6 +41,16 @@ Create, optimize, update, and validate AGENTS.md files with maximum token effici
 - Condensed default - always minimal output
 
 [View skill documentation →](./agents-md-pro/SKILL.md)
+
+## Contrib skills
+
+Skills from other repos I use on my daily AI coding workflow:
+
+```bash
+AGENT=claude-code && \
+npx skills add anthropics/skills --skill skill-creator --agent $AGENT --global && \
+npx skills add Jeffallan/claude-skills --skill '*' --agent $AGENT --global
+```
 
 ## Contributing
 
