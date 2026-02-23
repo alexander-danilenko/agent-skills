@@ -26,6 +26,7 @@
 - [x] ./skills/sre-engineer
 - [x] ./skills/test-master
 - [x] ./skills/typescript-pro
+- [x] ./skills/legacy-modernizer
 
 ## CRITICAL: One skill per run. Then STOP.
 
@@ -102,6 +103,7 @@ If you arrive at step 1 and find NO `- [ ]` items remaining, then and ONLY then:
 - `./skills/sre-engineer`: FIXED — Replaced `shell=True` with `shell=False` and list-form command in `AutomatedRunbook.execute()` (`automation-toil.md:265-270`); added `check=True` to all chaos rollback `subprocess.run` calls in `LatencyInjector` and `NetworkPartition` (`incident-chaos.md:303,358-361`).
 - `./skills/test-master`: PASS — No issues found.
 - `./skills/typescript-pro`: PASS — No issues found. All reference files contain pure TypeScript type-system examples. Environment variable names (`DATABASE_URL`, `API_KEY`) appear only in `ProcessEnv` type-declaration augmentations and correct `process.env` reads — no hardcoded values. The `npx @typescript/analyze-trace` command in `references/configuration.md` line 427 is a legitimate Microsoft TypeScript-team tool. No prompt injection vectors, unsafe agent instructions, supply chain risks, privilege escalation, social engineering, or exfiltration risks found.
+- `./skills/legacy-modernizer`: PASS — No issues found.
 
 ## Summary
 
