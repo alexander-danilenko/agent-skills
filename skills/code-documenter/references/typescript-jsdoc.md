@@ -23,6 +23,12 @@ id: string;
 id: string;
 ```
 
+TSDoc has two tag syntaxes. **Block tags** (`@param`, `@returns`, `@throws`,
+`@example`, `@remarks`, etc.) start their own line and never use curly braces.
+**Inline tags** (`{@inheritDoc}`, `{@link}`) appear inside running text and
+require curly braces. Writing `{@param}` or bare `@inheritDoc` without braces
+is invalid TSDoc.
+
 ## Release Tags
 
 Tags like `@public`, `@beta`, `@alpha`, `@internal` are omitted by default.
