@@ -103,7 +103,11 @@ metadata:
   name: app-secrets
 type: Opaque
 stringData:
-  database-url: "postgres://user:pass@host:5432/db"
+  # NEVER hardcode credentials here — reference an external secret manager instead.
+  # Example using External Secrets Operator (recommended):
+  #   secretStoreRef: name: vault-backend
+  #   data: - secretKey: database-url, remoteRef: key: secret/app/db, property: url
+  database-url: "" # Populated by External Secrets Operator or sealed-secrets at deploy time
 ```
 
 ## Horizontal Pod Autoscaler

@@ -262,9 +262,10 @@ class AutomatedRunbook:
 
             # Execute command
             try:
+                # Use list form to avoid shell injection — never pass shell=True with user-controlled strings
                 result = subprocess.run(
-                    step.command,
-                    shell=True,
+                    step.command if isinstance(step.command, list) else step.command.split(),
+                    shell=False,
                     capture_output=True,
                     text=True,
                     timeout=300,

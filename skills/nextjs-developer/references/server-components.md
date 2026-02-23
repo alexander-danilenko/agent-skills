@@ -285,6 +285,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
     <article>
       {/* Server-rendered content */}
       <h1>{post.title}</h1>
+      {/* SECURITY: Sanitize untrusted HTML before rendering raw — use DOMPurify.sanitize(post.content) */}
       <div dangerouslySetInnerHTML={{ __html: post.content }} />
 
       {/* Client island for interactivity */}

@@ -32,7 +32,9 @@ vercel --prod
     {
       "source": "/api/(.*)",
       "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Origin", "value": "https://your-allowed-origin.com" },
+        // WARNING: Do NOT use "*" in production for credentialed requests — it disables cookies/auth headers.
+        // Restrict to specific trusted origins instead.
         { "key": "Access-Control-Allow-Methods", "value": "GET,POST,PUT,DELETE" }
       ]
     }
@@ -389,7 +391,10 @@ import { revalidatePath } from 'next/cache'
 import { NextRequest } from 'next/server'
 
 export async function POST(request: NextRequest) {
-  const secret = request.nextUrl.searchParams.get('secret')
+  // SECURITY: Read secret from Authorization header, NOT a URL query param.
+  // Query params are logged by proxies/CDNs and appear in browser history.
+  const authHeader = request.headers.get('authorization')
+  const secret = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null
 
   if (secret !== process.env.REVALIDATE_SECRET) {
     return Response.json({ message: 'Invalid secret' }, { status: 401 })

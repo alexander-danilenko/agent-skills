@@ -524,7 +524,7 @@ public static class AuthEndpoints
 ```json
 {
   "JwtSettings": {
-    "Secret": "your-super-secret-key-minimum-32-characters",
+    "Secret": "", // MUST NOT store here — read from environment variable or secret manager at runtime
     "Issuer": "YourApp",
     "Audience": "YourAppUsers",
     "ExpirationMinutes": 60

@@ -187,7 +187,7 @@ def with_connection(
 # Usage
 @with_connection
 def query_user(conn: Connection, user_id: int) -> User:
-    return conn.execute(f"SELECT * FROM users WHERE id = {user_id}")
+    return conn.execute("SELECT * FROM users WHERE id = ?", (user_id,))  # Always use parameterized queries
 ```
 
 ## Mypy Configuration

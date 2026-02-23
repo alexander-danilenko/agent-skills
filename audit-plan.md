@@ -85,21 +85,21 @@ If you arrive at step 1 and find NO `- [ ]` items remaining, then and ONLY then:
 - `./skills/code-reviewer`: PASS — No issues found.
 - `./skills/csharp-developer`: PASS — No issues found.
 - `./skills/database-optimizer`: PASS — No issues found.
-- `./skills/devops-engineer`: WARN — `references/kubernetes.md` line 106 includes a hardcoded placeholder credential (`database-url: "postgres://user:pass@host:5432/db"`) directly inside a K8s Secret manifest example, and `references/docker-patterns.md` lines 66–67 embed plaintext passwords in a Docker Compose dev example. These are clearly illustrative placeholders, but they slightly contradict the skill's own MUST DO rule ("Store secrets in secret managers") and could normalize the pattern of inline credentials for less experienced users. No real credentials found.
-- `./skills/dotnet-core-expert`: WARN — `references/authentication.md` line 527 includes a placeholder JWT secret (`"your-super-secret-key-minimum-32-characters"`) directly in an `appsettings.json` example, which directly contradicts the skill's own MUST NOT DO rule ("Store secrets in code or appsettings.json"). `references/cloud-native.md` lines 54–55 and 66 embed plaintext placeholder passwords (`YourStrong@Passw0rd`) in a Docker Compose dev example. Both are clearly illustrative placeholders, but they model insecure patterns. No real credentials found.
+- `./skills/devops-engineer`: FIXED — Replaced hardcoded K8s Secret DB URL with External Secrets Operator guidance (`kubernetes.md:106`); replaced inline `user:pass` credentials with `${DB_USER}/${DB_PASSWORD}` env var refs in Docker Compose example (`docker-patterns.md:66,75`).
+- `./skills/dotnet-core-expert`: FIXED — Replaced JWT secret placeholder in `appsettings.json` with empty string + MUST NOT comment (`authentication.md:527`); replaced hardcoded `YourStrong@Passw0rd` and JWT secret in Docker Compose with `${SA_PASSWORD}` / `${JWT_SECRET}` env var refs (`cloud-native.md:54-55,66`).
 - `./skills/javascript-pro`: PASS — No issues found.
-- `./skills/nestjs-expert`: WARN — `references/migration-from-express.md` line 989 contains a hardcoded absolute filesystem path (`/Users/dmitry/Projects/claude-skills/skills/legacy-modernizer/references/strangler-fig-pattern.md`) in a cross-reference comment, exposing a developer's username and local directory structure. No real credentials, unsafe commands, prompt injection vectors, or exfiltration risks found.
-- `./skills/nextjs-developer`: WARN — `references/server-components.md` uses raw HTML injection via React prop without any sanitization guidance (normalizes XSS-prone pattern). `references/deployment.md` shows `Access-Control-Allow-Origin: *` without security caveats, and uses a URL query-parameter secret for on-demand revalidation (secrets in URLs appear in access logs and browser history). No real credentials, unsafe agent instructions, prompt injection vectors, or exfiltration risks found.
+- `./skills/nestjs-expert`: FIXED — Removed developer's absolute local filesystem path from cross-reference comment (`migration-from-express.md:989`); replaced with a generic skill-relative reference.
+- `./skills/nextjs-developer`: FIXED — Added DOMPurify sanitization warning before raw HTML render (`server-components.md:288`); replaced `Access-Control-Allow-Origin: *` with specific origin and security caveat (`deployment.md:35`); changed revalidation secret from URL query param to `Authorization: Bearer` header pattern (`deployment.md:392`).
 - `./skills/playwright-expert`: PASS — No issues found.
 - `./skills/prompt-engineer`: PASS — No issues found. The skill actively promotes prompt injection defense (instruction hierarchy, input sandboxing, canary tokens, injection test suite). CI/CD examples correctly use GitHub Secrets for API keys. No hardcoded credentials, unsafe commands, or exfiltration risks.
-- `./skills/python-pro`: WARN — `references/type-system.md` line 190 models SQL string interpolation via f-string (`conn.execute(f"SELECT * FROM users WHERE id = {user_id}")`) inside the Callable/Concatenate type example. While `user_id` is typed `int` in that specific context, the pattern normalizes raw SQL construction and could be copied with string-typed inputs, leading to SQL injection. No hardcoded credentials, unsafe agent instructions, prompt injection vectors, or exfiltration risks found.
+- `./skills/python-pro`: FIXED — Replaced f-string SQL interpolation with parameterized query (`conn.execute("SELECT * FROM users WHERE id = ?", (user_id,))`) (`type-system.md:190`).
 - `./skills/rag-architect`: PASS — No issues found. Placeholder API keys (`"your-api-key"`) appear throughout reference examples but are universally understood tutorial conventions; no real credentials, prompt injection vectors, unsafe commands, or exfiltration risks found.
 - `./skills/react-expert`: PASS — No issues found.
 - `./skills/secure-code-guardian`: PASS — No issues found. All secrets read from environment variables, no hardcoded credentials, no unsafe commands, no prompt injection vectors, no exfiltration risks. `'unsafe-inline'` in `styleSrc` CSP (xss-csrf.md line 37, owasp-prevention.md line 117) is a well-known pragmatic trade-off, not a skill-introduced vulnerability.
-- `./skills/security-reviewer`: WARN — `references/infrastructure-security.md` lines 184 and 192 pass placeholder secrets as CLI arguments (`api_key="secret123"`, `password="vaultpass"`), which are visible in process lists and shell history — contradicting the skill's own secrets-management guidance. `references/penetration-testing.md` lines 88–90 include an unbounded 1000-iteration brute-force loop (`for i in {1..1000}; do curl .../login`) with no rate or scope guard; while covered by "rules of engagement" prose, the loop itself has no safeguards. No real credentials, prompt injection vectors, supply chain risks, or exfiltration instructions found.
+- `./skills/security-reviewer`: FIXED — Replaced CLI-argument secrets with env var refs (`$API_KEY`, `$VAULT_DB_PASSWORD`) (`infrastructure-security.md:184,192`); capped brute-force loop to 50 iterations, added `sleep` guard and explicit authorization note (`penetration-testing.md:88-90`).
 - `./skills/spec-miner`: PASS — No issues found.
 - `./skills/sql-pro`: PASS — No issues found. All reference files contain pure SQL examples with no hardcoded credentials, no prompt injection vectors, no unsafe agent instructions, and no supply chain risks. The session-level `SET enable_seqscan = OFF` in `references/optimization.md` is a standard diagnostic tool, not a security concern.
-- `./skills/sre-engineer`: WARN — `references/automation-toil.md` lines 265–270: `AutomatedRunbook.execute()` calls `subprocess.run(step.command, shell=True, ...)`, passing arbitrary command strings through the shell, which normalizes a command-injection-prone pattern that could be dangerous if `RunbookStep.command` is ever constructed from user-controlled input. `references/incident-chaos.md` lines 295–303, 350–360: `LatencyInjector` and `NetworkPartition` chaos injectors call `subprocess.run(...)` without `check=True`, silently swallowing errors — if `rollback()` fails (e.g., the `tc` or `iptables` delete command errors), chaos state is left in place with no alert or exception. No hardcoded credentials, prompt injection vectors, supply chain risks, or exfiltration instructions found.
+- `./skills/sre-engineer`: FIXED — Replaced `shell=True` with `shell=False` and list-form command in `AutomatedRunbook.execute()` (`automation-toil.md:265-270`); added `check=True` to all chaos rollback `subprocess.run` calls in `LatencyInjector` and `NetworkPartition` (`incident-chaos.md:303,358-361`).
 - `./skills/test-master`: PASS — No issues found.
 - `./skills/typescript-pro`: PASS — No issues found. All reference files contain pure TypeScript type-system examples. Environment variable names (`DATABASE_URL`, `API_KEY`) appear only in `ProcessEnv` type-declaration augmentations and correct `process.env` reads — no hardcoded values. The `npx @typescript/analyze-trace` command in `references/configuration.md` line 427 is a legitimate Microsoft TypeScript-team tool. No prompt injection vectors, unsafe agent instructions, supply chain risks, privilege escalation, social engineering, or exfiltration risks found.
 
@@ -107,26 +107,17 @@ If you arrive at step 1 and find NO `- [ ]` items remaining, then and ONLY then:
 
 - **Total skills audited:** 25
 - **PASS:** 17
-- **WARN:** 8
+- **WARN:** 8 (all remediated — see FIXED entries above)
 - **FAIL:** 0
 
-### WARN Skills
+### Remediation Status
 
-| Skill | Issue |
-|-------|-------|
-| `devops-engineer` | Placeholder inline credentials in K8s Secret and Docker Compose examples contradict the skill's own secrets-management guidance |
-| `dotnet-core-expert` | Placeholder JWT secret in `appsettings.json` example contradicts the skill's own MUST NOT DO rule; plaintext passwords in Docker Compose dev example |
-| `nestjs-expert` | Developer's absolute local filesystem path (including username) leaked in a cross-reference comment |
-| `nextjs-developer` | Raw HTML prop injection example normalizes XSS-prone pattern; wildcard CORS without caveats; URL query-parameter secret in revalidation endpoint |
-| `python-pro` | SQL f-string interpolation example normalizes a pattern that leads to SQL injection when used with string-typed inputs |
-| `security-reviewer` | Placeholder secrets passed as CLI arguments (visible in process list/history); unbounded brute-force loop with no safeguards |
-| `sre-engineer` | `subprocess.run(shell=True)` with arbitrary command strings normalizes command injection; missing `check=True` in chaos rollback calls silently swallows failures |
-
-### Remediation Recommendations
-
-1. **devops-engineer / dotnet-core-expert**: Replace inline credential placeholders with references to secret-manager lookups (e.g., `valueFrom.secretKeyRef` for K8s, `Environment.GetEnvironmentVariable` for .NET). Add a comment directing readers to the skill's own secrets-management rules.
-2. **nestjs-expert**: Remove the absolute developer path from `references/migration-from-express.md` line 989 and replace with a relative or generic cross-reference.
-3. **nextjs-developer**: Add a sanitization note wherever raw HTML injection props are shown; add a security caveat to the `Access-Control-Allow-Origin: *` example; replace the URL query-parameter revalidation secret with an `Authorization` header pattern.
-4. **python-pro**: Replace the f-string SQL example with a parameterized query (`conn.execute("SELECT * FROM users WHERE id = ?", (user_id,))`).
-5. **security-reviewer**: Replace CLI-argument secrets with environment-variable reads; add a rate/scope guard or explicit disclaimer to the brute-force loop example.
-6. **sre-engineer**: Replace `subprocess.run(shell=True)` with a list-form `subprocess.run` call; add `check=True` (or explicit error handling) to all chaos rollback `subprocess.run` calls.
+| Skill | Original Finding | Status |
+|-------|-----------------|--------|
+| `devops-engineer` | Inline credentials in K8s Secret and Docker Compose examples | ✅ FIXED |
+| `dotnet-core-expert` | Hardcoded JWT secret in `appsettings.json`; plaintext passwords in Docker Compose | ✅ FIXED |
+| `nestjs-expert` | Developer's absolute local filesystem path leaked in cross-reference comment | ✅ FIXED |
+| `nextjs-developer` | XSS-prone raw HTML render; wildcard CORS; URL query-param revalidation secret | ✅ FIXED |
+| `python-pro` | SQL f-string interpolation normalizes SQL injection pattern | ✅ FIXED |
+| `security-reviewer` | Secrets as CLI args (visible in process list); unbounded brute-force loop | ✅ FIXED |
+| `sre-engineer` | `shell=True` normalizes command injection; missing `check=True` in chaos rollbacks | ✅ FIXED |

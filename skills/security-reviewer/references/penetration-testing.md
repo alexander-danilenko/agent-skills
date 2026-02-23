@@ -85,9 +85,12 @@ hashcat -m 16500 jwt.txt wordlist.txt
 ### Rate Limiting & Data Exposure
 
 ```bash
-# Test rate limits
-for i in {1..1000}; do
-  curl https://api.target.com/login -d "user=test&pass=test"
+# Test rate limits — ONLY against targets you have explicit written authorization to test
+# Limit iteration count and add delays to avoid unintended DoS impact
+MAX_REQS=50  # adjust per rules of engagement
+for i in $(seq 1 $MAX_REQS); do
+  curl https://api.target.example/login -d "user=test&pass=test"
+  sleep 0.5  # respect server load; remove or reduce only with explicit authorization
 done
 
 # Check for excessive data exposure

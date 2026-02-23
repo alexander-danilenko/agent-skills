@@ -300,7 +300,7 @@ class LatencyInjector:
     def rollback(self) -> None:
         """Remove latency."""
         import subprocess
-        subprocess.run(["tc", "qdisc", "del", "dev", "eth0", "root"])
+        subprocess.run(["tc", "qdisc", "del", "dev", "eth0", "root"], check=True)  # check=True raises on failure so chaos state is never silently left in place
 
 class PodKiller:
     """Kill pods to test resilience."""
@@ -350,7 +350,7 @@ class NetworkPartition:
         subprocess.run([
             "kubectl", "exec", self.source_pod, "--",
             "iptables", "-A", "OUTPUT", "-d", self.target_service, "-j", "DROP"
-        ])
+        ], check=True)
 
     def rollback(self) -> None:
         """Restore network traffic."""
@@ -358,7 +358,7 @@ class NetworkPartition:
         subprocess.run([
             "kubectl", "exec", self.source_pod, "--",
             "iptables", "-D", "OUTPUT", "-d", self.target_service, "-j", "DROP"
-        ])
+        ], check=True)  # check=True ensures rollback failures are never silently swallowed
 ```
 
 ## Chaos Experiment Runner

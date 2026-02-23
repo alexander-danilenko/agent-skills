@@ -63,7 +63,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgres://user:pass@db:5432/app
+      - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@db:5432/app  # load from .env file, never hardcode
     depends_on:
       db:
         condition: service_healthy
@@ -71,9 +71,9 @@ services:
   db:
     image: postgres:16-alpine
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: pass
-      POSTGRES_DB: app
+      POSTGRES_USER: ${DB_USER}         # load from .env file, never hardcode
+      POSTGRES_PASSWORD: ${DB_PASSWORD} # load from .env file, never hardcode
+      POSTGRES_DB: ${DB_NAME}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
