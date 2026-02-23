@@ -17,7 +17,7 @@
 Install all skills:
 
 ```bash
-npx skills add alexander-danilenko/ai-skills --skill '*'
+npx skills add alexander-danilenko/ai-skills --skill '*' --agent claude-code --global --copy
 ```
 
 Install a single skill:
@@ -37,7 +37,7 @@ npx skills add alexander-danilenko/ai-skills --list
 Skills from other repos I use daily:
 
 ```bash
-npx skills add anthropics/skills --skill skill-creator --agent claude-code --global
+npx skills add anthropics/skills --skill skill-creator --agent claude-code --global --copy
 ```
 
 ## 🙏 Credits
