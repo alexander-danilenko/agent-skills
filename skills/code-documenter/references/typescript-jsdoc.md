@@ -93,9 +93,24 @@ interface CreateUserDto {
 ## Implementation Documentation — `@inheritDoc` and DRY
 
 When a class implements an interface, do not repeat documentation that already
-exists on the interface. The implementation doc starts with `@inheritDoc` on the
-first line (referencing the interface method), followed by a blank line, and then
-only implementation-specific details that a maintainer of this class would need.
+exists on the interface. The implementation doc starts with `{@inheritDoc}` on
+the first line, followed by a blank line, and then only implementation-specific
+details that a maintainer of this class would need.
+
+**Important:** TSDoc does not allow a declaration reference inside `{@inheritDoc}`.
+The tag always inherits from the parent declaration automatically.
+
+```typescript
+// WRONG — declaration reference is not valid TSDoc
+/** 
+ * {@inheritDoc IUserService.create} 
+ */
+
+// CORRECT — no arguments
+/**
+ * {@inheritDoc} 
+ */
+```
 
 If there is nothing implementation-specific to add, `@inheritDoc` alone is
 sufficient.
@@ -229,7 +244,7 @@ async function findUserById(id: string): Promise<User | null> {
 | `@deprecated` | Mark deprecated | `@deprecated Use v2 instead.` |
 | `@template` | Generic type param | `@template T - Item type.` |
 | `@readonly` | Read-only property | Cannot modify |
-| `{@inheritDoc}` | Inherit interface docs | `{@inheritDoc IFoo.bar}` |
+| `{@inheritDoc}` | Inherit interface docs | `{@inheritDoc}` (no arguments) |
 | `{@link}` | Link to symbol or URL | `{@link IUserService}` |
 
 ## `{@link}` Usage
