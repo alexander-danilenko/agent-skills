@@ -37,10 +37,12 @@ npx skills add alexander-danilenko/ai-skills --list
 Skills from other repos I use daily:
 
 ```bash
-ARGUMENTS=(--agent claude-code --global) && \
-npx skills add anthropics/skills --skill skill-creator "${ARGUMENTS[@]}" && \
-npx skills add Jeffallan/claude-skills --skill '*' "${ARGUMENTS[@]}"
+npx skills add anthropics/skills --skill skill-creator --agent claude-code --global
 ```
+
+## 🙏 Credits
+
+[Jeffallan/claude-skills](https://github.com/Jeffallan/claude-skills) inspired me to start this project.
 
 ## 🤝 Contributing
 
