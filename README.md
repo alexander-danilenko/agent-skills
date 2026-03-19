@@ -43,13 +43,19 @@ To view the list of available skills, run:
 npx skills add alexander-danilenko/cortex-ai-skills --list
 ```
 
-## 🌟 Contrib Skills
+<details>
+<summary>Recommended skills from other repos</summary>
 
-Skills from other repos I use daily:
+- [anthropics/skills](https://github.com/anthropics/skills) — official Anthropic skills
+  ```bash
+  npx skills add anthropics/skills --skill skill-creator --agent claude-code --global --copy
+  ```
+- [obra/superpowers](https://github.com/obra/superpowers) — enhanced Claude Code workflows
+  ```bash
+  claude plugin install superpowers@claude-plugins-official
+  ```
 
-```bash
-npx skills add anthropics/skills --skill skill-creator --agent claude-code --global --copy
-```
+</details>
 
 ## 🛠️ Development
 
