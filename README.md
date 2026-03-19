@@ -14,6 +14,17 @@
 
 ## 📦 Installation
 
+### As a Claude Code Plugin
+
+```bash
+claude plugin marketplace add alexander-danilenko/ai-skills
+claude plugin install cortex@alexander-danilenko
+```
+
+Skills become available as `/<skill-name>`, e.g. `/api-designer`.
+
+### Via `npx skills`
+
 Install all skills:
 
 ```bash
@@ -38,6 +49,41 @@ Skills from other repos I use daily:
 
 ```bash
 npx skills add anthropics/skills --skill skill-creator --agent claude-code --global --copy
+```
+
+## 🛠️ Development
+
+To load the plugin from a local clone (session-only):
+
+```bash
+claude --plugin-dir /path/to/cloned/repo
+```
+
+To make it persistent, register the repo as a local marketplace in `~/.claude/settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "local": {
+      "source": {
+        "source": "directory",
+        "path": "/path/to/cloned/repo"
+      }
+    }
+  }
+}
+```
+
+Then install once:
+
+```bash
+claude plugin install cortex@local
+```
+
+After pulling new changes, update with:
+
+```bash
+claude plugin update cortex@local
 ```
 
 ## 🙏 Credits
