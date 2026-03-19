@@ -1,0 +1,13 @@
+{
+  "$schema": "../schemas/marketplace.schema.json",
+  "name": "alexander-danilenko",
+  "owner": {
+    "name": "Alexander Danilenko"
+  },
+  "plugins": [
+    {
+      "name": "cortex",
+      "source": "./"
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/alexander-danilenko/ai-skills/schemas/marketplace.schema.json",
+  "title": "Claude Code Plugin Marketplace",
+  "description": "Schema for .claude-plugin/marketplace.json catalog files",
+  "type": "object",
+  "required": ["name", "owner", "plugins"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference for editor validation"
+    },
+    "name": {
+      "type": "string",
+      "description": "Marketplace identifier used in install commands (e.g. cortex@<name>)",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+    },
+    "owner": {
+      "type": "object",
+      "description": "Marketplace owner information",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Owner display name"
+        },
+        "email": {
+          "type": "string",
+          "description": "Owner email address",
+          "format": "email"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Optional marketplace metadata",
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Brief marketplace description"
+        },
+        "version": {
+          "type": "string",
+          "description": "Marketplace catalog version",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        }
+      }
+    },
+    "plugins": {
+      "type": "array",
+      "description": "Plugins available in this marketplace",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/pluginEntry"
+      }
+    }
+  },
+  "$defs": {
+    "pluginEntry": {
+      "type": "object",
+      "description": "A plugin listed in the marketplace",
+      "required": ["name", "source"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Plugin identifier matching its plugin.json name",
+          "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+        },
+        "source": {
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "Relative path to plugin directory",
+              "pattern": "^\\.\\/.*"
+            },
+            {
+              "$ref": "#/$defs/githubSource"
+            },
+            {
+              "$ref": "#/$defs/urlSource"
+            },
+            {
+              "$ref": "#/$defs/npmSource"
+            }
+          ]
+        },
+        "description": {
+          "type": "string",
+          "description": "Brief plugin description"
+        },
+        "version": {
+          "type": "string",
+          "description": "Plugin version",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        }
+      }
+    },
+    "githubSource": {
+      "type": "object",
+      "description": "Plugin hosted in a GitHub repository",
+      "required": ["source", "repo"],
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "const": "github"
+        },
+        "repo": {
+          "type": "string",
+          "description": "GitHub owner/repo",
+          "pattern": "^[\\w.-]+/[\\w.-]+$"
+        }
+      }
+    },
+    "urlSource": {
+      "type": "object",
+      "description": "Plugin hosted at a git URL",
+      "required": ["source", "url"],
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "const": "url"
+        },
+        "url": {
+          "type": "string",
+          "description": "Git repository URL",
+          "format": "uri"
+        }
+      }
+    },
+    "npmSource": {
+      "type": "object",
+      "description": "Plugin published as an npm package",
+      "required": ["source", "package"],
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "const": "npm"
+        },
+        "package": {
+          "type": "string",
+          "description": "npm package name"
+        }
+      }
+    }
+  }
+}
