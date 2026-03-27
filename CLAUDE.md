@@ -67,13 +67,13 @@ When a skill is updated, bump `version` in its `metadata.yml` following semver:
 
 ### Plugin version (`plugin.json`)
 
-The plugin version tracks the overall collection state, bumped independently from individual skills:
+The plugin version **must** be bumped on every commit, matching the highest semver level among all changes in that commit:
 
-- **patch**: any skill version bump (regardless of skill bump type)
-- **minor**: new skill added, skill removed, or schema changes
-- **major**: breaking structural changes (plugin format, directory layout)
+- **patch**: typo fixes, wording tweaks, formatting changes, config adjustments, any skill patch bump
+- **minor**: new skill added, skill removed, schema changes, new reference files, any skill minor bump
+- **major**: breaking structural changes (plugin format, directory layout), rewritten workflows, any skill major bump
 
-Any skill version bump **must** also bump the plugin patch version.
+When a commit contains multiple changes at different semver levels, the highest level wins (e.g., 2 patches + 1 minor = minor bump).
 
 ## Conventions
 
