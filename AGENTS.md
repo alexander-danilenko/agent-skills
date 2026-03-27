@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI coding agents when working with code in this repository.
 
 ## Project
 
@@ -54,6 +54,7 @@ Validated by `schemas/metadata.schema.json`. Required fields: `authors`, `licens
   - Types: `feat`, `fix`, `docs`, `refactor`, `chore`
   - Scope: skill name when applicable, e.g. `feat(api-designer): add rate limiting reference`
   - Plugin-wide changes: `chore(plugin): bump plugin version`
+- Never use triple backticks (```) in commit messages
 
 ## Versioning
 
