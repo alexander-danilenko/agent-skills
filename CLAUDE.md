@@ -58,6 +58,8 @@ Validated by `schemas/metadata.schema.json`. Required fields: `authors`, `licens
 
 ## Versioning
 
+**Bump versions as part of the change, not after.** Before editing a skill — or any file that affects plugin behavior — classify the change (patch / minor / major) using the rubrics below, then update `metadata.yml` and `plugin.json` in the same diff as the content change. A commit without a matching version bump is incomplete.
+
 ### Skill versions (`metadata.yml`)
 
 When a skill is updated, bump `version` in its `metadata.yml` following semver:
@@ -75,6 +77,18 @@ The plugin version **must** be bumped on every commit, matching the highest semv
 - **major**: breaking structural changes (plugin format, directory layout), rewritten workflows, any skill major bump
 
 When a commit contains multiple changes at different semver levels, the highest level wins (e.g., 2 patches + 1 minor = minor bump).
+
+### Version review (applies to every review)
+
+Any review task — code review, skill audit, PR review, self-check before commit — must verify the version bumps match the change. This is not optional; reviewers are the last line of defense against unversioned changes reaching the marketplace.
+
+For each reviewed change:
+
+1. Identify the largest semver level the diff actually represents (using the rubrics above).
+2. Compare against the bumps present in `metadata.yml` and `plugin.json`.
+3. If the bump is **missing or too small**, fix it in the same review pass and leave a short note to the user explaining what was changed and why (e.g. "Bumped `skills/api-designer/metadata.yml` from 1.0.0 → 1.1.0 because a new reference file was added, which is a minor change").
+4. If the bump is **too large**, flag it to the user with a suggested downgrade rather than silently editing — over-bumping can be intentional (e.g. signalling a coordinated release).
+5. If only the skill was bumped but `plugin.json` was not, or vice versa, fix the missing side and note it.
 
 ## Conventions
 
