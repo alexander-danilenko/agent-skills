@@ -15,24 +15,22 @@ skills/<skill-name>/
 └── references/     # optional, loaded conditionally by SKILL.md
 ```
 
-### SKILL.md
+`metadata.yml` fields, requirements, and allowed values are defined by `schemas/metadata.schema.json` — read the schema rather than guessing.
 
-Claude Code frontmatter fields: `name` (kebab-case, matches dir), `description` (when to invoke), `allowed-tools` (optional), `user-invocable` (optional).
+## Skill Authoring — `/skill-creator` Required
 
-Body section order:
+Creating, editing, condensing, or auditing any `SKILL.md` or its `references/` **requires the `/skill-creator` plugin** ([anthropics/skills](https://github.com/anthropics/skills/tree/main/skills/skill-creator)). It is the single source of truth for frontmatter fields, body-section order, progressive-disclosure conventions, reference-file layout, and token efficiency — this repo intentionally does not duplicate those rules.
 
-1. **H1 Title** — human-friendly name
-2. **Role Definition** — expertise and domain
-3. **When to Use This Skill** — invocation scenarios
-4. **Core Workflow** — 3–5 numbered steps
-5. **Reference Guide** — table mapping topics → `references/*.md`
-6. **Constraints** — MUST DO / MUST NOT DO
-7. **Output Templates** — what the skill produces
-8. **Knowledge Reference** — comma-separated concepts
+Install it once:
 
-### metadata.yml
+```bash
+claude plugin marketplace add anthropics/skills
+claude plugin install skill-creator@anthropics
+```
 
-Fields, requirements, and allowed values live in `schemas/metadata.schema.json` — read the schema rather than duplicating it here.
+Then invoke `/skill-creator` for any skill-authoring task.
+
+**If `/skill-creator` is not installed, stop and ask the user to install it before running the prompt.** Do not fall back to hand-authoring a skill from memory or from this file — the conventions drift quickly and the plugin is the authority.
 
 ## Git
 
@@ -89,7 +87,6 @@ Common pitfalls: nested triple-backtick fences (use 4+ backticks on the outer fe
 
 - **Naming**: kebab-case for skill directories and files.
 - **Formatting**: UTF-8, LF, 2-space indent — see `.editorconfig`.
-- **Skill creation**: use [Anthropic's `/skill-creator`](https://github.com/anthropics/skills/tree/main/skills/skill-creator) for format parity and token efficiency.
 - **Reference files**: conditionally loaded by SKILL.md — never standalone skills.
 - **allowed-tools**: read-only → `Read, Grep, Glob`; editing → add `Write, Edit`; automation → add `Bash`.
 - **related-skills sync**: the `related-skills` enum in `schemas/metadata.schema.json` must list every skill directory. Adding or removing a skill requires updating the enum.
