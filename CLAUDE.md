@@ -12,7 +12,7 @@ Plugin name: `cortex` (defined in `.claude-plugin/plugin.json`). Skills are invo
 
 Each skill lives in `skills/<skill-name>/` with this layout:
 
-```
+```text
 skills/<skill-name>/
 ├── SKILL.md           # Required — skill definition with YAML frontmatter
 ├── metadata.yml       # Authorship, domain, triggers, related skills
@@ -89,6 +89,29 @@ For each reviewed change:
 3. If the bump is **missing or too small**, fix it in the same review pass and leave a short note to the user explaining what was changed and why (e.g. "Bumped `skills/api-designer/metadata.yml` from 1.0.0 → 1.1.0 because a new reference file was added, which is a minor change").
 4. If the bump is **too large**, flag it to the user with a suggested downgrade rather than silently editing — over-bumping can be intentional (e.g. signalling a coordinated release).
 5. If only the skill was bumped but `plugin.json` was not, or vice versa, fix the missing side and note it.
+
+## Markdown Validation
+
+Every task that creates or modifies a `.md` file (SKILL.md, reference files, CLAUDE.md, README, etc.) is **not complete until `markdownlint-cli2` reports zero errors** on every touched file. There is no `package.json` in this repo — invoke it via `npx`:
+
+```bash
+npx -y markdownlint-cli2 path/to/changed-file.md
+```
+
+For multiple files, pass them all in one invocation or use a glob:
+
+```bash
+npx -y markdownlint-cli2 "skills/<skill-name>/**/*.md"
+```
+
+Rules:
+
+1. Run the linter on every markdown file you edited before declaring the task done.
+2. If it reports errors, fix them and re-run. Repeat until the output is clean.
+3. Common issues to expect: nested triple-backtick fences (use 4+ backticks on the outer fence when the inner block contains ` ``` `), missing language on fenced code blocks (MD040), inconsistent list markers (MD004), trailing spaces (MD009), and missing blank lines around fences/lists (MD031/MD032).
+4. If a rule is genuinely wrong for this codebase, disable it per-file via an HTML comment (`<!-- markdownlint-disable MD013 -->`) or globally via `.markdownlint.json` at the repo root — do not leave lint errors unresolved.
+
+The repo-wide config lives at `.markdownlint.json`. It currently disables MD013 (line-length — prose wraps naturally), MD033 (inline HTML — the README uses it), and MD041 (first-line H1 — reference files start with prose), and restricts MD024 to siblings-only. Add further disables here only with a comment explaining why.
 
 ## Conventions
 
