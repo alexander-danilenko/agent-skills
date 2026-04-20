@@ -28,9 +28,9 @@ claude plugin marketplace add anthropics/skills
 claude plugin install skill-creator@anthropics
 ```
 
-Then invoke `/skill-creator` for any skill-authoring task.
+Then invoke `/skill-creator:skill-creator` for any skill-authoring task.
 
-**If `/skill-creator` is not installed, stop and ask the user to install it before running the prompt.** Do not fall back to hand-authoring a skill from memory or from this file — the conventions drift quickly and the plugin is the authority.
+**If `/skill-creator:skill-creator` is not installed, stop and ask the user to install it before running the prompt.** Do not fall back to hand-authoring a skill from memory or from this file — the conventions drift quickly and the plugin is the authority.
 
 ## Git
 
