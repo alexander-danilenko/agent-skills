@@ -18,8 +18,8 @@ When tests verify mock behavior instead of actual functionality, they provide fa
 
 ```typescript
 // ❌ BAD: Testing the mock, not the behavior
-it('should call the API', () => {
-  const mockApi = jest.fn().mockResolvedValue({ data: 'test' });
+it("should call the API", () => {
+  const mockApi = jest.fn().mockResolvedValue({ data: "test" });
   const service = new UserService(mockApi);
 
   service.getUser(1);
@@ -30,13 +30,13 @@ it('should call the API', () => {
 
 ```typescript
 // ✅ GOOD: Testing actual behavior
-it('should return user data from API', async () => {
-  const mockApi = jest.fn().mockResolvedValue({ id: 1, name: 'Alice' });
+it("should return user data from API", async () => {
+  const mockApi = jest.fn().mockResolvedValue({ id: 1, name: "Alice" });
   const service = new UserService(mockApi);
 
   const user = await service.getUser(1);
 
-  expect(user.name).toBe('Alice'); // Testing actual output
+  expect(user.name).toBe("Alice"); // Testing actual output
 });
 ```
 
@@ -91,11 +91,11 @@ function createFreshCache(): UserCache {
 
 ```typescript
 // ❌ BAD: Mocking everything without understanding
-it('should process order', async () => {
-  jest.mock('./inventory');
-  jest.mock('./payment');
-  jest.mock('./shipping');
-  jest.mock('./notifications');
+it("should process order", async () => {
+  jest.mock("./inventory");
+  jest.mock("./payment");
+  jest.mock("./shipping");
+  jest.mock("./notifications");
 
   const result = await processOrder(order);
 
@@ -105,7 +105,7 @@ it('should process order', async () => {
 
 ```typescript
 // ✅ GOOD: Strategic mocking with real components where possible
-it('should process order with real inventory check', async () => {
+it("should process order with real inventory check", async () => {
   // Real inventory service against test database
   const inventory = new InventoryService(testDb);
 
@@ -132,7 +132,7 @@ it('should process order with real inventory check', async () => {
 // ❌ BAD: Incomplete mock response
 const mockUserApi = jest.fn().mockResolvedValue({
   id: 1,
-  name: 'Test User'
+  name: "Test User",
   // Missing: email, createdAt, permissions, settings...
 });
 
@@ -143,19 +143,19 @@ const mockUserApi = jest.fn().mockResolvedValue({
 // ✅ GOOD: Complete mock matching real API response
 const mockUserApi = jest.fn().mockResolvedValue({
   id: 1,
-  name: 'Test User',
-  email: 'test@example.com',
-  createdAt: '2024-01-01T00:00:00Z',
-  permissions: ['read', 'write'],
+  name: "Test User",
+  email: "test@example.com",
+  createdAt: "2024-01-01T00:00:00Z",
+  permissions: ["read", "write"],
   settings: {
-    theme: 'light',
-    notifications: true
-  }
+    theme: "light",
+    notifications: true,
+  },
 });
 
 // Or use a factory
 const mockUserApi = jest.fn().mockResolvedValue(
-  createMockUser({ name: 'Test User' }) // Factory fills defaults
+  createMockUser({ name: "Test User" }), // Factory fills defaults
 );
 ```
 
@@ -179,18 +179,19 @@ const mockUserApi = jest.fn().mockResolvedValue(
 ```typescript
 // ✅ GOOD: Tests are part of implementation
 // Write failing test
-it('should reject duplicate usernames', async () => {
-  await createUser({ username: 'alice' });
+it("should reject duplicate usernames", async () => {
+  await createUser({ username: "alice" });
 
-  await expect(createUser({ username: 'alice' }))
-    .rejects.toThrow('Username already exists');
+  await expect(createUser({ username: "alice" })).rejects.toThrow(
+    "Username already exists",
+  );
 });
 
 // Make it pass
 async function createUser(data: UserInput): Promise<User> {
   const existing = await db.users.findByUsername(data.username);
   if (existing) {
-    throw new Error('Username already exists');
+    throw new Error("Username already exists");
   }
   return db.users.create(data);
 }
@@ -206,26 +207,26 @@ async function createUser(data: UserInput): Promise<User> {
 
 Review your tests for these warning signs:
 
-| Warning Sign                                             | Anti-Pattern                  |
-| -------------------------------------------------------- | ----------------------------- |
-| `expect(mock).toHaveBeenCalled()` without testing output | Testing mock behavior         |
-| Methods starting with `_` or `ForTesting` in production  | Test-only methods             |
-| Every dependency is mocked                               | Mocking without understanding |
-| Mocks return `{ success: true }` only                    | Incomplete mocks              |
-| Test files added weeks after feature ships               | Tests as afterthought         |
+| Warning Sign | Anti-Pattern |
+| --- | --- |
+| `expect(mock).toHaveBeenCalled()` without testing output | Testing mock behavior |
+| Methods starting with `_` or `ForTesting` in production | Test-only methods |
+| Every dependency is mocked | Mocking without understanding |
+| Mocks return `{ success: true }` only | Incomplete mocks |
+| Test files added weeks after feature ships | Tests as afterthought |
 
 ---
 
 ## Quick Reference
 
-| Anti-Pattern          | Symptom                                 | Fix                          |
-| --------------------- | --------------------------------------- | ---------------------------- |
-| Testing mocks         | Only mock assertions, no behavior tests | Assert on actual output      |
-| Test-only methods     | `_reset()`, `_setForTest()` in prod     | Use fresh instances          |
-| Over-mocking          | 10+ mocks per test                      | Test with real deps first    |
-| Incomplete mocks      | Minimal stub responses                  | Use factories, match reality |
-| Tests as afterthought | Features ship untested                  | TDD from the start           |
+| Anti-Pattern | Symptom | Fix |
+| --- | --- | --- |
+| Testing mocks | Only mock assertions, no behavior tests | Assert on actual output |
+| Test-only methods | `_reset()`, `_setForTest()` in prod | Use fresh instances |
+| Over-mocking | 10+ mocks per test | Test with real deps first |
+| Incomplete mocks | Minimal stub responses | Use factories, match reality |
+| Tests as afterthought | Features ship untested | TDD from the start |
 
 ---
 
-*Content adapted from [obra/superpowers](https://github.com/obra/superpowers) by Jesse Vincent (@obra), MIT License.*
+_Content adapted from [obra/superpowers](https://github.com/obra/superpowers) by Jesse Vincent (@obra), MIT License._

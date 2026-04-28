@@ -2,16 +2,16 @@
 
 ## Comprehensive Review Checklist
 
-| Category           | Key Questions                                            |
-| ------------------ | -------------------------------------------------------- |
-| **Design**         | Does it fit existing patterns? Right abstraction level?  |
-| **Logic**          | Edge cases handled? Race conditions? Null checks?        |
-| **Security**       | Input validated? Auth checked? Secrets safe?             |
-| **Performance**    | N+1 queries? Memory leaks? Caching needed?               |
-| **Tests**          | Adequate coverage? Edge cases tested? Mocks appropriate? |
-| **Naming**         | Clear, consistent, intention-revealing?                  |
-| **Error Handling** | Errors caught? Meaningful messages? Logged?              |
-| **Documentation**  | Public APIs documented? Complex logic explained?         |
+| Category | Key Questions |
+| --- | --- |
+| **Design** | Does it fit existing patterns? Right abstraction level? |
+| **Logic** | Edge cases handled? Race conditions? Null checks? |
+| **Security** | Input validated? Auth checked? Secrets safe? |
+| **Performance** | N+1 queries? Memory leaks? Caching needed? |
+| **Tests** | Adequate coverage? Edge cases tested? Mocks appropriate? |
+| **Naming** | Clear, consistent, intention-revealing? |
+| **Error Handling** | Errors caught? Meaningful messages? Logged? |
+| **Documentation** | Public APIs documented? Complex logic explained? |
 
 ## Review Process
 

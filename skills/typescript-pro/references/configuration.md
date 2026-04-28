@@ -141,9 +141,9 @@
 
 ```typescript
 // Usage with path mapping
-import { Button } from '@components/Button';
-import { formatDate } from '@utils/date';
-import type { User } from '@types';
+import { Button } from "@components/Button";
+import { formatDate } from "@utils/date";
+import type { User } from "@types";
 ```
 
 ## Incremental Compilation
@@ -177,7 +177,7 @@ import type { User } from '@types';
 }
 ```
 
-```typescript
+````typescript
 // Using JSDoc for .d.ts generation
 /**
  * Creates a user
@@ -192,7 +192,7 @@ import type { User } from '@types';
 export function createUser(name: string, email: string): User {
   return { id: generateId(), name, email };
 }
-```
+````
 
 ## Build Optimization
 
@@ -330,7 +330,7 @@ declare global {
     interface ProcessEnv {
       DATABASE_URL: string;
       API_KEY: string;
-      NODE_ENV: 'development' | 'production' | 'test';
+      NODE_ENV: "development" | "production" | "test";
     }
   }
 }
@@ -338,17 +338,17 @@ declare global {
 export {};
 
 // src/types/modules.d.ts
-declare module '*.svg' {
+declare module "*.svg" {
   const content: string;
   export default content;
 }
 
-declare module '*.css' {
+declare module "*.css" {
   const classes: { [key: string]: string };
   export default classes;
 }
 
-declare module 'untyped-library' {
+declare module "untyped-library" {
   export function doSomething(value: string): number;
 }
 ```
@@ -357,7 +357,7 @@ declare module 'untyped-library' {
 
 ```typescript
 // programmatic compilation
-import ts from 'typescript';
+import ts from "typescript";
 
 function compile(fileNames: string[], options: ts.CompilerOptions): void {
   const program = ts.createProgram(fileNames, options);
@@ -367,22 +367,22 @@ function compile(fileNames: string[], options: ts.CompilerOptions): void {
     .getPreEmitDiagnostics(program)
     .concat(emitResult.diagnostics);
 
-  allDiagnostics.forEach(diagnostic => {
+  allDiagnostics.forEach((diagnostic) => {
     if (diagnostic.file) {
       const { line, character } = ts.getLineAndCharacterOfPosition(
         diagnostic.file,
-        diagnostic.start!
+        diagnostic.start!,
       );
       const message = ts.flattenDiagnosticMessageText(
         diagnostic.messageText,
-        '\n'
+        "\n",
       );
       console.log(
-        `${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`
+        `${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`,
       );
     } else {
       console.log(
-        ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')
+        ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n"),
       );
     }
   });
@@ -392,11 +392,11 @@ function compile(fileNames: string[], options: ts.CompilerOptions): void {
   process.exit(exitCode);
 }
 
-compile(['src/index.ts'], {
+compile(["src/index.ts"], {
   noEmitOnError: true,
   target: ts.ScriptTarget.ES2022,
   module: ts.ModuleKind.ES2022,
-  strict: true
+  strict: true,
 });
 ```
 

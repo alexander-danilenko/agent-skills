@@ -5,38 +5,38 @@
 ```typescript
 // Critical user paths to test
 const criticalPaths = [
-  'User registration and login',
-  'Core product/service workflow',
-  'Payment/checkout flow',
-  'Settings and profile management',
+  "User registration and login",
+  "Core product/service workflow",
+  "Payment/checkout flow",
+  "Settings and profile management",
 ];
 ```
 
 ## User Flow Testing
 
 ```typescript
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('User Registration Flow', () => {
-  test('complete registration', async ({ page }) => {
-    await page.goto('/register');
+test.describe("User Registration Flow", () => {
+  test("complete registration", async ({ page }) => {
+    await page.goto("/register");
 
-    await page.getByLabel('Email').fill('new@example.com');
-    await page.getByLabel('Password').fill('SecurePass123!');
-    await page.getByLabel('Confirm Password').fill('SecurePass123!');
-    await page.getByRole('button', { name: 'Register' }).click();
+    await page.getByLabel("Email").fill("new@example.com");
+    await page.getByLabel("Password").fill("SecurePass123!");
+    await page.getByLabel("Confirm Password").fill("SecurePass123!");
+    await page.getByRole("button", { name: "Register" }).click();
 
     await expect(page).toHaveURL(/dashboard/);
-    await expect(page.getByText('Welcome')).toBeVisible();
+    await expect(page.getByText("Welcome")).toBeVisible();
   });
 
-  test('shows validation errors', async ({ page }) => {
-    await page.goto('/register');
+  test("shows validation errors", async ({ page }) => {
+    await page.goto("/register");
 
-    await page.getByLabel('Email').fill('invalid');
-    await page.getByRole('button', { name: 'Register' }).click();
+    await page.getByLabel("Email").fill("invalid");
+    await page.getByRole("button", { name: "Register" }).click();
 
-    await expect(page.getByText('Invalid email')).toBeVisible();
+    await expect(page.getByText("Invalid email")).toBeVisible();
   });
 });
 ```
@@ -44,26 +44,26 @@ test.describe('User Registration Flow', () => {
 ## Checkout Flow
 
 ```typescript
-test.describe('Checkout Flow', () => {
-  test('complete purchase', async ({ page }) => {
+test.describe("Checkout Flow", () => {
+  test("complete purchase", async ({ page }) => {
     // Add to cart
-    await page.goto('/products/123');
-    await page.getByRole('button', { name: 'Add to Cart' }).click();
-    await expect(page.getByTestId('cart-count')).toHaveText('1');
+    await page.goto("/products/123");
+    await page.getByRole("button", { name: "Add to Cart" }).click();
+    await expect(page.getByTestId("cart-count")).toHaveText("1");
 
     // Checkout
-    await page.goto('/cart');
-    await page.getByRole('button', { name: 'Checkout' }).click();
+    await page.goto("/cart");
+    await page.getByRole("button", { name: "Checkout" }).click();
 
     // Payment
-    await page.getByLabel('Card Number').fill('4242424242424242');
-    await page.getByLabel('Expiry').fill('12/25');
-    await page.getByLabel('CVC').fill('123');
-    await page.getByRole('button', { name: 'Pay' }).click();
+    await page.getByLabel("Card Number").fill("4242424242424242");
+    await page.getByLabel("Expiry").fill("12/25");
+    await page.getByLabel("CVC").fill("123");
+    await page.getByRole("button", { name: "Pay" }).click();
 
     // Confirmation
     await expect(page).toHaveURL(/order-confirmation/);
-    await expect(page.getByText('Order Confirmed')).toBeVisible();
+    await expect(page.getByText("Order Confirmed")).toBeVisible();
   });
 });
 ```
@@ -74,24 +74,24 @@ test.describe('Checkout Flow', () => {
 // fixtures/testData.ts
 export const testUsers = {
   standard: {
-    email: 'standard@test.com',
-    password: 'TestPass123!',
+    email: "standard@test.com",
+    password: "TestPass123!",
   },
   admin: {
-    email: 'admin@test.com',
-    password: 'AdminPass123!',
+    email: "admin@test.com",
+    password: "AdminPass123!",
   },
 };
 
 // Test setup
 test.beforeEach(async ({ page }) => {
   // Seed test data
-  await page.request.post('/api/test/seed');
+  await page.request.post("/api/test/seed");
 });
 
 test.afterEach(async ({ page }) => {
   // Clean up
-  await page.request.post('/api/test/cleanup');
+  await page.request.post("/api/test/cleanup");
 });
 ```
 
@@ -101,11 +101,11 @@ test.afterEach(async ({ page }) => {
 // playwright.config.ts
 export default defineConfig({
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
-    { name: 'mobile-chrome', use: { ...devices['Pixel 5'] } },
-    { name: 'mobile-safari', use: { ...devices['iPhone 13'] } },
+    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+    { name: "firefox", use: { ...devices["Desktop Firefox"] } },
+    { name: "webkit", use: { ...devices["Desktop Safari"] } },
+    { name: "mobile-chrome", use: { ...devices["Pixel 5"] } },
+    { name: "mobile-safari", use: { ...devices["iPhone 13"] } },
   ],
 });
 ```

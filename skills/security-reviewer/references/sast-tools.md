@@ -81,8 +81,8 @@ sonar-scanner -Dsonar.projectKey=myproject
 - name: Run Trivy
   uses: aquasecurity/trivy-action@master
   with:
-    scan-type: 'fs'
-    severity: 'CRITICAL,HIGH'
+    scan-type: "fs"
+    severity: "CRITICAL,HIGH"
 ```
 
 ### GitLab CI

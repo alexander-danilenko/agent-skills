@@ -3,40 +3,40 @@
 ## Authentication Tests
 
 ```typescript
-describe('Authentication Security', () => {
-  it('rejects invalid credentials', async () => {
+describe("Authentication Security", () => {
+  it("rejects invalid credentials", async () => {
     await request(app)
-      .post('/api/login')
-      .send({ email: 'user@test.com', password: 'wrong' })
+      .post("/api/login")
+      .send({ email: "user@test.com", password: "wrong" })
       .expect(401);
   });
 
-  it('rejects expired tokens', async () => {
+  it("rejects expired tokens", async () => {
     const expiredToken = createExpiredToken();
     await request(app)
-      .get('/api/protected')
-      .set('Authorization', `Bearer ${expiredToken}`)
+      .get("/api/protected")
+      .set("Authorization", `Bearer ${expiredToken}`)
       .expect(401);
   });
 
-  it('rejects tampered tokens', async () => {
-    const tamperedToken = validToken.slice(0, -5) + 'xxxxx';
+  it("rejects tampered tokens", async () => {
+    const tamperedToken = validToken.slice(0, -5) + "xxxxx";
     await request(app)
-      .get('/api/protected')
-      .set('Authorization', `Bearer ${tamperedToken}`)
+      .get("/api/protected")
+      .set("Authorization", `Bearer ${tamperedToken}`)
       .expect(401);
   });
 
-  it('enforces rate limiting on login', async () => {
+  it("enforces rate limiting on login", async () => {
     for (let i = 0; i < 6; i++) {
       await request(app)
-        .post('/api/login')
-        .send({ email: 'user@test.com', password: 'wrong' });
+        .post("/api/login")
+        .send({ email: "user@test.com", password: "wrong" });
     }
 
     await request(app)
-      .post('/api/login')
-      .send({ email: 'user@test.com', password: 'correct' })
+      .post("/api/login")
+      .send({ email: "user@test.com", password: "correct" })
       .expect(429);
   });
 });
@@ -45,18 +45,18 @@ describe('Authentication Security', () => {
 ## Authorization Tests
 
 ```typescript
-describe('Authorization', () => {
-  it('denies access to other users resources', async () => {
+describe("Authorization", () => {
+  it("denies access to other users resources", async () => {
     await request(app)
-      .get('/api/users/other-user-id/data')
-      .set('Authorization', `Bearer ${userAToken}`)
+      .get("/api/users/other-user-id/data")
+      .set("Authorization", `Bearer ${userAToken}`)
       .expect(403);
   });
 
-  it('denies admin routes to regular users', async () => {
+  it("denies admin routes to regular users", async () => {
     await request(app)
-      .delete('/api/admin/users/123')
-      .set('Authorization', `Bearer ${regularUserToken}`)
+      .delete("/api/admin/users/123")
+      .set("Authorization", `Bearer ${regularUserToken}`)
       .expect(403);
   });
 });
@@ -65,27 +65,27 @@ describe('Authorization', () => {
 ## Input Validation Tests
 
 ```typescript
-describe('Input Validation', () => {
-  it('rejects SQL injection attempts', async () => {
+describe("Input Validation", () => {
+  it("rejects SQL injection attempts", async () => {
     await request(app)
-      .get('/api/users')
+      .get("/api/users")
       .query({ search: "'; DROP TABLE users; --" })
       .expect(400);
   });
 
-  it('rejects XSS in input fields', async () => {
+  it("rejects XSS in input fields", async () => {
     const response = await request(app)
-      .post('/api/posts')
+      .post("/api/posts")
       .send({ title: '<script>alert("xss")</script>' })
       .expect(201);
 
-    expect(response.body.title).not.toContain('<script>');
+    expect(response.body.title).not.toContain("<script>");
   });
 
-  it('validates file upload types', async () => {
+  it("validates file upload types", async () => {
     await request(app)
-      .post('/api/upload')
-      .attach('file', 'malicious.exe')
+      .post("/api/upload")
+      .attach("file", "malicious.exe")
       .expect(400);
   });
 });
@@ -94,13 +94,13 @@ describe('Input Validation', () => {
 ## Security Headers Test
 
 ```typescript
-describe('Security Headers', () => {
-  it('sets security headers', async () => {
-    const response = await request(app).get('/');
+describe("Security Headers", () => {
+  it("sets security headers", async () => {
+    const response = await request(app).get("/");
 
-    expect(response.headers['x-content-type-options']).toBe('nosniff');
-    expect(response.headers['x-frame-options']).toBe('DENY');
-    expect(response.headers['strict-transport-security']).toBeDefined();
+    expect(response.headers["x-content-type-options"]).toBe("nosniff");
+    expect(response.headers["x-frame-options"]).toBe("DENY");
+    expect(response.headers["strict-transport-security"]).toBeDefined();
   });
 });
 ```

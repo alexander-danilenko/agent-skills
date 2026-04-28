@@ -32,27 +32,32 @@ Zero tests is correct when a service contains only delegation and mapping.
 
 ```typescript
 // WRONG — variables at file scope, mock returns in beforeEach
-let module: TestingModule
-let service: MyService
+let module: TestingModule;
+let service: MyService;
 
 beforeEach(async () => {
   // ...
-  jest.spyOn(depService, "doWork").mockResolvedValue(result)  // WRONG: mock in beforeEach
-})
+  jest.spyOn(depService, "doWork").mockResolvedValue(result); // WRONG: mock in beforeEach
+});
 
 // RIGHT — variables inside describe, mock returns inside it()
 describe("MyService @ci", () => {
-  let module: TestingModule
-  let service: MyService
+  let module: TestingModule;
+  let service: MyService;
 
-  beforeEach(async () => { /* compile module only */ })
-  afterEach(async () => { jest.clearAllMocks(); await module.close() })
+  beforeEach(async () => {
+    /* compile module only */
+  });
+  afterEach(async () => {
+    jest.clearAllMocks();
+    await module.close();
+  });
 
   it("should do something", async () => {
-    jest.spyOn(depService, "doWork").mockResolvedValue(result)  // RIGHT: mock in it()
+    jest.spyOn(depService, "doWork").mockResolvedValue(result); // RIGHT: mock in it()
     // ...
-  })
-})
+  });
+});
 ```
 
 ## Module Setup Template
@@ -62,7 +67,7 @@ describe("MyService @ci", () => {
 const module = await Test.createTestingModule({
   imports: [DepModule],
   providers: [MyService],
-}).compile()
+}).compile();
 
 // RIGHT — providers only, all deps mocked
 const module = await Test.createTestingModule({
@@ -70,23 +75,23 @@ const module = await Test.createTestingModule({
     MyService,
     { provide: DepService, useValue: { doWork: jest.fn() } },
   ],
-}).compile()
+}).compile();
 ```
 
 - **MUST** use only the `providers` array (no `imports` array) in `createTestingModule()` — using `imports` pulls real modules and makes the test an integration test.
 - **MUST** import dependency classes with value imports (`import { Dep }`), not type-only (`import type { Dep }`). NestJS needs the class reference at runtime for DI token resolution.
 
 ```typescript
-import { Test } from "@nestjs/testing"
-import { MyService } from "../service/my.service"
-import { DepService } from "../../dep/service"
+import { Test } from "@nestjs/testing";
+import { MyService } from "../service/my.service";
+import { DepService } from "../../dep/service";
 
-import type { TestingModule } from "@nestjs/testing"
+import type { TestingModule } from "@nestjs/testing";
 
 describe("MyService @ci", () => {
-  let module: TestingModule
-  let service: MyService
-  let depService: DepService
+  let module: TestingModule;
+  let service: MyService;
+  let depService: DepService;
 
   beforeEach(async () => {
     module = await Test.createTestingModule({
@@ -94,19 +99,19 @@ describe("MyService @ci", () => {
         MyService,
         { provide: DepService, useValue: { doWork: jest.fn() } },
       ],
-    }).compile()
+    }).compile();
 
-    service = module.get(MyService)
-    depService = module.get(DepService)
-  })
+    service = module.get(MyService);
+    depService = module.get(DepService);
+  });
 
   afterEach(async () => {
-    jest.clearAllMocks()
-    await module.close()
-  })
+    jest.clearAllMocks();
+    await module.close();
+  });
 
   // tests …
-})
+});
 ```
 
 ## Mocking & DI

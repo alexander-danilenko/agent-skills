@@ -147,12 +147,12 @@ Comment:
 
 ### Few-Shot Selection Strategies
 
-| Strategy              | Description                      | Best For                       |
-| --------------------- | -------------------------------- | ------------------------------ |
-| Diverse               | Cover different cases/categories | Classification, categorization |
-| Similar               | Match examples to input type     | Consistent formatting          |
-| Increasing complexity | Start simple, build up           | Complex reasoning tasks        |
-| Edge cases            | Include boundary cases           | Robust handling                |
+| Strategy | Description | Best For |
+| --- | --- | --- |
+| Diverse | Cover different cases/categories | Classification, categorization |
+| Similar | Match examples to input type | Consistent formatting |
+| Increasing complexity | Start simple, build up | Complex reasoning tasks |
+| Edge cases | Include boundary cases | Robust handling |
 
 ### Example Selection Guidelines
 
@@ -226,7 +226,7 @@ Final Answer:
 
 ### Example: Debugging with CoT
 
-```yaml
+````yaml
 Debug the following code by analyzing it step by step.
 
 Code:
@@ -236,7 +236,7 @@ def calculate_average(numbers):
     for num in numbers:
         total += num
     return total / len(numbers)
-```
+````
 
 Error: ZeroDivisionError when called with empty list
 
@@ -252,8 +252,7 @@ Let me trace what happens when `numbers = []`:
 
 ### Step 2: Identify the root cause
 
-The function doesn't handle the edge case of an empty list.
-`len([])` returns 0, causing division by zero.
+The function doesn't handle the edge case of an empty list. `len([])` returns 0, causing division by zero.
 
 ### Step 3: Propose fix
 
@@ -300,13 +299,7 @@ Available tools:
 - calculate(expression): Evaluate a mathematical expression
 - lookup(term): Look up a definition or fact
 
-Respond in this format:
-Thought: [Your reasoning about what to do next]
-Action: [tool_name(parameters)]
-Observation: [Result from the tool - provided by system]
-... (repeat Thought/Action/Observation as needed)
-Thought: I now have enough information to answer.
-Answer: [Final answer]
+Respond in this format: Thought: [Your reasoning about what to do next] Action: [tool_name(parameters)] Observation: [Result from the tool - provided by system] ... (repeat Thought/Action/Observation as needed) Thought: I now have enough information to answer. Answer: [Final answer]
 
 Question: {user_question}
 
@@ -318,18 +311,13 @@ Question: {user_question}
 
 Question: What is the current market cap of the company that created ChatGPT?
 
-Thought: I need to find out which company created ChatGPT, then look up their market cap.
-Action: search("company that created ChatGPT")
-Observation: ChatGPT was created by OpenAI, an AI research company.
+Thought: I need to find out which company created ChatGPT, then look up their market cap. Action: search("company that created ChatGPT") Observation: ChatGPT was created by OpenAI, an AI research company.
 
-Thought: Now I need to find OpenAI's current market cap.
-Action: search("OpenAI market cap 2025")
-Observation: OpenAI's valuation reached $157 billion in 2024 after their latest funding round.
+Thought: Now I need to find OpenAI's current market cap. Action: search("OpenAI market cap 2025") Observation: OpenAI's valuation reached $157 billion in 2024 after their latest funding round.
 
-Thought: I now have the information needed to answer.
-Answer: ChatGPT was created by OpenAI, which has a valuation of approximately $157 billion (as of their 2024 funding round). Note: OpenAI is a private company, so this is a valuation rather than a public market cap.
+Thought: I now have the information needed to answer. Answer: ChatGPT was created by OpenAI, which has a valuation of approximately $157 billion (as of their 2024 funding round). Note: OpenAI is a private company, so this is a valuation rather than a public market cap.
 
-```text
+````text
 
 ### ReAct Implementation Pattern
 
@@ -357,7 +345,7 @@ def react_loop(question: str, tools: dict, max_iterations: int = 10) -> str:
         context += f"Observation: {observation}\n\n"
 
     return "Max iterations reached without answer."
-```
+````
 
 ---
 

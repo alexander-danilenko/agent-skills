@@ -427,14 +427,14 @@ Document all possible errors for each endpoint:
 /users/{id}:
   get:
     responses:
-      '200':
+      "200":
         description: Success
-      '401':
+      "401":
         description: Authentication failed
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              $ref: "#/components/schemas/Error"
             examples:
               missing_token:
                 value:
@@ -446,12 +446,12 @@ Document all possible errors for each endpoint:
                   error:
                     code: INVALID_TOKEN
                     message: Token is invalid or expired
-      '404':
+      "404":
         description: User not found
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              $ref: "#/components/schemas/Error"
             examples:
               not_found:
                 value:

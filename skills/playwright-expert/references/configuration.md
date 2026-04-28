@@ -4,54 +4,54 @@
 
 ```typescript
 // playwright.config.ts
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
-  testDir: './tests',
+  testDir: "./tests",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: [
-    ['html'],
-    ['json', { outputFile: 'results.json' }],
-    ['junit', { outputFile: 'results.xml' }],
+    ["html"],
+    ["json", { outputFile: "results.json" }],
+    ["junit", { outputFile: "results.xml" }],
   ],
 
   use: {
-    baseURL: 'http://localhost:3000',
-    trace: 'retain-on-failure',
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
-    testIdAttribute: 'data-testid',
+    baseURL: "http://localhost:3000",
+    trace: "retain-on-failure",
+    screenshot: "only-on-failure",
+    video: "retain-on-failure",
+    testIdAttribute: "data-testid",
   },
 
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
     },
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
     },
     {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
     },
     {
-      name: 'mobile-chrome',
-      use: { ...devices['Pixel 5'] },
+      name: "mobile-chrome",
+      use: { ...devices["Pixel 5"] },
     },
     {
-      name: 'mobile-safari',
-      use: { ...devices['iPhone 13'] },
+      name: "mobile-safari",
+      use: { ...devices["iPhone 13"] },
     },
   ],
 
   webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:3000',
+    command: "npm run dev",
+    url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
   },
@@ -62,20 +62,20 @@ export default defineConfig({
 
 ```typescript
 // global-setup.ts
-import { chromium, FullConfig } from '@playwright/test';
+import { chromium, FullConfig } from "@playwright/test";
 
 async function globalSetup(config: FullConfig) {
   const browser = await chromium.launch();
   const page = await browser.newPage();
 
-  await page.goto('http://localhost:3000/login');
-  await page.getByLabel('Email').fill('user@test.com');
-  await page.getByLabel('Password').fill('password');
-  await page.getByRole('button', { name: 'Log in' }).click();
+  await page.goto("http://localhost:3000/login");
+  await page.getByLabel("Email").fill("user@test.com");
+  await page.getByLabel("Password").fill("password");
+  await page.getByRole("button", { name: "Log in" }).click();
   await page.waitForURL(/dashboard/);
 
   // Save auth state
-  await page.context().storageState({ path: 'auth.json' });
+  await page.context().storageState({ path: "auth.json" });
   await browser.close();
 }
 
@@ -83,9 +83,9 @@ export default globalSetup;
 
 // playwright.config.ts
 export default defineConfig({
-  globalSetup: require.resolve('./global-setup'),
+  globalSetup: require.resolve("./global-setup"),
   use: {
-    storageState: 'auth.json',
+    storageState: "auth.json",
   },
 });
 ```

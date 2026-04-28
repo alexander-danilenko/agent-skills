@@ -32,10 +32,16 @@ vercel --prod
     {
       "source": "/api/(.*)",
       "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "https://your-allowed-origin.com" },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://your-allowed-origin.com"
+        },
         // WARNING: Do NOT use "*" in production for credentialed requests — it disables cookies/auth headers.
         // Restrict to specific trusted origins instead.
-        { "key": "Access-Control-Allow-Methods", "value": "GET,POST,PUT,DELETE" }
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET,POST,PUT,DELETE"
+        }
       ]
     }
   ],
@@ -68,10 +74,10 @@ NEXT_PUBLIC_API_URL="https://api.example.com"
 
 ```tsx
 // Access in Server Components
-const dbUrl = process.env.DATABASE_URL
+const dbUrl = process.env.DATABASE_URL;
 
 // Access in Client Components (must be prefixed with NEXT_PUBLIC_)
-const apiUrl = process.env.NEXT_PUBLIC_API_URL
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 ```
 
 ## Self-Hosting
@@ -82,10 +88,10 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL
 // next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
-}
+  output: "standalone",
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
 ```
 
 ```bash
@@ -167,7 +173,7 @@ CMD ["node", "server.js"]
 ### docker-compose.yml
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   nextjs:
@@ -217,16 +223,16 @@ docker-compose up -d --build
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Standalone for self-hosting
-  output: 'standalone',
+  output: "standalone",
 
   // Image optimization
   images: {
-    formats: ['image/avif', 'image/webp'],
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'cdn.example.com',
-        pathname: '/images/**',
+        protocol: "https",
+        hostname: "cdn.example.com",
+        pathname: "/images/**",
       },
     ],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -240,60 +246,60 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/:path*',
+        source: "/:path*",
         headers: [
           {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on'
+            key: "X-DNS-Prefetch-Control",
+            value: "on",
           },
           {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload'
+            key: "Strict-Transport-Security",
+            value: "max-age=63072000; includeSubDomains; preload",
           },
           {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
           },
           {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff'
+            key: "X-Content-Type-Options",
+            value: "nosniff",
           },
           {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block'
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
           },
           {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin'
+            key: "Referrer-Policy",
+            value: "origin-when-cross-origin",
           },
         ],
       },
-    ]
+    ];
   },
 
   // Experimental features
   experimental: {
-    optimizePackageImports: ['@mui/material', 'lodash'],
+    optimizePackageImports: ["@mui/material", "lodash"],
   },
 
   // Bundle analyzer
   webpack: (config, { isServer }) => {
-    if (process.env.ANALYZE === 'true') {
-      const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+    if (process.env.ANALYZE === "true") {
+      const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
       config.plugins.push(
         new BundleAnalyzerPlugin({
-          analyzerMode: 'static',
+          analyzerMode: "static",
           reportFilename: isServer
-            ? '../analyze/server.html'
-            : './analyze/client.html',
-        })
-      )
+            ? "../analyze/server.html"
+            : "./analyze/client.html",
+        }),
+      );
     }
-    return config
+    return config;
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
 ```
 
 ### Bundle Analysis
@@ -313,13 +319,13 @@ npm run build -- --experimental-build-mode=compile
 
 ```tsx
 // app/layout.tsx
-import { SpeedInsights } from '@vercel/speed-insights/next'
-import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html>
@@ -329,7 +335,7 @@ export default function RootLayout({
         <Analytics />
       </body>
     </html>
-  )
+  );
 }
 ```
 
@@ -340,32 +346,31 @@ export default function RootLayout({
 ```js
 // next.config.js
 const nextConfig = {
-  assetPrefix: process.env.NODE_ENV === 'production'
-    ? 'https://cdn.example.com'
-    : '',
-}
+  assetPrefix:
+    process.env.NODE_ENV === "production" ? "https://cdn.example.com" : "",
+};
 ```
 
 ### Edge Runtime
 
 ```tsx
 // app/api/edge/route.ts
-export const runtime = 'edge'
+export const runtime = "edge";
 
 export async function GET(request: Request) {
-  return new Response('Hello from Edge!', {
+  return new Response("Hello from Edge!", {
     status: 200,
     headers: {
-      'content-type': 'text/plain',
+      "content-type": "text/plain",
     },
-  })
+  });
 }
 
 // app/page.tsx
-export const runtime = 'edge'
+export const runtime = "edge";
 
 export default async function Page() {
-  return <div>Edge-rendered page</div>
+  return <div>Edge-rendered page</div>;
 }
 ```
 
@@ -375,11 +380,15 @@ export default async function Page() {
 
 ```tsx
 // app/blog/[slug]/page.tsx
-export const revalidate = 3600 // Revalidate every hour
+export const revalidate = 3600; // Revalidate every hour
 
-export default async function BlogPost({ params }: { params: { slug: string } }) {
-  const post = await fetchPost(params.slug)
-  return <article>{post.content}</article>
+export default async function BlogPost({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const post = await fetchPost(params.slug);
+  return <article>{post.content}</article>;
 }
 ```
 
@@ -387,24 +396,24 @@ export default async function BlogPost({ params }: { params: { slug: string } })
 
 ```tsx
 // app/api/revalidate/route.ts
-import { revalidatePath } from 'next/cache'
-import { NextRequest } from 'next/server'
+import { revalidatePath } from "next/cache";
+import { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
   // SECURITY: Read secret from Authorization header, NOT a URL query param.
   // Query params are logged by proxies/CDNs and appear in browser history.
-  const authHeader = request.headers.get('authorization')
-  const secret = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null
+  const authHeader = request.headers.get("authorization");
+  const secret = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
 
   if (secret !== process.env.REVALIDATE_SECRET) {
-    return Response.json({ message: 'Invalid secret' }, { status: 401 })
+    return Response.json({ message: "Invalid secret" }, { status: 401 });
   }
 
-  const path = request.nextUrl.searchParams.get('path') || '/'
+  const path = request.nextUrl.searchParams.get("path") || "/";
 
-  revalidatePath(path)
+  revalidatePath(path);
 
-  return Response.json({ revalidated: true, now: Date.now() })
+  return Response.json({ revalidated: true, now: Date.now() });
 }
 ```
 
@@ -412,45 +421,48 @@ export async function POST(request: NextRequest) {
 
 ```ts
 // lib/db.ts
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = global as unknown as {
-  prisma: PrismaClient | undefined
-}
+  prisma: PrismaClient | undefined;
+};
 
 export const db =
   globalForPrisma.prisma ??
   new PrismaClient({
-    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-  })
+    log:
+      process.env.NODE_ENV === "development"
+        ? ["query", "error", "warn"]
+        : ["error"],
+  });
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
 ```
 
 ## Health Check Endpoint
 
 ```tsx
 // app/api/health/route.ts
-import { db } from '@/lib/db'
+import { db } from "@/lib/db";
 
 export async function GET() {
   try {
     // Check database connection
-    await db.$queryRaw`SELECT 1`
+    await db.$queryRaw`SELECT 1`;
 
     return Response.json({
-      status: 'ok',
+      status: "ok",
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
-    })
+    });
   } catch (error) {
     return Response.json(
       {
-        status: 'error',
-        message: 'Database connection failed',
+        status: "error",
+        message: "Database connection failed",
       },
-      { status: 503 }
-    )
+      { status: 503 },
+    );
   }
 }
 ```
@@ -475,8 +487,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -496,28 +508,28 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
+          vercel-args: "--prod"
 ```
 
 ## Monitoring & Logging
 
 ```tsx
 // app/error.tsx
-'use client'
+"use client";
 
-import * as Sentry from '@sentry/nextjs'
-import { useEffect } from 'react'
+import * as Sentry from "@sentry/nextjs";
+import { useEffect } from "react";
 
 export default function Error({
   error,
 }: {
-  error: Error & { digest?: string }
+  error: Error & { digest?: string };
 }) {
   useEffect(() => {
-    Sentry.captureException(error)
-  }, [error])
+    Sentry.captureException(error);
+  }, [error]);
 
-  return <div>Something went wrong!</div>
+  return <div>Something went wrong!</div>;
 }
 ```
 

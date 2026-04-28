@@ -268,10 +268,10 @@ aws ec2 modify-volume \
 
 #### DynamoDB Capacity Modes
 
-| Mode                       | Best For                 | Pricing                   |
-| -------------------------- | ------------------------ | ------------------------- |
-| On-Demand                  | Unpredictable traffic    | Pay per request           |
-| Provisioned                | Steady traffic           | Pay per capacity unit     |
+| Mode | Best For | Pricing |
+| --- | --- | --- |
+| On-Demand | Unpredictable traffic | Pay per request |
+| Provisioned | Steady traffic | Pay per capacity unit |
 | Provisioned + Auto Scaling | Variable but predictable | Lower cost than on-demand |
 
 ## Network Cost Optimization
@@ -327,7 +327,7 @@ resource "aws_vpc_endpoint" "ecr" {
 # CloudFront cache optimization
 CacheBehaviors:
   - PathPattern: "/static/*"
-    CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6  # CachingOptimized
+    CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6 # CachingOptimized
     Compress: true
     TTL:
       DefaultTTL: 86400
@@ -370,7 +370,7 @@ Resources:
     Properties:
       Runtime: python3.11
       Architectures:
-        - arm64  # 20% cost savings
+        - arm64 # 20% cost savings
 ```
 
 ### Container Optimization
@@ -387,7 +387,7 @@ ECS Service:
       Weight: 4
     - CapacityProvider: FARGATE
       Weight: 1
-      Base: 2  # Minimum on-demand tasks
+      Base: 2 # Minimum on-demand tasks
 ```
 
 #### Right-Size Container Resources
@@ -396,10 +396,10 @@ ECS Service:
 # Analyze actual usage with Container Insights
 resources:
   requests:
-    memory: "256Mi"  # Based on p95 usage + 20% buffer
-    cpu: "100m"      # Based on p95 usage + 20% buffer
+    memory: "256Mi" # Based on p95 usage + 20% buffer
+    cpu: "100m" # Based on p95 usage + 20% buffer
   limits:
-    memory: "512Mi"  # 2x requests for burst
+    memory: "512Mi" # 2x requests for burst
     cpu: "500m"
 ```
 
@@ -411,21 +411,9 @@ resources:
 
 ```yaml
 # Terraform - enforce tags
-variable "required_tags" {
-  default = {
-    environment  = "prod"
-    cost-center  = "engineering"
-    owner        = "platform-team"
-    project      = "api-gateway"
-    managed-by   = "terraform"
-  }
-}
+variable "required_tags" { default = { environment  = "prod" cost-center  = "engineering" owner        = "platform-team" project      = "api-gateway" managed-by   = "terraform" } }
 
-resource "aws_instance" "example" {
-  ami           = data.aws_ami.latest.id
-  instance_type = "t3.medium"
-  tags          = var.required_tags
-}
+resource "aws_instance" "example" { ami           = data.aws_ami.latest.id instance_type = "t3.medium" tags          = var.required_tags }
 ```
 
 #### Tag Enforcement
@@ -529,14 +517,14 @@ Resources:
     Properties:
       AutoScalingGroupName: !Ref DevASG
       DesiredCapacity: 0
-      Recurrence: "0 20 * * MON-FRI"  # 8 PM weekdays
+      Recurrence: "0 20 * * MON-FRI" # 8 PM weekdays
 
   ScaleUpSchedule:
     Type: AWS::AutoScaling::ScheduledAction
     Properties:
       AutoScalingGroupName: !Ref DevASG
       DesiredCapacity: 3
-      Recurrence: "0 8 * * MON-FRI"   # 8 AM weekdays
+      Recurrence: "0 8 * * MON-FRI" # 8 AM weekdays
 ```
 
 ### Cost Anomaly Detection

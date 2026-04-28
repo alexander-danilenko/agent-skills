@@ -35,20 +35,20 @@
 ```typescript
 // WRONG — beforeEach makes N API calls (one per test)
 beforeEach(async () => {
-  result = await service.search(buildInput({ id: KnownRecord.id }))
-})
+  result = await service.search(buildInput({ id: KnownRecord.id }));
+});
 
 // RIGHT — beforeAll makes 1 API call, all it() blocks share the cached response
 beforeAll(async () => {
-  const ctx = await createExternalApiModule()
-  module = ctx.module
-  service = ctx.service
-  result = await service.search(buildInput({ id: KnownRecord.id }))
-}, API_TIMEOUT)
+  const ctx = await createExternalApiModule();
+  module = ctx.module;
+  service = ctx.service;
+  result = await service.search(buildInput({ id: KnownRecord.id }));
+}, API_TIMEOUT);
 
 afterAll(async () => {
-  await module.close()
-})
+  await module.close();
+});
 ```
 
 ## Timeout Management
@@ -62,27 +62,31 @@ Constant definition in `__setup__/`:
 
 ```typescript
 /** Timeout for live external API calls (ms). */
-export const API_TIMEOUT = 15_000
+export const API_TIMEOUT = 15_000;
 ```
 
 Usage in spec files:
 
 ```typescript
-it("should return the exact record when searching by ID alone", async () => {
-  const result = await service.search(buildInput({ id: KnownRecord.id }))
-  expect(result.result_count).toBe(1)
-}, API_TIMEOUT)
+it(
+  "should return the exact record when searching by ID alone",
+  async () => {
+    const result = await service.search(buildInput({ id: KnownRecord.id }));
+    expect(result.result_count).toBe(1);
+  },
+  API_TIMEOUT,
+);
 ```
 
 Usage in `beforeAll`:
 
 ```typescript
 beforeAll(async () => {
-  const ctx = await createExternalApiModule()
-  module = ctx.module
-  service = ctx.service
-  response = await service.search(buildInput({ id: KnownRecord.id }))
-}, API_TIMEOUT)
+  const ctx = await createExternalApiModule();
+  module = ctx.module;
+  service = ctx.service;
+  response = await service.search(buildInput({ id: KnownRecord.id }));
+}, API_TIMEOUT);
 ```
 
 ## Known Fixture Pattern
@@ -111,19 +115,19 @@ export const KnownRecord = {
   state: "NY",
   postalCodePrefix: "100",
   classification: "General Practice",
-} as const
+} as const;
 ```
 
 ## No-Mock Policy
 
-| In contract tests...    | DO                                   | DO NOT                      |
-| ----------------------- | ------------------------------------ | --------------------------- |
-| Service under test      | Provide as real class in `providers` | Mock with `useValue`        |
-| External API calls      | Let them hit the real API            | Intercept with `jest.spyOn` |
-| Helper utilities        | Write as plain functions             | Wrap in `jest.fn()`         |
-| Service import in setup | Use value import (`import { Svc }`)  | Use `import type`           |
-| Service import in spec  | **MAY** use `import type`            | —                           |
-| `jest.mock()`           | —                                    | Never use in contract tests |
+| In contract tests... | DO | DO NOT |
+| --- | --- | --- |
+| Service under test | Provide as real class in `providers` | Mock with `useValue` |
+| External API calls | Let them hit the real API | Intercept with `jest.spyOn` |
+| Helper utilities | Write as plain functions | Wrap in `jest.fn()` |
+| Service import in setup | Use value import (`import { Svc }`) | Use `import type` |
+| Service import in spec | **MAY** use `import type` | — |
+| `jest.mock()` | — | Never use in contract tests |
 
 ## Setup Helpers
 
@@ -135,21 +139,21 @@ export const KnownRecord = {
 Full example:
 
 ```typescript
-import { chain } from "lodash"
-import { Test } from "@nestjs/testing"
-import { ExternalApiService } from "../../external-api.service"
-import { SearchInput } from "../../../dto"
-import { RecordType } from "../../../enum"
+import { chain } from "lodash";
+import { Test } from "@nestjs/testing";
+import { ExternalApiService } from "../../external-api.service";
+import { SearchInput } from "../../../dto";
+import { RecordType } from "../../../enum";
 
-import type { TestingModule } from "@nestjs/testing"
-import type { SearchResult } from "../../../schema"
+import type { TestingModule } from "@nestjs/testing";
+import type { SearchResult } from "../../../schema";
 
 /** Timeout for live external API calls (ms). */
-export const API_TIMEOUT = 15_000
+export const API_TIMEOUT = 15_000;
 
 export interface ExternalApiTestContext {
-  module: TestingModule
-  service: ExternalApiService
+  module: TestingModule;
+  service: ExternalApiService;
 }
 
 /**
@@ -158,42 +162,44 @@ export interface ExternalApiTestContext {
 export async function createExternalApiModule(): Promise<ExternalApiTestContext> {
   const module = await Test.createTestingModule({
     providers: [ExternalApiService],
-  }).compile()
+  }).compile();
 
   return {
     module,
     service: module.get(ExternalApiService),
-  }
+  };
 }
 
 /**
  * Build a search input with sensible defaults.
  */
 export function buildInput(overrides: Partial<SearchInput>): SearchInput {
-  const input = new SearchInput()
-  input.record_type = RecordType.Individual
-  input.limit = 10
-  Object.assign(input, overrides)
-  return input
+  const input = new SearchInput();
+  input.record_type = RecordType.Individual;
+  input.limit = 10;
+  Object.assign(input, overrides);
+  return input;
 }
 
 /**
  * Index search results by ID for O(1) lookups in assertions.
  */
-export function indexById(results: SearchResult[]): Record<string, SearchResult> {
+export function indexById(
+  results: SearchResult[],
+): Record<string, SearchResult> {
   return chain(results)
-    .keyBy(result => result.id)
-    .value()
+    .keyBy((result) => result.id)
+    .value();
 }
 ```
 
 `satisfies` usage for `Promise.all` tuples:
 
 ```typescript
-const [withFilter, withoutFilter] = await Promise.all([
+const [withFilter, withoutFilter] = (await Promise.all([
   service.search(buildInput({ include_aliases: true, limit: 200 })),
   service.search(buildInput({ include_aliases: false, limit: 200 })),
-]) satisfies [SearchResponse, SearchResponse]
+])) satisfies [SearchResponse, SearchResponse];
 ```
 
 ## Assertion Helpers
@@ -205,21 +211,19 @@ const [withFilter, withoutFilter] = await Promise.all([
 ```typescript
 /** Helper: check if a value is null or undefined. */
 function isAbsent(value: unknown): value is null | undefined {
-  return null === value || undefined === value
+  return null === value || undefined === value;
 }
 
 /** Helper: assert a field is a string or absent (null/undefined). */
 function expectStringOrAbsent(value: unknown): void {
-  expect(
-    isAbsent(value) || "string" === typeof value,
-  ).toBe(true)
+  expect(isAbsent(value) || "string" === typeof value).toBe(true);
 }
 
 /** Helper: assert a field is a date string (YYYY-MM-DD) or absent. */
 function expectDateOrAbsent(value: unknown): void {
   if (!isAbsent(value)) {
-    expect(typeof value).toBe("string")
-    expect(value).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+    expect(typeof value).toBe("string");
+    expect(value).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   }
 }
 ```

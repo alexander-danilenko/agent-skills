@@ -138,25 +138,25 @@ spec:
   template:
     spec:
       containers:
-      - name: web
-        image: myregistry/web:v1
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
+        - name: web
+          image: myregistry/web:v1
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
 ```
 
 #### Cloud-Specific Considerations
 
-| Feature         | EKS                 | AKS               | GKE               |
-| --------------- | ------------------- | ----------------- | ----------------- |
-| Load Balancer   | ALB/NLB annotations | Azure LB          | GCP LB            |
-| Storage Class   | gp3, io2            | managed-premium   | pd-ssd            |
-| IAM Integration | IRSA                | Workload Identity | Workload Identity |
-| Ingress         | AWS ALB Controller  | AGIC              | GKE Ingress       |
+| Feature | EKS | AKS | GKE |
+| --- | --- | --- | --- |
+| Load Balancer | ALB/NLB annotations | Azure LB | GCP LB |
+| Storage Class | gp3, io2 | managed-premium | pd-ssd |
+| IAM Integration | IRSA | Workload Identity | Workload Identity |
+| Ingress | AWS ALB Controller | AGIC | GKE Ingress |
 
 ### Application Abstraction
 
@@ -258,15 +258,15 @@ S3 Bucket -> S3 Event -> Lambda -> GCS Upload
 
 ### Lock-In Risk Assessment
 
-| Service Type         | Lock-In Risk | Mitigation Strategy                           |
-| -------------------- | ------------ | --------------------------------------------- |
-| Compute (VMs)        | Low          | Standard OS images, IaC                       |
-| Kubernetes           | Low          | Portable manifests, avoid proprietary add-ons |
-| Object Storage       | Low          | S3-compatible API, standard formats           |
-| Managed Databases    | Medium       | Standard SQL, logical backups                 |
-| Serverless Functions | High         | Abstraction layers, containers                |
-| Proprietary AI/ML    | High         | Open-source alternatives, ONNX models         |
-| Managed Services     | High         | Evaluate portability before adoption          |
+| Service Type | Lock-In Risk | Mitigation Strategy |
+| --- | --- | --- |
+| Compute (VMs) | Low | Standard OS images, IaC |
+| Kubernetes | Low | Portable manifests, avoid proprietary add-ons |
+| Object Storage | Low | S3-compatible API, standard formats |
+| Managed Databases | Medium | Standard SQL, logical backups |
+| Serverless Functions | High | Abstraction layers, containers |
+| Proprietary AI/ML | High | Open-source alternatives, ONNX models |
+| Managed Services | High | Evaluate portability before adoption |
 
 ### Mitigation Strategies
 
@@ -289,7 +289,10 @@ interface QueueService {
 
 class SQSQueue implements QueueService {
   async send(message: string) {
-    await this.sqsClient.sendMessage({ QueueUrl: this.url, MessageBody: message });
+    await this.sqsClient.sendMessage({
+      QueueUrl: this.url,
+      MessageBody: message,
+    });
   }
 }
 
@@ -302,8 +305,10 @@ class PubSubQueue implements QueueService {
 // Factory pattern for cloud selection
 function createQueue(provider: string): QueueService {
   switch (provider) {
-    case "aws": return new SQSQueue();
-    case "gcp": return new PubSubQueue();
+    case "aws":
+      return new SQSQueue();
+    case "gcp":
+      return new PubSubQueue();
   }
 }
 ```
@@ -403,11 +408,11 @@ spec:
 
 ```yaml
 Required Tags (all clouds):
-- environment: prod/staging/dev
-- cost-center: engineering/marketing/sales
-- owner: team-name
-- project: project-code
-- managed-by: terraform/manual
+  - environment: prod/staging/dev
+  - cost-center: engineering/marketing/sales
+  - owner: team-name
+  - project: project-code
+  - managed-by: terraform/manual
 ```
 
 ### Cost Comparison Framework

@@ -47,10 +47,10 @@ Breaking changes, deprecations, or behavioral changes to existing functionality.
 
 List the parts of the system affected by these changes. Helps QA know where to focus testing.
 
-| Area                      | Impact                                            |
-| ------------------------- | ------------------------------------------------- |
+| Area | Impact |
+| --- | --- |
 | e.g., Member Verification | New NPI Registry check added to verification flow |
-| e.g., API                 | New endpoint for provider lookup                  |
+| e.g., API | New endpoint for provider lookup |
 
 ### Testing Considerations
 

@@ -4,19 +4,19 @@
 
 ```javascript
 // Promise creation
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const fetchWithTimeout = (url, timeout = 5000) => {
   return Promise.race([
     fetch(url),
-    delay(timeout).then(() => Promise.reject(new Error('Timeout')))
+    delay(timeout).then(() => Promise.reject(new Error("Timeout"))),
   ]);
 };
 
 // Promise composition
 const fetchUserData = async (userId) => {
-  const user = await fetch(`/api/users/${userId}`).then(r => r.json());
-  const posts = await fetch(`/api/users/${userId}/posts`).then(r => r.json());
+  const user = await fetch(`/api/users/${userId}`).then((r) => r.json());
+  const posts = await fetch(`/api/users/${userId}/posts`).then((r) => r.json());
   return { user, posts };
 };
 ```
@@ -27,9 +27,9 @@ const fetchUserData = async (userId) => {
 // Parallel execution with Promise.all
 const fetchAllData = async () => {
   const [users, posts, comments] = await Promise.all([
-    fetch('/api/users').then(r => r.json()),
-    fetch('/api/posts').then(r => r.json()),
-    fetch('/api/comments').then(r => r.json())
+    fetch("/api/users").then((r) => r.json()),
+    fetch("/api/posts").then((r) => r.json()),
+    fetch("/api/comments").then((r) => r.json()),
   ]);
   return { users, posts, comments };
 };
@@ -69,10 +69,10 @@ const safeApiCall = async (url) => {
     }
     return await response.json();
   } catch (error) {
-    if (error.name === 'TypeError') {
-      console.error('Network error:', error);
-    } else if (error.name === 'SyntaxError') {
-      console.error('Invalid JSON:', error);
+    if (error.name === "TypeError") {
+      console.error("Network error:", error);
+    } else if (error.name === "SyntaxError") {
+      console.error("Invalid JSON:", error);
     }
     throw error;
   }
@@ -82,7 +82,7 @@ const safeApiCall = async (url) => {
 class ApiError extends Error {
   constructor(status, message, data) {
     super(message);
-    this.name = 'ApiError';
+    this.name = "ApiError";
     this.status = status;
     this.data = data;
   }
@@ -105,7 +105,7 @@ const retryWithBackoff = async (fn, maxRetries = 3) => {
     } catch (error) {
       if (i === maxRetries - 1) throw error;
       const delay = Math.min(1000 * 2 ** i, 10000);
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
 };
@@ -116,13 +116,13 @@ const retryWithBackoff = async (fn, maxRetries = 3) => {
 ```javascript
 // Promise.allSettled - wait for all, regardless of rejection
 const results = await Promise.allSettled([
-  fetch('/api/users'),
-  fetch('/api/posts'),
-  fetch('/api/invalid')
+  fetch("/api/users"),
+  fetch("/api/posts"),
+  fetch("/api/invalid"),
 ]);
 
 results.forEach((result, index) => {
-  if (result.status === 'fulfilled') {
+  if (result.status === "fulfilled") {
     console.log(`Success ${index}:`, result.value);
   } else {
     console.error(`Failed ${index}:`, result.reason);
@@ -131,16 +131,13 @@ results.forEach((result, index) => {
 
 // Promise.any - first successful result
 const fastestMirror = await Promise.any([
-  fetch('https://mirror1.example.com/data'),
-  fetch('https://mirror2.example.com/data'),
-  fetch('https://mirror3.example.com/data')
+  fetch("https://mirror1.example.com/data"),
+  fetch("https://mirror2.example.com/data"),
+  fetch("https://mirror3.example.com/data"),
 ]);
 
 // Promise.race - first settled (resolved or rejected)
-const raceResult = await Promise.race([
-  fetchFromCache(),
-  fetchFromNetwork()
-]);
+const raceResult = await Promise.race([fetchFromCache(), fetchFromNetwork()]);
 ```
 
 ## Async Generators
@@ -163,7 +160,7 @@ async function* fetchPaginatedData(baseUrl) {
 }
 
 // Usage
-for await (const items of fetchPaginatedData('/api/items')) {
+for await (const items of fetchPaginatedData("/api/items")) {
   processItems(items);
 }
 
@@ -201,7 +198,7 @@ class AsyncQueue {
 
   async run(fn) {
     while (this.#running >= this.#maxConcurrent) {
-      await new Promise(resolve => this.#queue.push(resolve));
+      await new Promise((resolve) => this.#queue.push(resolve));
     }
 
     this.#running++;
@@ -218,7 +215,7 @@ class AsyncQueue {
 // Usage
 const queue = new AsyncQueue(2);
 const results = await Promise.all(
-  urls.map(url => queue.run(() => fetch(url)))
+  urls.map((url) => queue.run(() => fetch(url))),
 );
 ```
 
@@ -226,15 +223,15 @@ const results = await Promise.all(
 
 ```javascript
 // Microtasks vs Macrotasks
-console.log('1: Synchronous');
+console.log("1: Synchronous");
 
-setTimeout(() => console.log('2: Macrotask (setTimeout)'), 0);
+setTimeout(() => console.log("2: Macrotask (setTimeout)"), 0);
 
-Promise.resolve().then(() => console.log('3: Microtask (Promise)'));
+Promise.resolve().then(() => console.log("3: Microtask (Promise)"));
 
-queueMicrotask(() => console.log('4: Microtask (queueMicrotask)'));
+queueMicrotask(() => console.log("4: Microtask (queueMicrotask)"));
 
-console.log('5: Synchronous');
+console.log("5: Synchronous");
 
 // Output order: 1, 5, 3, 4, 2
 
@@ -248,7 +245,7 @@ const processLargeArray = async (items) => {
     results.push(...chunk.map(processItem));
 
     // Yield to event loop
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await new Promise((resolve) => setTimeout(resolve, 0));
   }
 
   return results;
@@ -265,11 +262,11 @@ const { signal } = controller;
 setTimeout(() => controller.abort(), 5000);
 
 try {
-  const response = await fetch('/api/data', { signal });
+  const response = await fetch("/api/data", { signal });
   const data = await response.json();
 } catch (error) {
-  if (error.name === 'AbortError') {
-    console.log('Request aborted');
+  if (error.name === "AbortError") {
+    console.log("Request aborted");
   }
 }
 
@@ -279,8 +276,8 @@ const multiAbort = async () => {
 
   try {
     const [users, posts] = await Promise.all([
-      fetch('/api/users', { signal: controller.signal }),
-      fetch('/api/posts', { signal: controller.signal })
+      fetch("/api/users", { signal: controller.signal }),
+      fetch("/api/posts", { signal: controller.signal }),
     ]);
   } catch (error) {
     controller.abort();
@@ -298,7 +295,7 @@ const processStream = async (url) => {
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
 
-  let result = '';
+  let result = "";
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
@@ -314,21 +311,21 @@ const transformStream = new TransformStream({
   transform(chunk, controller) {
     const transformed = chunk.toString().toUpperCase();
     controller.enqueue(transformed);
-  }
+  },
 });
 
-const response = await fetch('/data');
+const response = await fetch("/data");
 const transformed = response.body.pipeThrough(transformStream);
 ```
 
 ## Quick Reference
 
-| Pattern                | Use Case              | Example                              |
-| ---------------------- | --------------------- | ------------------------------------ |
-| `Promise.all()`        | Parallel, fail-fast   | `await Promise.all([p1, p2])`        |
+| Pattern | Use Case | Example |
+| --- | --- | --- |
+| `Promise.all()` | Parallel, fail-fast | `await Promise.all([p1, p2])` |
 | `Promise.allSettled()` | Parallel, all results | `await Promise.allSettled([p1, p2])` |
-| `Promise.race()`       | First to complete     | `await Promise.race([p1, p2])`       |
-| `Promise.any()`        | First to succeed      | `await Promise.any([p1, p2])`        |
-| `async function*`      | Async iteration       | `for await (const x of gen())`       |
-| `AbortController`      | Cancellation          | `fetch(url, { signal })`             |
-| `queueMicrotask()`     | Priority microtask    | `queueMicrotask(fn)`                 |
+| `Promise.race()` | First to complete | `await Promise.race([p1, p2])` |
+| `Promise.any()` | First to succeed | `await Promise.any([p1, p2])` |
+| `async function*` | Async iteration | `for await (const x of gen())` |
+| `AbortController` | Cancellation | `fetch(url, { signal })` |
+| `queueMicrotask()` | Priority microtask | `queueMicrotask(fn)` |

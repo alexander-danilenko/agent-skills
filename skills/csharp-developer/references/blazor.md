@@ -290,12 +290,12 @@ public class AppState
 ```javascript
 // wwwroot/js/mapComponent.js
 export function initializeMap(element) {
-    const map = new Map(element);
-    return {
-        setLocation: (lat, lng) => {
-            map.setView([lat, lng], 13);
-        }
-    };
+  const map = new Map(element);
+  return {
+    setLocation: (lat, lng) => {
+      map.setView([lat, lng], 13);
+    },
+  };
 }
 ```
 

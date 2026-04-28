@@ -135,15 +135,15 @@
 
 ```markdown
 ## Testing Strategy
-Our project uses Jest as the testing framework. To run tests, you should
-execute the npm test command. We aim for high test coverage and follow
-TDD principles when possible.
+
+Our project uses Jest as the testing framework. To run tests, you should execute the npm test command. We aim for high test coverage and follow TDD principles when possible.
 ```
 
 ### ✅ Token Efficient
 
 ```markdown
 ## TEST
+
 `npm test` (Jest)
 ```
 
@@ -153,6 +153,7 @@ TDD principles when possible.
 
 ```markdown
 ## Code Style
+
 - 2 spaces indentation
 - 100 char line limit
 - Single quotes
@@ -163,6 +164,7 @@ TDD principles when possible.
 
 ```markdown
 ## CODE STYLE
+
 See `.eslintrc` + `.prettierrc`
 ```
 
@@ -172,22 +174,16 @@ See `.eslintrc` + `.prettierrc`
 
 ```markdown
 ## Error Handling
-Errors should be handled gracefully. Consider the user experience and
-provide helpful error messages.
+
+Errors should be handled gracefully. Consider the user experience and provide helpful error messages.
 ```
 
 ### ✅ Concrete Pattern
 
 ```markdown
 ## ERRORS
-Pattern:
-\`\`\`ts
-try { /* ... */ }
-catch (e) {
-  logger.error(e);
-  return { error: e.message };
-}
-\`\`\`
+
+Pattern: \`\`\`ts try { /_ ... _/ } catch (e) { logger.error(e); return { error: e.message }; } \`\`\`
 ```
 
 ---
@@ -196,6 +192,7 @@ catch (e) {
 
 ```markdown
 ## API Routes
+
 Located in `src/api/`. Return JSON responses.
 ```
 
@@ -203,9 +200,8 @@ Located in `src/api/`. Return JSON responses.
 
 ```markdown
 ## API ROUTES
-Location: `src/api/`
-Auth: JWT via `auth.middleware.ts`
-Validate: Zod schemas in `schemas/`
+
+Location: `src/api/` Auth: JWT via `auth.middleware.ts` Validate: Zod schemas in `schemas/`
 ```
 
 ## Monorepo-Specific Validation

@@ -22,13 +22,16 @@
 # Runbook: High API Error Rate
 
 ## Symptoms
+
 - Alert: `api_error_rate > 0.05`
 - Dashboard: https://grafana.example.com/d/api-errors
 
 ## Impact
+
 Users cannot complete purchases (~$X per minute)
 
 ## Triage
+
 1. Check dashboard for affected endpoints
 2. Check recent deployments: `kubectl rollout history deployment/api`
 3. Check dependencies: database, redis, external APIs
@@ -36,20 +39,25 @@ Users cannot complete purchases (~$X per minute)
 ## Resolution
 
 ### Option 1: Rollback
+
 kubectl rollout undo deployment/api -n production
 
 ### Option 2: Scale Up
+
 kubectl scale deployment/api --replicas=10 -n production
 
 ### Option 3: Fix Config
+
 kubectl set env deployment/api DB_POOL_SIZE=50 -n production
 
 ## Verification
+
 - [ ] Error rate <1%
 - [ ] P95 latency <500ms
 - [ ] Health checks passing
 
 ## Communication
+
 - Update status page
 - Notify #incidents
 - Post if user-facing
@@ -86,16 +94,14 @@ class IncidentRemediator:
 ```markdown
 # Postmortem: API Outage - 2024-01-15
 
-**Date**: January 15, 2024
-**Duration**: 45 minutes (14:23 - 15:08 UTC)
-**Severity**: SEV1
-**Impact**: Complete API outage, ~$25K revenue loss
+**Date**: January 15, 2024 **Duration**: 45 minutes (14:23 - 15:08 UTC) **Severity**: SEV1 **Impact**: Complete API outage, ~$25K revenue loss
 
 ## Summary
-API became unresponsive due to database connection pool exhaustion
-from slow query in v2.3.1.
+
+API became unresponsive due to database connection pool exhaustion from slow query in v2.3.1.
 
 ## Timeline (UTC)
+
 - 14:23 - Alert fired
 - 14:27 - Incident declared SEV1
 - 14:30 - Rollback initiated
@@ -104,23 +110,26 @@ from slow query in v2.3.1.
 - 15:08 - Resolved
 
 ## Root Cause
-New query missing index on `user_id`, causing full table scans that
-exhausted connection pool under load.
+
+New query missing index on `user_id`, causing full table scans that exhausted connection pool under load.
 
 ## Impact
+
 - 100% API failure for 45 minutes
 - 15,000 users affected
 - $25K revenue loss
 - 200+ support tickets
 
 ## Action Items
-| Action | Owner | Deadline |
-|--------|-------|----------|
-| Add index on user_id | DB team | 2024-01-16 |
-| Add query perf testing | Platform | 2024-01-22 |
-| Increase staging DB size | Infra | 2024-01-30 |
+
+| Action                   | Owner    | Deadline   |
+| ------------------------ | -------- | ---------- |
+| Add index on user_id     | DB team  | 2024-01-16 |
+| Add query perf testing   | Platform | 2024-01-22 |
+| Increase staging DB size | Infra    | 2024-01-30 |
 
 ## Lessons Learned
+
 - Performance testing must use production-scale data
 - Connection pool exhaustion needs active intervention
 - Consider circuit breakers for DB operations
@@ -133,18 +142,18 @@ schedules:
   - name: Primary On-Call
     time_zone: America/New_York
     layers:
-      - rotation_turn_length_seconds: 604800  # 1 week
+      - rotation_turn_length_seconds: 604800 # 1 week
         users: [PXXXXXX, PXXXXXX, PXXXXXX]
 
 escalation_policies:
   - name: Production
     rules:
       - escalation_delay_in_minutes: 0
-        targets: [{type: schedule, id: primary}]
+        targets: [{ type: schedule, id: primary }]
       - escalation_delay_in_minutes: 15
-        targets: [{type: schedule, id: secondary}]
+        targets: [{ type: schedule, id: secondary }]
       - escalation_delay_in_minutes: 30
-        targets: [{type: user, id: manager}]
+        targets: [{ type: user, id: manager }]
 ```
 
 ## Chaos Engineering
@@ -230,12 +239,7 @@ echo "$(date): Evidence collection completed" >> $EVIDENCE_DIR/timeline.txt
 
 **INCIDENT ALERT - SEV1**
 
-**Status**: Investigating
-**Impact**: Payment API unavailable (100% error rate)
-**Started**: 2024-01-15 14:23 UTC
-**Affected**: All users (~15K active sessions)
-**Lead**: @oncall-engineer
-**War Room**: https://zoom.us/incident-123
+**Status**: Investigating **Impact**: Payment API unavailable (100% error rate) **Started**: 2024-01-15 14:23 UTC **Affected**: All users (~15K active sessions) **Lead**: @oncall-engineer **War Room**: https://zoom.us/incident-123
 
 Updates every 15 minutes or on major change.
 
@@ -245,24 +249,20 @@ Updates every 15 minutes or on major change.
 
 **INCIDENT RESOLVED**
 
-**Summary**: Payment API restored after database connection pool exhaustion
-**Duration**: 45 minutes (14:23 - 15:08 UTC)
-**Resolution**: Rollback to v2.3.0 + query optimization
-**Impact**: 15K users, ~$25K revenue loss
-**Next Steps**: Postmortem scheduled for Jan 16 10am
+**Summary**: Payment API restored after database connection pool exhaustion **Duration**: 45 minutes (14:23 - 15:08 UTC) **Resolution**: Rollback to v2.3.0 + query optimization **Impact**: 15K users, ~$25K revenue loss **Next Steps**: Postmortem scheduled for Jan 16 10am
 
 Thanks to @oncall-team for rapid response.
 ```
 
 ## Incident Classification
 
-| Type            | Examples                               | Response Team      | Escalation      |
-| --------------- | -------------------------------------- | ------------------ | --------------- |
-| **Security**    | Breach, data leak, unauthorized access | Security + DevOps  | CISO, Legal     |
-| **Service**     | Outage, degradation, errors            | DevOps + SRE       | Engineering VP  |
-| **Data**        | Corruption, loss, sync issues          | DBA + DevOps       | CTO             |
-| **Compliance**  | GDPR, SOC2, audit violations           | Compliance + Legal | CEO             |
-| **Third-party** | Provider outage, API failures          | DevOps + Product   | Account manager |
+| Type | Examples | Response Team | Escalation |
+| --- | --- | --- | --- |
+| **Security** | Breach, data leak, unauthorized access | Security + DevOps | CISO, Legal |
+| **Service** | Outage, degradation, errors | DevOps + SRE | Engineering VP |
+| **Data** | Corruption, loss, sync issues | DBA + DevOps | CTO |
+| **Compliance** | GDPR, SOC2, audit violations | Compliance + Legal | CEO |
+| **Third-party** | Provider outage, API failures | DevOps + Product | Account manager |
 
 ## Security Incident Specifics
 

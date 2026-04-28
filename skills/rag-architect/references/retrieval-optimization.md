@@ -4,15 +4,15 @@
 
 ## Optimization Techniques Overview
 
-| Technique                  | Impact      | Complexity | When to Use               |
-| -------------------------- | ----------- | ---------- | ------------------------- |
-| **Hybrid Search**          | High        | Medium     | Always for production     |
-| **Reranking**              | High        | Low        | Top-k refinement          |
-| **Query Expansion**        | Medium      | Medium     | Ambiguous queries         |
-| **HyDE**                   | Medium-High | Medium     | Concept-heavy retrieval   |
-| **Metadata Filtering**     | High        | Low        | Multi-tenant, categorical |
-| **Query Decomposition**    | Medium      | High       | Complex questions         |
-| **Contextual Compression** | Medium      | Medium     | Long retrieved chunks     |
+| Technique | Impact | Complexity | When to Use |
+| --- | --- | --- | --- |
+| **Hybrid Search** | High | Medium | Always for production |
+| **Reranking** | High | Low | Top-k refinement |
+| **Query Expansion** | Medium | Medium | Ambiguous queries |
+| **HyDE** | Medium-High | Medium | Concept-heavy retrieval |
+| **Metadata Filtering** | High | Low | Multi-tenant, categorical |
+| **Query Decomposition** | Medium | High | Complex questions |
+| **Contextual Compression** | Medium | Medium | Long retrieved chunks |
 
 ---
 

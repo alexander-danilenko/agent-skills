@@ -6,11 +6,13 @@
 # Reverse-Engineered Specification: [System/Feature Name]
 
 ## Overview
+
 [High-level description based on analysis]
 
 ## Architecture Summary
 
 ### Technology Stack
+
 - **Language**: TypeScript 5.x
 - **Framework**: NestJS 10.x
 - **Database**: PostgreSQL 15
@@ -19,20 +21,14 @@
 ### Module Structure
 ```
 
-src/
-├── auth/         # Authentication (JWT, guards)
-├── users/        # User CRUD operations
-├── orders/       # Order processing
-└── common/       # Shared utilities
+src/ ├── auth/ # Authentication (JWT, guards) ├── users/ # User CRUD operations ├── orders/ # Order processing └── common/ # Shared utilities
 
 ```text
 
 ### Data Flow
 ```
 
-Request → Guard → Controller → Service → Repository → Database
-                                     ↓
-                              External APIs
+Request → Guard → Controller → Service → Repository → Database ↓ External APIs
 
 ```yaml
 

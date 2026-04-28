@@ -580,7 +580,7 @@ Log Router
 #### Best Practices
 
 - Use approximate aggregation functions (APPROX_COUNT_DISTINCT)
-- Avoid SELECT *, specify columns
+- Avoid SELECT \*, specify columns
 - Use materialized views for common queries
 - Set up cost controls with custom quotas
 

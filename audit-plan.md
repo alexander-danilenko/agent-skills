@@ -1,4 +1,3 @@
-
 ## Skills to analyze
 
 - [x] ./skills/api-designer
@@ -36,8 +35,7 @@ You are performing a **security audit** of AI skill files in this repository. DO
 
 > **EXACTLY ONE SKILL. Then check the box, write the report entry, save, and EXIT.**
 >
-> Do NOT audit a second skill. Do NOT keep going. Do NOT be helpful by doing more.
-> After you update this file with one result, you are DONE. Stop immediately.
+> Do NOT audit a second skill. Do NOT keep going. Do NOT be helpful by doing more. After you update this file with one result, you are DONE. Stop immediately.
 
 ### Steps for this single run
 
@@ -115,12 +113,12 @@ If you arrive at step 1 and find NO `- [ ]` items remaining, then and ONLY then:
 
 ### Remediation Status
 
-| Skill                | Original Finding                                                                   | Status   |
-| -------------------- | ---------------------------------------------------------------------------------- | -------- |
-| `devops-engineer`    | Inline credentials in K8s Secret and Docker Compose examples                       | ✅ FIXED |
-| `dotnet-core-expert` | Hardcoded JWT secret in `appsettings.json`; plaintext passwords in Docker Compose  | ✅ FIXED |
-| `nestjs-expert`      | Developer's absolute local filesystem path leaked in cross-reference comment       | ✅ FIXED |
-| `nextjs-developer`   | XSS-prone raw HTML render; wildcard CORS; URL query-param revalidation secret      | ✅ FIXED |
-| `python-pro`         | SQL f-string interpolation normalizes SQL injection pattern                        | ✅ FIXED |
-| `security-reviewer`  | Secrets as CLI args (visible in process list); unbounded brute-force loop          | ✅ FIXED |
-| `sre-engineer`       | `shell=True` normalizes command injection; missing `check=True` in chaos rollbacks | ✅ FIXED |
+| Skill | Original Finding | Status |
+| --- | --- | --- |
+| `devops-engineer` | Inline credentials in K8s Secret and Docker Compose examples | ✅ FIXED |
+| `dotnet-core-expert` | Hardcoded JWT secret in `appsettings.json`; plaintext passwords in Docker Compose | ✅ FIXED |
+| `nestjs-expert` | Developer's absolute local filesystem path leaked in cross-reference comment | ✅ FIXED |
+| `nextjs-developer` | XSS-prone raw HTML render; wildcard CORS; URL query-param revalidation secret | ✅ FIXED |
+| `python-pro` | SQL f-string interpolation normalizes SQL injection pattern | ✅ FIXED |
+| `security-reviewer` | Secrets as CLI args (visible in process list); unbounded brute-force loop | ✅ FIXED |
+| `sre-engineer` | `shell=True` normalizes command injection; missing `check=True` in chaos rollbacks | ✅ FIXED |

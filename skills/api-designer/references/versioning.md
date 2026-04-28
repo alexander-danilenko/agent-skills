@@ -283,7 +283,7 @@ Response: 410 Gone
 
 ### Provide Migration Guide
 
-```markdown
+````markdown
 # Migrating from v1 to v2
 
 ## Breaking Changes
@@ -291,6 +291,7 @@ Response: 410 Gone
 ### User Resource Changes
 
 **v1:**
+
 ```json
 {
   "id": 123,
@@ -298,6 +299,7 @@ Response: 410 Gone
   "email": "john@example.com"
 }
 ```
+````
 
 **v2:**
 
@@ -315,7 +317,7 @@ Response: 410 Gone
 - Split `name` field into `first_name` and `last_name`
 - Update client code to use new fields
 
-```text
+````text
 
 ### Offer Tools
 
@@ -349,7 +351,7 @@ Response:
     }
   }
 }
-```
+````
 
 ### Version Info Endpoint
 

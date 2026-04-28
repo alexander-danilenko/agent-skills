@@ -4,56 +4,71 @@
 
 ```typescript
 import {
-  Controller, Get, Post, Patch, Delete,
-  Body, Param, Query, HttpCode, HttpStatus, UseGuards
-} from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
-import { ParseUUIDPipe, ParseIntPipe } from '@nestjs/common';
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Body,
+  Param,
+  Query,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+} from "@nestjs/common";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+} from "@nestjs/swagger";
+import { ParseUUIDPipe, ParseIntPipe } from "@nestjs/common";
 
-@Controller('users')
-@ApiTags('users')
+@Controller("users")
+@ApiTags("users")
 @UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create user' })
+  @ApiOperation({ summary: "Create user" })
   @ApiResponse({ status: 201, type: UserDto })
-  @ApiResponse({ status: 400, description: 'Validation failed' })
+  @ApiResponse({ status: 400, description: "Validation failed" })
   create(@Body() dto: CreateUserDto): Promise<UserDto> {
     return this.usersService.create(dto);
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all users' })
-  @ApiQuery({ name: 'page', required: false, type: Number })
-  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiOperation({ summary: "Get all users" })
+  @ApiQuery({ name: "page", required: false, type: Number })
+  @ApiQuery({ name: "limit", required: false, type: Number })
   findAll(
-    @Query('page', new ParseIntPipe({ optional: true })) page = 1,
-    @Query('limit', new ParseIntPipe({ optional: true })) limit = 20,
+    @Query("page", new ParseIntPipe({ optional: true })) page = 1,
+    @Query("limit", new ParseIntPipe({ optional: true })) limit = 20,
   ): Promise<UserDto[]> {
     return this.usersService.findAll({ page, limit });
   }
 
-  @Get(':id')
-  @ApiParam({ name: 'id', type: 'string', format: 'uuid' })
+  @Get(":id")
+  @ApiParam({ name: "id", type: "string", format: "uuid" })
   @ApiResponse({ status: 200, type: UserDto })
-  @ApiResponse({ status: 404, description: 'User not found' })
-  findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserDto> {
+  @ApiResponse({ status: 404, description: "User not found" })
+  findOne(@Param("id", ParseUUIDPipe) id: string): Promise<UserDto> {
     return this.usersService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch(":id")
   update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param("id", ParseUUIDPipe) id: string,
     @Body() dto: UpdateUserDto,
   ): Promise<UserDto> {
     return this.usersService.update(id, dto);
   }
 
-  @Delete(':id')
+  @Delete(":id")
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+  remove(@Param("id", ParseUUIDPipe) id: string): Promise<void> {
     return this.usersService.remove(id);
   }
 }
@@ -62,17 +77,17 @@ export class UsersController {
 ## Nested Routes
 
 ```typescript
-@Controller('posts/:postId/comments')
-@ApiTags('comments')
+@Controller("posts/:postId/comments")
+@ApiTags("comments")
 export class CommentsController {
   @Get()
-  findAll(@Param('postId', ParseUUIDPipe) postId: string) {
+  findAll(@Param("postId", ParseUUIDPipe) postId: string) {
     return this.commentsService.findByPost(postId);
   }
 
   @Post()
   create(
-    @Param('postId', ParseUUIDPipe) postId: string,
+    @Param("postId", ParseUUIDPipe) postId: string,
     @Body() dto: CreateCommentDto,
   ) {
     return this.commentsService.create(postId, dto);
@@ -85,14 +100,14 @@ export class CommentsController {
 ```typescript
 // main.ts
 const app = await NestFactory.create(AppModule);
-app.setGlobalPrefix('api');
+app.setGlobalPrefix("api");
 app.enableVersioning({ type: VersioningType.URI });
 
 // controller.ts
-@Controller({ path: 'users', version: '1' })  // /api/v1/users
+@Controller({ path: "users", version: "1" }) // /api/v1/users
 export class UsersV1Controller {}
 
-@Controller({ path: 'users', version: '2' })  // /api/v2/users
+@Controller({ path: "users", version: "2" }) // /api/v2/users
 export class UsersV2Controller {}
 ```
 

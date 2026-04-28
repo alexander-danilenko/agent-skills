@@ -5,7 +5,7 @@
 ```typescript
 // Basic type predicate
 function isString(value: unknown): value is string {
-  return typeof value === 'string';
+  return typeof value === "string";
 }
 
 function processValue(value: string | number) {
@@ -23,19 +23,19 @@ function isArray<T>(value: T | T[]): value is T[] {
 
 // Narrowing to specific interface
 interface User {
-  type: 'user';
+  type: "user";
   name: string;
   email: string;
 }
 
 interface Admin {
-  type: 'admin';
+  type: "admin";
   name: string;
   permissions: string[];
 }
 
 function isAdmin(account: User | Admin): account is Admin {
-  return account.type === 'admin';
+  return account.type === "admin";
 }
 ```
 
@@ -44,53 +44,53 @@ function isAdmin(account: User | Admin): account is Admin {
 ```typescript
 // Tagged union pattern
 type Result<T, E = Error> =
-  | { status: 'success'; data: T }
-  | { status: 'error'; error: E }
-  | { status: 'loading' };
+  | { status: "success"; data: T }
+  | { status: "error"; error: E }
+  | { status: "loading" };
 
 function handleResult<T>(result: Result<T>) {
   switch (result.status) {
-    case 'success':
+    case "success":
       console.log(result.data); // Narrowed to success
       break;
-    case 'error':
+    case "error":
       console.error(result.error); // Narrowed to error
       break;
-    case 'loading':
-      console.log('Loading...'); // Narrowed to loading
+    case "loading":
+      console.log("Loading..."); // Narrowed to loading
       break;
   }
 }
 
 // Complex discriminated union
 type Shape =
-  | { kind: 'circle'; radius: number }
-  | { kind: 'rectangle'; width: number; height: number }
-  | { kind: 'triangle'; base: number; height: number };
+  | { kind: "circle"; radius: number }
+  | { kind: "rectangle"; width: number; height: number }
+  | { kind: "triangle"; base: number; height: number };
 
 function getArea(shape: Shape): number {
   switch (shape.kind) {
-    case 'circle':
+    case "circle":
       return Math.PI * shape.radius ** 2;
-    case 'rectangle':
+    case "rectangle":
       return shape.width * shape.height;
-    case 'triangle':
+    case "triangle":
       return (shape.base * shape.height) / 2;
   }
 }
 
 // Exhaustive checking
 function assertNever(x: never): never {
-  throw new Error('Unexpected value: ' + x);
+  throw new Error("Unexpected value: " + x);
 }
 
 function processShape(shape: Shape): number {
   switch (shape.kind) {
-    case 'circle':
+    case "circle":
       return shape.radius;
-    case 'rectangle':
+    case "rectangle":
       return shape.width;
-    case 'triangle':
+    case "triangle":
       return shape.base;
     default:
       return assertNever(shape); // Compile error if not exhaustive
@@ -103,22 +103,26 @@ function processShape(shape: Shape): number {
 ```typescript
 // typeof narrowing
 function printValue(value: string | number | boolean) {
-  if (typeof value === 'string') {
+  if (typeof value === "string") {
     console.log(value.toUpperCase());
-  } else if (typeof value === 'number') {
+  } else if (typeof value === "number") {
     console.log(value.toFixed(2));
   } else {
-    console.log(value ? 'yes' : 'no');
+    console.log(value ? "yes" : "no");
   }
 }
 
 // instanceof narrowing
 class Dog {
-  bark() { console.log('woof'); }
+  bark() {
+    console.log("woof");
+  }
 }
 
 class Cat {
-  meow() { console.log('meow'); }
+  meow() {
+    console.log("meow");
+  }
 }
 
 function makeSound(animal: Dog | Cat) {
@@ -134,7 +138,7 @@ type Fish = { swim: () => void };
 type Bird = { fly: () => void };
 
 function move(animal: Fish | Bird) {
-  if ('swim' in animal) {
+  if ("swim" in animal) {
     animal.swim();
   } else {
     animal.fly();
@@ -163,20 +167,20 @@ function compare(x: string | number, y: string | boolean) {
 // Basic assertion function
 function assert(condition: unknown, message?: string): asserts condition {
   if (!condition) {
-    throw new Error(message || 'Assertion failed');
+    throw new Error(message || "Assertion failed");
   }
 }
 
 function processUser(user: unknown) {
-  assert(typeof user === 'object' && user !== null);
-  assert('name' in user && typeof user.name === 'string');
+  assert(typeof user === "object" && user !== null);
+  assert("name" in user && typeof user.name === "string");
   console.log(user.name.toUpperCase()); // user is narrowed
 }
 
 // Type assertion function
 function assertIsString(value: unknown): asserts value is string {
-  if (typeof value !== 'string') {
-    throw new Error('Value is not a string');
+  if (typeof value !== "string") {
+    throw new Error("Value is not a string");
   }
 }
 
@@ -188,7 +192,7 @@ function greet(name: unknown) {
 // Generic assertion function
 function assertIsDefined<T>(value: T): asserts value is NonNullable<T> {
   if (value === null || value === undefined) {
-    throw new Error('Value is null or undefined');
+    throw new Error("Value is null or undefined");
   }
 }
 
@@ -200,12 +204,12 @@ function processValue(value: string | null) {
 // Assert with type predicate
 function assertIsUser(value: unknown): asserts value is User {
   if (
-    typeof value !== 'object' ||
+    typeof value !== "object" ||
     value === null ||
-    !('type' in value) ||
-    value.type !== 'user'
+    !("type" in value) ||
+    value.type !== "user"
   ) {
-    throw new Error('Not a user');
+    throw new Error("Not a user");
   }
 }
 ```
@@ -214,9 +218,9 @@ function assertIsUser(value: unknown): asserts value is User {
 
 ```typescript
 // Assignment narrowing
-let x: string | number = Math.random() > 0.5 ? 'hello' : 42;
+let x: string | number = Math.random() > 0.5 ? "hello" : 42;
 
-if (typeof x === 'string') {
+if (typeof x === "string") {
   x; // string
 } else {
   x; // number
@@ -225,7 +229,7 @@ if (typeof x === 'string') {
 // Return statement narrowing
 function getValue(flag: boolean): string | number {
   if (flag) {
-    return 'hello';
+    return "hello";
   }
   return 42; // TypeScript knows this must be number
 }
@@ -233,14 +237,14 @@ function getValue(flag: boolean): string | number {
 // Throw statement narrowing
 function processValue(value: string | null) {
   if (!value) {
-    throw new Error('Value is required');
+    throw new Error("Value is required");
   }
   console.log(value.length); // value is string (null thrown above)
 }
 
 // Type guards in array methods
-const mixed: (string | number)[] = ['a', 1, 'b', 2];
-const strings = mixed.filter((x): x is string => typeof x === 'string');
+const mixed: (string | number)[] = ["a", 1, "b", 2];
+const strings = mixed.filter((x): x is string => typeof x === "string");
 // strings is string[]
 ```
 
@@ -250,9 +254,9 @@ const strings = mixed.filter((x): x is string => typeof x === 'string');
 // Nominal typing with branded types
 type Brand<K, T> = K & { __brand: T };
 
-type UserId = Brand<string, 'UserId'>;
-type Email = Brand<string, 'Email'>;
-type Url = Brand<string, 'Url'>;
+type UserId = Brand<string, "UserId">;
+type Email = Brand<string, "Email">;
+type Url = Brand<string, "Url">;
 
 // Constructor functions
 function createUserId(id: string): UserId {
@@ -260,15 +264,15 @@ function createUserId(id: string): UserId {
 }
 
 function createEmail(email: string): Email {
-  if (!email.includes('@')) {
-    throw new Error('Invalid email');
+  if (!email.includes("@")) {
+    throw new Error("Invalid email");
   }
   return email as Email;
 }
 
 // Usage prevents mixing
-const userId: UserId = createUserId('user-123');
-const email: Email = createEmail('user@example.com');
+const userId: UserId = createUserId("user-123");
+const email: Email = createEmail("user@example.com");
 
 // const wrongAssignment: UserId = email; // Error!
 
@@ -278,16 +282,16 @@ function isUserId(value: string): value is UserId {
 }
 
 // Branded numbers
-type Positive = Brand<number, 'Positive'>;
-type Integer = Brand<number, 'Integer'>;
+type Positive = Brand<number, "Positive">;
+type Integer = Brand<number, "Integer">;
 
 function createPositive(n: number): Positive {
-  if (n <= 0) throw new Error('Must be positive');
+  if (n <= 0) throw new Error("Must be positive");
   return n as Positive;
 }
 
 function createInteger(n: number): Integer {
-  if (!Number.isInteger(n)) throw new Error('Must be integer');
+  if (!Number.isInteger(n)) throw new Error("Must be integer");
   return n as Integer;
 }
 ```
@@ -303,7 +307,7 @@ function processInput<T>(input: T | T[]): T[] {
 // Object key narrowing
 function getProperty<T extends object, K extends keyof T>(
   obj: T,
-  key: K
+  key: K,
 ): T[K] {
   return obj[key];
 }
@@ -311,9 +315,7 @@ function getProperty<T extends object, K extends keyof T>(
 // Mapped type narrowing
 type Nullable<T> = { [K in keyof T]: T[K] | null };
 
-function isComplete<T extends object>(
-  obj: Nullable<T>
-): obj is T {
+function isComplete<T extends object>(obj: Nullable<T>): obj is T {
   return Object.values(obj).every((v) => v !== null);
 }
 
@@ -326,12 +328,12 @@ type TypeMap = {
 
 function is<K extends keyof TypeMap>(
   type: K,
-  value: unknown
+  value: unknown,
 ): value is TypeMap[K] {
   return typeof value === type;
 }
 
-if (is('string', someValue)) {
+if (is("string", someValue)) {
   someValue.toUpperCase(); // someValue is string
 }
 ```

@@ -69,10 +69,10 @@ Standard POSIX exit codes:
 const EXIT_CODES = {
   SUCCESS: 0,
   GENERAL_ERROR: 1,
-  MISUSE: 2,              // Invalid arguments
+  MISUSE: 2, // Invalid arguments
   PERMISSION_DENIED: 77,
   NOT_FOUND: 127,
-  SIGINT: 130,            // Ctrl+C
+  SIGINT: 130, // Ctrl+C
 };
 ```
 
@@ -118,19 +118,19 @@ Error: ENOENT
 
 ```javascript
 // Detect if running in CI/CD
-const isCI = process.env.CI === 'true' || !process.stdout.isTTY;
+const isCI = process.env.CI === "true" || !process.stdout.isTTY;
 
 if (isCI) {
   // Non-interactive: fail fast with clear errors
   if (!options.environment) {
-    throw new Error('--environment required in non-interactive mode');
+    throw new Error("--environment required in non-interactive mode");
   }
 } else {
   // Interactive: prompt user
   const environment = await prompt({
-    type: 'select',
-    message: 'Select environment:',
-    choices: ['development', 'staging', 'production'],
+    type: "select",
+    message: "Select environment:",
+    choices: ["development", "staging", "production"],
   });
 }
 ```
@@ -151,42 +151,40 @@ if (isCI) {
 
 ```javascript
 // Lazy loading: Don't load unused dependencies
-if (command === 'deploy') {
-  const deploy = require('./commands/deploy'); // Load on demand
+if (command === "deploy") {
+  const deploy = require("./commands/deploy"); // Load on demand
   await deploy.run();
 }
 
 // Caching: Avoid repeated API calls
-const cache = new Cache('~/.mycli/cache', { ttl: 3600 });
-let plugins = await cache.get('plugins');
+const cache = new Cache("~/.mycli/cache", { ttl: 3600 });
+let plugins = await cache.get("plugins");
 if (!plugins) {
   plugins = await fetchPlugins();
-  await cache.set('plugins', plugins);
+  await cache.set("plugins", plugins);
 }
 
 // Async operations: Don't block unnecessarily
-await Promise.all([
-  validateConfig(),
-  checkForUpdates(),
-  loadPlugins(),
-]);
+await Promise.all([validateConfig(), checkForUpdates(), loadPlugins()]);
 ```
 
 ## Versioning & Updates
 
 ```javascript
 // Check for updates (non-blocking)
-checkForUpdates().then(update => {
-  if (update.available) {
-    console.log(`Update available: ${update.version}`);
-    console.log(`Run: npm install -g mycli@latest`);
-  }
-}).catch(() => {
-  // Silently fail - don't interrupt user workflow
-});
+checkForUpdates()
+  .then((update) => {
+    if (update.available) {
+      console.log(`Update available: ${update.version}`);
+      console.log(`Run: npm install -g mycli@latest`);
+    }
+  })
+  .catch(() => {
+    // Silently fail - don't interrupt user workflow
+  });
 
 // Version compatibility
-const MIN_NODE_VERSION = '18.0.0';
+const MIN_NODE_VERSION = "18.0.0";
 if (!semver.satisfies(process.version, `>=${MIN_NODE_VERSION}`)) {
   console.error(`mycli requires Node.js ${MIN_NODE_VERSION} or higher`);
   process.exit(1);

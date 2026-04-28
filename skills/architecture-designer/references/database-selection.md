@@ -2,14 +2,14 @@
 
 ## Database Types
 
-| Type            | Examples                   | Best For                                     |
-| --------------- | -------------------------- | -------------------------------------------- |
-| **Relational**  | PostgreSQL, MySQL          | Transactions, complex queries, relationships |
-| **Document**    | MongoDB, Firestore         | Flexible schemas, rapid iteration            |
-| **Key-Value**   | Redis, DynamoDB            | Caching, sessions, high throughput           |
-| **Time-Series** | TimescaleDB, InfluxDB      | Metrics, IoT, analytics                      |
-| **Graph**       | Neo4j, Neptune             | Relationships, social networks               |
-| **Search**      | Elasticsearch, Meilisearch | Full-text search, logs                       |
+| Type | Examples | Best For |
+| --- | --- | --- |
+| **Relational** | PostgreSQL, MySQL | Transactions, complex queries, relationships |
+| **Document** | MongoDB, Firestore | Flexible schemas, rapid iteration |
+| **Key-Value** | Redis, DynamoDB | Caching, sessions, high throughput |
+| **Time-Series** | TimescaleDB, InfluxDB | Metrics, IoT, analytics |
+| **Graph** | Neo4j, Neptune | Relationships, social networks |
+| **Search** | Elasticsearch, Meilisearch | Full-text search, logs |
 
 ## Relational (PostgreSQL, MySQL)
 

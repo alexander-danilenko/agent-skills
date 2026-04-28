@@ -147,18 +147,19 @@ groups:
 
 Every alert must link to a runbook with clear remediation steps.
 
-```markdown
+````markdown
 # Runbook: Error Budget Burn Rate
 
 ## Alert: ErrorBudgetBurnRateFast
 
 ### Description
-The service is consuming error budget faster than sustainable rate.
-At current rate, the 30-day error budget will be exhausted within 2 days.
+
+The service is consuming error budget faster than sustainable rate. At current rate, the 30-day error budget will be exhausted within 2 days.
 
 ### Severity: Critical
 
 ### Impact
+
 - Users experiencing elevated error rates
 - Risk of SLO violation and feature freeze
 - Potential customer impact
@@ -169,6 +170,7 @@ At current rate, the 30-day error budget will be exhausted within 2 days.
    ```promql
    rate(http_requests_total{status=~"5..", service="api"}[5m])
    ```
+````
 
 1. **Identify error types**
 
@@ -240,7 +242,7 @@ Incident doc: [link]
 - Implement circuit breaker for external dependencies
 - Add capacity planning for traffic spikes
 
-```text
+````text
 
 ## Dashboard Configuration
 
@@ -357,7 +359,7 @@ def create_slo_dashboard(service: str) -> dict:
     )
 
     return dashboard.to_json()
-```
+````
 
 ## Alert Fatigue Prevention
 

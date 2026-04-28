@@ -8,7 +8,9 @@ Common mistakes that bloat token count and reduce effectiveness.
 
 ```markdown
 ## 1. Project Core Identity and Technical Overview
+
 ## 2. Ubiquitous Domain Language and Glossary of Terms
+
 ## 3. Comprehensive Architectural Overview and Design Patterns
 ```
 
@@ -16,7 +18,9 @@ Common mistakes that bloat token count and reduce effectiveness.
 
 ```markdown
 ## PROJECT
+
 ## DOMAIN
+
 ## ARCHITECTURE
 ```
 
@@ -32,6 +36,7 @@ Common mistakes that bloat token count and reduce effectiveness.
 # Project Documentation
 
 ## Technology Stack
+
 - Framework: Next.js 14
 - Language: TypeScript
 - Database: PostgreSQL
@@ -54,6 +59,7 @@ Common mistakes that bloat token count and reduce effectiveness.
 
 ```markdown
 ## Code Style
+
 - Use 2 spaces for indentation (not tabs)
 - Maximum line length of 100 characters
 - Use single quotes for strings
@@ -66,6 +72,7 @@ Common mistakes that bloat token count and reduce effectiveness.
 
 ```markdown
 ## CODE STYLE
+
 Enforced by `.eslintrc` + `.prettierrc`
 ```
 
@@ -79,15 +86,15 @@ Enforced by `.eslintrc` + `.prettierrc`
 
 ```markdown
 ## Testing
-To run the test suite, execute the npm test command. This will run all
-tests using Jest. You can also run tests in watch mode by using npm
-run test:watch. For coverage reports, use npm run test:coverage.
+
+To run the test suite, execute the npm test command. This will run all tests using Jest. You can also run tests in watch mode by using npm run test:watch. For coverage reports, use npm run test:coverage.
 ```
 
 ✅ **Pattern:**
 
 ```markdown
 ## TEST
+
 - Run: `npm test`
 - Watch: `npm test:watch`
 - Coverage: `npm test:coverage`
@@ -103,21 +110,16 @@ run test:watch. For coverage reports, use npm run test:coverage.
 
 ```markdown
 ## Error Handling Philosophy
-We believe in graceful degradation and user-friendly error messages.
-When errors occur, consider the user experience and provide helpful
-context about what went wrong and how to fix it.
+
+We believe in graceful degradation and user-friendly error messages. When errors occur, consider the user experience and provide helpful context about what went wrong and how to fix it.
 ```
 
 ✅ **Pattern:**
 
 ```markdown
 ## ERRORS
-\`\`\`ts
-catch (e) {
-  logger.error(e);
-  return { error: e.message };
-}
-\`\`\`
+
+\`\`\`ts catch (e) { logger.error(e); return { error: e.message }; } \`\`\`
 ```
 
 **Why:** AI needs concrete patterns, not philosophy. Show, don't tell.
@@ -131,32 +133,19 @@ catch (e) {
 ```markdown
 ## API Routes
 
-Example GET endpoint:
-\`\`\`ts
-export default async (req, res) => { /* ... */ }
-\`\`\`
+Example GET endpoint: \`\`\`ts export default async (req, res) => { /_ ... _/ } \`\`\`
 
-Example POST endpoint:
-\`\`\`ts
-export default async (req, res) => { /* ... */ }
-\`\`\`
+Example POST endpoint: \`\`\`ts export default async (req, res) => { /_ ... _/ } \`\`\`
 
-Example with authentication:
-\`\`\`ts
-export default async (req, res) => { /* ... */ }
-\`\`\`
+Example with authentication: \`\`\`ts export default async (req, res) => { /_ ... _/ } \`\`\`
 ```
 
 ✅ **Pattern:**
 
 ```markdown
 ## API ROUTES
-Location: `src/pages/api`
-\`\`\`ts
-export default async (req, res) => {
-  // validate, process, respond
-}
-\`\`\`
+
+Location: `src/pages/api` \`\`\`ts export default async (req, res) => { // validate, process, respond } \`\`\`
 ```
 
 **Why:** One clear example is enough. Multiple examples waste 100+ tokens.
@@ -169,6 +158,7 @@ export default async (req, res) => {
 
 ```markdown
 ## Git Workflow
+
 - Create feature branches from main
 - Use meaningful commit messages
 - Keep commits atomic and focused
@@ -181,8 +171,8 @@ export default async (req, res) => {
 
 ```markdown
 ## GIT
-Format: `type(scope): message`
-Hooks: pre-commit (lint + test)
+
+Format: `type(scope): message` Hooks: pre-commit (lint + test)
 ```
 
 **Why:** Standard git practices don't need documentation. Only document project-specific conventions.
@@ -195,9 +185,8 @@ Hooks: pre-commit (lint + test)
 
 ```markdown
 ## Background
-This project was started in 2020 as a monolith. In 2022 we migrated
-to microservices. In 2023 we adopted TypeScript. The current architecture
-reflects lessons learned from these transitions.
+
+This project was started in 2020 as a monolith. In 2022 we migrated to microservices. In 2023 we adopted TypeScript. The current architecture reflects lessons learned from these transitions.
 ```
 
 ✅ **Pattern:**
@@ -217,24 +206,17 @@ _Delete this section entirely_
 ```markdown
 ## Component Patterns
 
-❌ Don't do this:
-\`\`\`ts
-function BadComponent() { /* ... */ }
-\`\`\`
+❌ Don't do this: \`\`\`ts function BadComponent() { /_ ... _/ } \`\`\`
 
-✅ Do this instead:
-\`\`\`ts
-function GoodComponent() { /* ... */ }
-\`\`\`
+✅ Do this instead: \`\`\`ts function GoodComponent() { /_ ... _/ } \`\`\`
 ```
 
 ✅ **Pattern:**
 
 ```markdown
 ## COMPONENTS
-\`\`\`ts
-function Component() { /* ... */ }
-\`\`\`
+
+\`\`\`ts function Component() { /_ ... _/ } \`\`\`
 ```
 
 **Why:** Only show correct patterns. Bad examples double token cost with no benefit.
@@ -253,6 +235,7 @@ This comprehensive guide will help you understand our codebase...
 [sections...]
 
 ## Conclusion
+
 Thank you for reading this documentation. If you have questions...
 ```
 
@@ -274,15 +257,15 @@ Thank you for reading this documentation. If you have questions...
 
 ```markdown
 ## Directory Structure
-The `src/` directory contains all source code files. The `tests/`
-directory contains test files. The `public/` directory contains
-static assets that will be publicly accessible.
+
+The `src/` directory contains all source code files. The `tests/` directory contains test files. The `public/` directory contains static assets that will be publicly accessible.
 ```
 
 ✅ **Pattern:**
 
 ```markdown
 ## STRUCTURE
+
 - `src/components/` - React components
 - `src/utils/` - Utilities
 ```
@@ -297,6 +280,7 @@ static assets that will be publicly accessible.
 
 ```markdown
 ## Features
+
 - User Management
   - Registration
     - Email validation
@@ -310,6 +294,7 @@ static assets that will be publicly accessible.
 
 ```markdown
 ## FEATURES
+
 Auth: `src/auth/` (registration, login, sessions)
 ```
 
@@ -323,6 +308,7 @@ Auth: `src/auth/` (registration, login, sessions)
 
 ```markdown
 ## Available Scripts
+
 - `npm run dev` - Starts development server
 - `npm run build` - Builds for production
 - `npm run start` - Starts production server
@@ -335,10 +321,8 @@ Auth: `src/auth/` (registration, login, sessions)
 
 ```markdown
 ## COMMANDS
-Dev: `npm run dev`
-Build: `npm run build`
-Test: `npm test`
-Lint: `npm run lint --fix`
+
+Dev: `npm run dev` Build: `npm run build` Test: `npm test` Lint: `npm run lint --fix`
 ```
 
 **Why:** Only list essential commands. Users can check package.json for full list.
@@ -351,15 +335,15 @@ Lint: `npm run lint --fix`
 
 ```markdown
 ## Architecture
-We follow clean architecture principles with clear separation of
-concerns. The presentation layer communicates with the business logic
-layer through well-defined interfaces. Data access is abstracted...
+
+We follow clean architecture principles with clear separation of concerns. The presentation layer communicates with the business logic layer through well-defined interfaces. Data access is abstracted...
 ```
 
 ✅ **Pattern:**
 
 ```markdown
 ## ARCHITECTURE
+
 - `src/ui/` - Components
 - `src/domain/` - Business logic
 - `src/data/` - DB/API access
@@ -375,13 +359,15 @@ layer through well-defined interfaces. Data access is abstracted...
 
 ```markdown
 ## Domain Glossary
-| Term | Definition |
-|------|------------|
-| User | A person who interacts with the system |
-| Session | A period of user activity |
-| Token | Authentication credential |
-| Role | User permission level |
-| Admin | User with elevated privileges |
+
+| Term    | Definition                             |
+| ------- | -------------------------------------- |
+| User    | A person who interacts with the system |
+| Session | A period of user activity              |
+| Token   | Authentication credential              |
+| Role    | User permission level                  |
+| Admin   | User with elevated privileges          |
+
 [20+ more obvious terms...]
 ```
 
@@ -389,10 +375,11 @@ layer through well-defined interfaces. Data access is abstracted...
 
 ```markdown
 ## DOMAIN
-| Term | Definition |
-|------|------------|
-| Merchant | Seller with inventory system access |
-| Settlement | Daily payout to merchant account |
+
+| Term       | Definition                          |
+| ---------- | ----------------------------------- |
+| Merchant   | Seller with inventory system access |
+| Settlement | Daily payout to merchant account    |
 ```
 
 **Why:** Only define project-specific or non-obvious terms.

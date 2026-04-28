@@ -58,29 +58,31 @@ Approach every review with professional skepticism. Verify claims independently.
 
 **Check for features that were requested but not implemented.**
 
-| Question                          | How to Verify                                    |
-| --------------------------------- | ------------------------------------------------ |
+| Question | How to Verify |
+| --- | --- |
 | Did they skip requested features? | Compare PR to original requirements line by line |
-| Are edge cases handled?           | Check error paths, empty states, boundaries      |
-| Were error scenarios addressed?   | Look for try/catch, error boundaries, validation |
-| Is the happy path complete?       | Trace through primary use case manually          |
+| Are edge cases handled? | Check error paths, empty states, boundaries |
+| Were error scenarios addressed? | Look for try/catch, error boundaries, validation |
+| Is the happy path complete? | Trace through primary use case manually |
 
-```markdown
+````markdown
 ## Example Review Finding
 
 **Missing Requirement:** Issue #42 requested "password must be at least 8 characters"
 
 **Found in code:**
+
 ```typescript
 // No length validation present
 function validatePassword(password: string) {
-  return password.length > 0;  // Only checks non-empty
+  return password.length > 0; // Only checks non-empty
 }
 ```
+````
 
 **Status:** ❌ Incomplete - minimum length validation missing
 
-```text
+````text
 
 #### Category 2: Unnecessary Additions
 
@@ -111,11 +113,11 @@ class CachedUserRepository {  // Not requested
     // 50 lines of cache logic
   }
 }
-```
+````
 
 **Status:** ⚠️ Scope creep - discuss before merging
 
-```text
+````text
 
 #### Category 3: Interpretation Gaps
 
@@ -139,7 +141,7 @@ class CachedUserRepository {  // Not requested
 **Expected:** Most recent first is typical UX pattern
 
 **Status:** ❓ Clarify - which sort order was intended?
-```
+````
 
 ---
 
@@ -147,11 +149,11 @@ class CachedUserRepository {  // Not requested
 
 ### Stage 1 Must Come First
 
-| Scenario      | Waste from Wrong Order                                                  |
-| ------------- | ----------------------------------------------------------------------- |
-| Skip Stage 1  | Review 500 lines of code quality, then discover wrong feature was built |
-| Stage 2 First | Suggest refactoring, then realize the code shouldn't exist              |
-| Combined      | Mix concerns, miss systematic issues                                    |
+| Scenario | Waste from Wrong Order |
+| --- | --- |
+| Skip Stage 1 | Review 500 lines of code quality, then discover wrong feature was built |
+| Stage 2 First | Suggest refactoring, then realize the code shouldn't exist |
+| Combined | Mix concerns, miss systematic issues |
 
 ### Separation of Concerns
 
@@ -211,6 +213,7 @@ Code quality review is meaningless if the code doesn't implement the correct fun
 ## Spec Compliance Review: ✅ PASS
 
 All requirements verified:
+
 - ✅ User can upload profile image (req #1)
 - ✅ Image resized to 200x200 (req #2)
 - ✅ Invalid formats rejected with error message (req #3)
@@ -250,14 +253,14 @@ All requirements verified:
 
 ## Common Mistakes to Avoid
 
-| Mistake                                     | Why It's Wrong                         |
-| ------------------------------------------- | -------------------------------------- |
+| Mistake | Why It's Wrong |
+| --- | --- |
 | Reviewing code style before spec compliance | Wasted effort if wrong thing was built |
-| Assuming spec was followed                  | Verify independently                   |
-| Skipping edge cases                         | Bugs hide in boundaries                |
-| Accepting "we can add it later"             | Technical debt accumulates             |
-| Missing scope creep                         | Unreviewed code enters codebase        |
+| Assuming spec was followed | Verify independently |
+| Skipping edge cases | Bugs hide in boundaries |
+| Accepting "we can add it later" | Technical debt accumulates |
+| Missing scope creep | Unreviewed code enters codebase |
 
 ---
 
-*Content adapted from [obra/superpowers](https://github.com/obra/superpowers) by Jesse Vincent (@obra), MIT License.*
+_Content adapted from [obra/superpowers](https://github.com/obra/superpowers) by Jesse Vincent (@obra), MIT License._

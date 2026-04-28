@@ -29,14 +29,15 @@
 
 ```markdown
 ## Code Style
-We follow strict TypeScript conventions. All code must be properly typed.
-Use ESLint and Prettier for formatting. Run `npm run lint` to check your code.
+
+We follow strict TypeScript conventions. All code must be properly typed. Use ESLint and Prettier for formatting. Run `npm run lint` to check your code.
 ```
 
 **After (12 tokens):**
 
 ```markdown
 ## CODE STYLE
+
 - Lint: `npm run lint --fix`
 - Config: `.eslintrc`, `.prettierrc`
 ```
@@ -47,6 +48,7 @@ Use ESLint and Prettier for formatting. Run `npm run lint` to check your code.
 
 ```markdown
 ## Coding Standards
+
 - Use 2 spaces for indentation
 - Maximum line length of 100 characters
 - Use single quotes for strings
@@ -59,6 +61,7 @@ Use ESLint and Prettier for formatting. Run `npm run lint` to check your code.
 
 ```markdown
 ## CODE STYLE
+
 See `.eslintrc` and `.prettierrc`
 ```
 
@@ -68,12 +71,15 @@ See `.eslintrc` and `.prettierrc`
 
 ```markdown
 ## Build Process
+
 Run `npm run build` to build the project.
 
 ## Testing
+
 Run `npm test` to run tests.
 
 ## Linting
+
 Run `npm run lint` to check code quality.
 ```
 
@@ -81,6 +87,7 @@ Run `npm run lint` to check code quality.
 
 ```markdown
 ## COMMANDS
+
 - Build: `npm run build`
 - Test: `npm test`
 - Lint: `npm run lint --fix`
@@ -108,6 +115,7 @@ Read files before editing.
 # Project Documentation
 
 ## Technology Stack
+
 - Framework: Next.js 14
 - Language: TypeScript
 - Database: PostgreSQL
@@ -124,10 +132,10 @@ Read files before editing.
 **Before (structured but verbose):**
 
 ```markdown
-| Command | Purpose | When to Use |
-|---------|---------|-------------|
-| npm run dev | Start development server | During local development |
-| npm run build | Create production build | Before deployment |
+| Command       | Purpose                  | When to Use              |
+| ------------- | ------------------------ | ------------------------ |
+| npm run dev   | Start development server | During local development |
+| npm run build | Create production build  | Before deployment        |
 ```
 
 **After (more concise for simple info):**
@@ -143,14 +151,15 @@ Read files before editing.
 
 ```markdown
 ## Directory Structure
-The `src/` directory contains all source code. The `src/components/` directory
-contains React components. The `src/utils/` directory contains utility functions.
+
+The `src/` directory contains all source code. The `src/components/` directory contains React components. The `src/utils/` directory contains utility functions.
 ```
 
 **After (15 tokens):**
 
 ```markdown
 ## STRUCTURE
+
 - `src/components/` - React components
 - `src/utils/` - Utilities
 ```
@@ -161,23 +170,18 @@ contains React components. The `src/utils/` directory contains utility functions
 
 ```markdown
 ## API Routes
-All API routes should be created in the `src/pages/api` directory. They should
-export a default async function that receives request and response objects. Always
-validate input data and handle errors appropriately with try-catch blocks.
+
+All API routes should be created in the `src/pages/api` directory. They should export a default async function that receives request and response objects. Always validate input data and handle errors appropriately with try-catch blocks.
 ```
 
 **After (32 tokens):**
 
 ```markdown
 ## API ROUTES
+
 Location: `src/pages/api`
 
-Pattern:
-\`\`\`ts
-export default async (req, res) => {
-  // validate, process, respond
-}
-\`\`\`
+Pattern: \`\`\`ts export default async (req, res) => { // validate, process, respond } \`\`\`
 ```
 
 ### 10. Distill to Actionable Rules Only
@@ -186,15 +190,15 @@ export default async (req, res) => {
 
 ```markdown
 ## Git Workflow
-We use conventional commits for our commit messages. This helps us maintain
-a clean git history and makes it easier to generate changelogs. Please follow
-this format when creating commits.
+
+We use conventional commits for our commit messages. This helps us maintain a clean git history and makes it easier to generate changelogs. Please follow this format when creating commits.
 ```
 
 **After (8 tokens):**
 
 ```markdown
 ## GIT
+
 Format: `type(scope): message`
 ```
 

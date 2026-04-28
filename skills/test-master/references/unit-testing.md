@@ -3,7 +3,7 @@
 ## Jest/Vitest Pattern
 
 ```typescript
-describe('UserService', () => {
+describe("UserService", () => {
   let service: UserService;
   let mockRepo: jest.Mocked<UserRepository>;
 
@@ -14,21 +14,21 @@ describe('UserService', () => {
 
   afterEach(() => jest.clearAllMocks());
 
-  describe('getUser', () => {
-    it('returns user when found', async () => {
-      const user = { id: '1', name: 'Test' };
+  describe("getUser", () => {
+    it("returns user when found", async () => {
+      const user = { id: "1", name: "Test" };
       mockRepo.findById.mockResolvedValue(user);
 
-      const result = await service.getUser('1');
+      const result = await service.getUser("1");
 
       expect(result).toEqual(user);
-      expect(mockRepo.findById).toHaveBeenCalledWith('1');
+      expect(mockRepo.findById).toHaveBeenCalledWith("1");
     });
 
-    it('throws NotFoundError when user not found', async () => {
+    it("throws NotFoundError when user not found", async () => {
       mockRepo.findById.mockResolvedValue(null);
 
-      await expect(service.getUser('1')).rejects.toThrow(NotFoundError);
+      await expect(service.getUser("1")).rejects.toThrow(NotFoundError);
     });
   });
 });
@@ -69,34 +69,34 @@ class TestUserService:
 ```typescript
 // Mock functions
 const mockFn = jest.fn();
-mockFn.mockReturnValue('value');
-mockFn.mockResolvedValue('async value');
-mockFn.mockRejectedValue(new Error('error'));
+mockFn.mockReturnValue("value");
+mockFn.mockResolvedValue("async value");
+mockFn.mockRejectedValue(new Error("error"));
 
 // Mock modules
-jest.mock('./database', () => ({
+jest.mock("./database", () => ({
   query: jest.fn(),
 }));
 
 // Spy on existing methods
-jest.spyOn(console, 'log').mockImplementation(() => {});
+jest.spyOn(console, "log").mockImplementation(() => {});
 ```
 
 ## Test Organization
 
 ```typescript
-describe('Feature', () => {
-  describe('happy path', () => {
-    it('does expected behavior', () => {});
+describe("Feature", () => {
+  describe("happy path", () => {
+    it("does expected behavior", () => {});
   });
 
-  describe('edge cases', () => {
-    it('handles empty input', () => {});
-    it('handles max values', () => {});
+  describe("edge cases", () => {
+    it("handles empty input", () => {});
+    it("handles max values", () => {});
   });
 
-  describe('error cases', () => {
-    it('throws on invalid input', () => {});
+  describe("error cases", () => {
+    it("throws on invalid input", () => {});
   });
 });
 ```

@@ -57,16 +57,16 @@ __tests__/
 
 ```typescript
 // __tests__/__setup__/{name}.service.setup.ts
-import { Test } from "@nestjs/testing"
-import { MyService } from "../../my.service"
-import { DepService } from "../../../dep/service"
+import { Test } from "@nestjs/testing";
+import { MyService } from "../../my.service";
+import { DepService } from "../../../dep/service";
 
-import type { TestingModule } from "@nestjs/testing"
+import type { TestingModule } from "@nestjs/testing";
 
 export interface MyServiceTestContext {
-  module: TestingModule
-  service: MyService
-  depService: DepService
+  module: TestingModule;
+  service: MyService;
+  depService: DepService;
 }
 
 export async function createMyServiceModule(): Promise<MyServiceTestContext> {
@@ -75,13 +75,13 @@ export async function createMyServiceModule(): Promise<MyServiceTestContext> {
       MyService,
       { provide: DepService, useValue: { doWork: jest.fn() } },
     ],
-  }).compile()
+  }).compile();
 
   return {
     module,
     service: module.get(MyService),
     depService: module.get(DepService),
-  }
+  };
 }
 ```
 
@@ -89,25 +89,25 @@ export async function createMyServiceModule(): Promise<MyServiceTestContext> {
 
 ```typescript
 // __tests__/__setup__/{name}.service.setup.ts
-import { Test } from "@nestjs/testing"
-import { ExternalApiService } from "../../external-api.service"
+import { Test } from "@nestjs/testing";
+import { ExternalApiService } from "../../external-api.service";
 
-import type { TestingModule } from "@nestjs/testing"
+import type { TestingModule } from "@nestjs/testing";
 
 export interface ExternalApiTestContext {
-  module: TestingModule
-  service: ExternalApiService
+  module: TestingModule;
+  service: ExternalApiService;
 }
 
 export async function createExternalApiModule(): Promise<ExternalApiTestContext> {
   const module = await Test.createTestingModule({
     providers: [ExternalApiService],
-  }).compile()
+  }).compile();
 
   return {
     module,
     service: module.get(ExternalApiService),
-  }
+  };
 }
 ```
 
@@ -120,27 +120,31 @@ export async function createExternalApiModule(): Promise<ExternalApiTestContext>
 ```typescript
 // WRONG
 describe("tests", () => {
-  it("works", () => { /* ... */ })
-})
+  it("works", () => {
+    /* ... */
+  });
+});
 
 // RIGHT
 describe("ExternalApiService @contract", () => {
   describe("search", () => {
-    it("should return the matching record when searching by ID alone", () => { /* ... */ })
-  })
-})
+    it("should return the matching record when searching by ID alone", () => {
+      /* ... */
+    });
+  });
+});
 ```
 
 ## Test Documentation
 
 Every `it()` MUST have a TSDoc block. Use multiline TSDoc format — never single-line.
 
-| Field            | Required | Purpose                                                                                                |
-| ---------------- | -------- | ------------------------------------------------------------------------------------------------------ |
-| `@what`          | **yes**  | One sentence: what behavior is verified.                                                               |
-| `@expected`      | **yes**  | The observable outcome: return value, exception, or side-effect.                                       |
-| `@prerequisites` | no       | Non-obvious mock setup, data state, or environment. MUST omit when trivial.                            |
-| `@conditions`    | no       | The action/input that triggers the behavior. MUST omit when obvious from the `it()` name or test body. |
+| Field | Required | Purpose |
+| --- | --- | --- |
+| `@what` | **yes** | One sentence: what behavior is verified. |
+| `@expected` | **yes** | The observable outcome: return value, exception, or side-effect. |
+| `@prerequisites` | no | Non-obvious mock setup, data state, or environment. MUST omit when trivial. |
+| `@conditions` | no | The action/input that triggers the behavior. MUST omit when obvious from the `it()` name or test body. |
 
 File-level and top-level `describe()` blocks SHOULD have a TSDoc comment with `@remarks` describing the scope of the suite.
 
@@ -152,9 +156,13 @@ File-level and top-level `describe()` blocks SHOULD have a TSDoc comment with `@
  * @expected Resolves without throwing.
  */
 it("should resolve when resource is deleted successfully", async () => {
-  jest.spyOn(storageService, "deleteResource").mockResolvedValue(undefined as never)
-  await expect(strategy.disconnect("usr_123", "res_abc")).resolves.toBeUndefined()
-})
+  jest
+    .spyOn(storageService, "deleteResource")
+    .mockResolvedValue(undefined as never);
+  await expect(
+    strategy.disconnect("usr_123", "res_abc"),
+  ).resolves.toBeUndefined();
+});
 
 /** Error path — prerequisites explain the non-obvious setup. */
 
@@ -164,11 +172,15 @@ it("should resolve when resource is deleted successfully", async () => {
  * @expected Resolves without throwing; error is swallowed.
  */
 it("should silently succeed on resource_missing error", async () => {
-  jest.spyOn(storageService, "deleteResource").mockRejectedValue(
-    new ResourceNotFoundError("No such resource: 'res_gone'"),
-  )
-  await expect(strategy.disconnect("usr_123", "res_gone")).resolves.toBeUndefined()
-})
+  jest
+    .spyOn(storageService, "deleteResource")
+    .mockRejectedValue(
+      new ResourceNotFoundError("No such resource: 'res_gone'"),
+    );
+  await expect(
+    strategy.disconnect("usr_123", "res_gone"),
+  ).resolves.toBeUndefined();
+});
 ```
 
 ## Assertions
@@ -181,16 +193,16 @@ it("should silently succeed on resource_missing error", async () => {
 ```typescript
 // WRONG — sole assertion is on wiring, not output
 it("should call dependency", async () => {
-  await service.process(input)
-  expect(depService.doWork).toHaveBeenCalledWith(input)
-})
+  await service.process(input);
+  expect(depService.doWork).toHaveBeenCalledWith(input);
+});
 
 // RIGHT — assert output, toHaveBeenCalledWith is secondary
 it("should return processed result", async () => {
-  jest.spyOn(depService, "doWork").mockResolvedValue(expected)
-  const result = await service.process(input)
-  expect(result).toEqual(expected)
-})
+  jest.spyOn(depService, "doWork").mockResolvedValue(expected);
+  const result = await service.process(input);
+  expect(result).toEqual(expected);
+});
 ```
 
 ## Anti-Patterns
@@ -206,17 +218,17 @@ it("should return processed result", async () => {
 
 ```typescript
 // WRONG — type imports mixed with value imports
-import type { TestingModule } from "@nestjs/testing"
-import { Test } from "@nestjs/testing"
-import type { MyService } from "../my.service"
-import { DepService } from "../../dep/service"
+import type { TestingModule } from "@nestjs/testing";
+import { Test } from "@nestjs/testing";
+import type { MyService } from "../my.service";
+import { DepService } from "../../dep/service";
 
 // RIGHT — type imports grouped at bottom
-import { Test } from "@nestjs/testing"
-import { DepService } from "../../dep/service"
+import { Test } from "@nestjs/testing";
+import { DepService } from "../../dep/service";
 
-import type { TestingModule } from "@nestjs/testing"
-import type { MyService } from "../my.service"
+import type { TestingModule } from "@nestjs/testing";
+import type { MyService } from "../my.service";
 ```
 
 ## Type Safety

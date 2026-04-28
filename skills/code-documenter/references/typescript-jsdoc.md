@@ -1,20 +1,14 @@
 # TypeScript Documentation
 
-Uses Microsoft Code Documentation style (TSDoc-aligned). **Documentation
-describes the contract — what something does and why — not how it's
-implemented internally.** Implementation details (algorithms, internal
-caching, side effects) belong in inline `//` comments inside the body, never
-in the doc comment.
+Uses Microsoft Code Documentation style (TSDoc-aligned). **Documentation describes the contract — what something does and why — not how it's implemented internally.** Implementation details (algorithms, internal caching, side effects) belong in inline `//` comments inside the body, never in the doc comment.
 
-When Context7 MCP is available, query `websites/tsdoc` for up-to-date TSDoc
-tag reference and syntax rules.
+When Context7 MCP is available, query `websites/tsdoc` for up-to-date TSDoc tag reference and syntax rules.
 
 **Do not use `@example` blocks.**
 
 ## Formatting Rules
 
-Every `/**` comment block places its body on a new line. One-line doc comments
-are not allowed because they become hard to extend and visually inconsistent.
+Every `/**` comment block places its body on a new line. One-line doc comments are not allowed because they become hard to extend and visually inconsistent.
 
 ```typescript
 // WRONG — one-line doc comment
@@ -28,27 +22,15 @@ id: string;
 id: string;
 ```
 
-TSDoc has two tag syntaxes. **Block tags** (`@param`, `@returns`, `@throws`,
-`@remarks`, `@inheritDoc`, etc.) start their own line and never use curly
-braces. **Inline tags** (`{@link}`) appear inside running text and require
-curly braces. Writing `{@param}` with braces is invalid.
+TSDoc has two tag syntaxes. **Block tags** (`@param`, `@returns`, `@throws`, `@remarks`, `@inheritDoc`, etc.) start their own line and never use curly braces. **Inline tags** (`{@link}`) appear inside running text and require curly braces. Writing `{@param}` with braces is invalid.
 
-**Project convention:** `@inheritDoc` is written as a bare block tag without
-curly braces and without a declaration reference — always `@inheritDoc` alone,
-never `{@inheritDoc}` or `{@inheritDoc Foo.bar}`. This diverges from the
-strict TSDoc spec but keeps the form consistent with other block tags in the
-codebase.
+**Project convention:** `@inheritDoc` is written as a bare block tag without curly braces and without a declaration reference — always `@inheritDoc` alone, never `{@inheritDoc}` or `{@inheritDoc Foo.bar}`. This diverges from the strict TSDoc spec but keeps the form consistent with other block tags in the codebase.
 
 ## Inline Implementation Comments
 
-Doc comments (`/** */`) describe the **contract** — what something does and
-why, for the consumer. Inline `//` comments inside a function or method body
-briefly explain **how** a non-trivial block works, so both human and AI
-readers can grasp the key idea at a glance.
+Doc comments (`/** */`) describe the **contract** — what something does and why, for the consumer. Inline `//` comments inside a function or method body briefly explain **how** a non-trivial block works, so both human and AI readers can grasp the key idea at a glance.
 
-Use them sparingly — only when the block is genuinely complex enough that a
-reader would otherwise have to puzzle out the intent line-by-line. Keep each
-comment short; one line is ideal.
+Use them sparingly — only when the block is genuinely complex enough that a reader would otherwise have to puzzle out the intent line-by-line. Keep each comment short; one line is ideal.
 
 ```typescript
 // CORRECT — doc comment describes the contract; inline comment summarises
@@ -75,16 +57,11 @@ function nextDelay(attempt: number): number {
 
 ## Release Tags
 
-Tags like `@public`, `@beta`, `@alpha`, `@internal` are omitted by default.
-Only include them when the user explicitly requests release-stage annotations.
+Tags like `@public`, `@beta`, `@alpha`, `@internal` are omitted by default. Only include them when the user explicitly requests release-stage annotations.
 
 ## Interface Documentation
 
-Interfaces represent abstractions — the *contract*, not the machinery behind
-it. Document what the consumer needs to know: purpose, parameters, return
-values, and thrown errors. Never describe implementation details such as
-internal caching strategies, database queries, retry logic, or algorithmic
-choices. Those belong in the implementation.
+Interfaces represent abstractions — the _contract_, not the machinery behind it. Document what the consumer needs to know: purpose, parameters, return values, and thrown errors. Never describe implementation details such as internal caching strategies, database queries, retry logic, or algorithmic choices. Those belong in the implementation.
 
 ```typescript
 /**
@@ -137,21 +114,11 @@ interface CreateUserDto {
 
 ## Implementation Documentation — `@inheritDoc` and DRY
 
-When a class implements an interface, do not repeat documentation that already
-exists on the interface. The implementation doc starts with `@inheritDoc` on
-the first line, followed by a blank line, and then only implementation-specific
-details that a maintainer of this class would need — expressed exclusively
-through TSDoc block tags such as `@remarks` or `@see`.
+When a class implements an interface, do not repeat documentation that already exists on the interface. The implementation doc starts with `@inheritDoc` on the first line, followed by a blank line, and then only implementation-specific details that a maintainer of this class would need — expressed exclusively through TSDoc block tags such as `@remarks` or `@see`.
 
-**Untagged prose after `@inheritDoc` overrides the inherited description**
-rather than supplementing it, because TSDoc treats the free-text portion of a
-comment as the summary. Any note that would otherwise live as a bare paragraph
-must be placed inside a tag block — most commonly `@remarks` — so the
-inherited summary is preserved and the implementation note is additive.
+**Untagged prose after `@inheritDoc` overrides the inherited description** rather than supplementing it, because TSDoc treats the free-text portion of a comment as the summary. Any note that would otherwise live as a bare paragraph must be placed inside a tag block — most commonly `@remarks` — so the inherited summary is preserved and the implementation note is additive.
 
-**Form:** write the tag bare — no curly braces, no declaration reference. The
-tag always inherits from the parent declaration automatically, so references
-like `@inheritDoc IUserService.create` are never needed and must not be used.
+**Form:** write the tag bare — no curly braces, no declaration reference. The tag always inherits from the parent declaration automatically, so references like `@inheritDoc IUserService.create` are never needed and must not be used.
 
 ```typescript
 // WRONG — curly braces
@@ -170,9 +137,7 @@ like `@inheritDoc IUserService.create` are never needed and must not be used.
  */
 ```
 
-Always use the multi-line form, even when the comment is only `@inheritDoc`.
-One-line `/** @inheritDoc */` is not allowed — this keeps the form consistent
-with every other doc comment in the codebase:
+Always use the multi-line form, even when the comment is only `@inheritDoc`. One-line `/** @inheritDoc */` is not allowed — this keeps the form consistent with every other doc comment in the codebase:
 
 ```typescript
 // WRONG — one-line doc comment
@@ -184,9 +149,7 @@ with every other doc comment in the codebase:
  */
 ```
 
-If there *are* implementation notes to add, place them after a blank line
-inside a TSDoc tag block — never as a bare paragraph. Reach for `@remarks`
-only when truly necessary (see the `@remarks` section below):
+If there _are_ implementation notes to add, place them after a blank line inside a TSDoc tag block — never as a bare paragraph. Reach for `@remarks` only when truly necessary (see the `@remarks` section below):
 
 ```typescript
 class UserService implements IUserService {
@@ -210,8 +173,7 @@ class UserService implements IUserService {
 }
 ```
 
-Untagged prose below `@inheritDoc` silently replaces the inherited summary, so
-the following is incorrect even though it looks reasonable:
+Untagged prose below `@inheritDoc` silently replaces the inherited summary, so the following is incorrect even though it looks reasonable:
 
 ```typescript
 // WRONG — untagged prose overrides the inherited description
@@ -235,18 +197,13 @@ Key points:
 - `@inheritDoc` is always bare: no braces, no reference.
 - `@inheritDoc` must be the first line of the comment body.
 - A blank line separates `@inheritDoc` from any additional notes.
-- Any additional notes must live inside a TSDoc tag block (`@remarks` or
-  `@see`). Untagged prose overrides the inherited summary instead of
-  supplementing it.
-- Only add notes specific to *this* implementation when the constraint is
-  genuinely non-obvious — never restate the contract.
-- Do not re-state parameter descriptions, return types, or thrown errors
-  already documented on the interface.
+- Any additional notes must live inside a TSDoc tag block (`@remarks` or `@see`). Untagged prose overrides the inherited summary instead of supplementing it.
+- Only add notes specific to _this_ implementation when the constraint is genuinely non-obvious — never restate the contract.
+- Do not re-state parameter descriptions, return types, or thrown errors already documented on the interface.
 
 ## Function Documentation
 
-Standalone functions (not implementing an interface) are documented fully.
-Describe the contract — what + why — never the implementation.
+Standalone functions (not implementing an interface) are documented fully. Describe the contract — what + why — never the implementation.
 
 ```typescript
 /**
@@ -262,8 +219,7 @@ function calculateTotal(items: Item[], taxRate = 0): number {
 
 ## Class Documentation
 
-Describe the contract of the class — what it represents and why it exists —
-not how it works internally.
+Describe the contract of the class — what it represents and why it exists — not how it works internally.
 
 ```typescript
 /**
@@ -281,15 +237,9 @@ class ConnectionPool {
 
 ## Simple Mappers and Delegators
 
-When a **class method or standalone function** is a simple mapper or merely
-delegates to another function or service, document it briefly — a single-line
-summary is enough. Do not pad with `@param`/`@returns` if the signature is
-self-explanatory; the contract is already obvious from the types and the name.
+When a **class method or standalone function** is a simple mapper or merely delegates to another function or service, document it briefly — a single-line summary is enough. Do not pad with `@param`/`@returns` if the signature is self-explanatory; the contract is already obvious from the types and the name.
 
-**This rule does not apply to interface methods.** Interface methods always
-require full contract documentation — `@param`, `@returns`, `@throws` as
-applicable — because the interface defines the contract that consumers depend
-on, regardless of how trivial any particular implementation turns out to be.
+**This rule does not apply to interface methods.** Interface methods always require full contract documentation — `@param`, `@returns`, `@throws` as applicable — because the interface defines the contract that consumers depend on, regardless of how trivial any particular implementation turns out to be.
 
 ```typescript
 // CORRECT — interface method: full contract.
@@ -351,17 +301,9 @@ interface PaginatedResponse<T> {
 
 ## `@remarks` — Use Sparingly
 
-`@remarks` is **not** a must-have. Avoid it unless absolutely necessary. It is
-the **only** way to flag that an implementation behaves in a tricky or
-non-obvious way and to describe the **why** behind that behaviour — never the
-how. If a reader could reasonably infer the same information from the
-signature, the summary, or the code itself, omit `@remarks` entirely.
+`@remarks` is **not** a must-have. Avoid it unless absolutely necessary. It is the **only** way to flag that an implementation behaves in a tricky or non-obvious way and to describe the **why** behind that behaviour — never the how. If a reader could reasonably infer the same information from the signature, the summary, or the code itself, omit `@remarks` entirely.
 
-When you do use it, the body is **always a markdown bullet list** — even if
-there is only one point. This keeps the form consistent so additional points
-can be added later without restructuring, and makes it visually obvious which
-parts of a docblock are remarks. When a bullet wraps to a new line, indent
-the continuation to align with the text after the dash.
+When you do use it, the body is **always a markdown bullet list** — even if there is only one point. This keeps the form consistent so additional points can be added later without restructuring, and makes it visually obvious which parts of a docblock are remarks. When a bullet wraps to a new line, indent the continuation to align with the text after the dash.
 
 ```typescript
 /**
@@ -407,25 +349,22 @@ interface SessionToken {
 
 ## Quick Reference
 
-| Tag           | Purpose                          | Example                                       |
-| ------------- | -------------------------------- | --------------------------------------------- |
-| `@param`      | Parameter description            | `@param name - User's name.`                  |
-| `@returns`    | Return value                     | `@returns The user object.`                   |
-| `@throws`     | Exception thrown                 | `@throws {Error} If invalid.`                 |
-| `@remarks`    | Tricky "why", use sparingly      | Always a bullet list, even with one item      |
-| `@see`        | URLs and cross-references        | `@see https://example.com`                    |
-| `@deprecated` | Mark deprecated                  | `@deprecated Use v2 instead.`                 |
-| `@template`   | Generic type param               | `@template T - Item type.`                    |
-| `@readonly`   | Read-only property               | Cannot modify                                 |
-| `@inheritDoc` | Inherit interface docs           | `@inheritDoc` (bare, no braces, no reference) |
-| `{@link}`     | Symbol cross-link, use sparingly | `{@link IUserService}`                        |
+| Tag | Purpose | Example |
+| --- | --- | --- |
+| `@param` | Parameter description | `@param name - User's name.` |
+| `@returns` | Return value | `@returns The user object.` |
+| `@throws` | Exception thrown | `@throws {Error} If invalid.` |
+| `@remarks` | Tricky "why", use sparingly | Always a bullet list, even with one item |
+| `@see` | URLs and cross-references | `@see https://example.com` |
+| `@deprecated` | Mark deprecated | `@deprecated Use v2 instead.` |
+| `@template` | Generic type param | `@template T - Item type.` |
+| `@readonly` | Read-only property | Cannot modify |
+| `@inheritDoc` | Inherit interface docs | `@inheritDoc` (bare, no braces, no reference) |
+| `{@link}` | Symbol cross-link, use sparingly | `{@link IUserService}` |
 
 ## `{@link}` Usage
 
-Use `{@link Something}` **sparingly — only when absolutely necessary.** Most
-cross-references read fine as plain text and clutter quickly when every type
-name becomes a link. Reserve `{@link}` for cases where the relationship is
-genuinely non-obvious from the surrounding prose.
+Use `{@link Something}` **sparingly — only when absolutely necessary.** Most cross-references read fine as plain text and clutter quickly when every type name becomes a link. Reserve `{@link}` for cases where the relationship is genuinely non-obvious from the surrounding prose.
 
 ```typescript
 /**
@@ -434,9 +373,7 @@ genuinely non-obvious from the surrounding prose.
 class UserService implements IUserService {
 ```
 
-**URLs always go in `@see`, never in `{@link}`.** `@see` is the dedicated tag
-for external references, and tooling renders it more reliably than an inline
-URL link.
+**URLs always go in `@see`, never in `{@link}`.** `@see` is the dedicated tag for external references, and tooling renders it more reliably than an inline URL link.
 
 ```typescript
 /**

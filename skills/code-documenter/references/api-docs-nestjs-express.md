@@ -7,44 +7,44 @@ NestJS requires explicit decorators for OpenAPI documentation.
 ### Controller Documentation
 
 ```typescript
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param } from "@nestjs/common";
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiParam,
   ApiBearerAuth,
-} from '@nestjs/swagger';
+} from "@nestjs/swagger";
 
-@ApiTags('Users')
+@ApiTags("Users")
 @ApiBearerAuth()
-@Controller('users')
+@Controller("users")
 export class UsersController {
   @Post()
-  @ApiOperation({ summary: 'Create a new user' })
+  @ApiOperation({ summary: "Create a new user" })
   @ApiResponse({
     status: 201,
-    description: 'User created successfully',
+    description: "User created successfully",
     type: UserDto,
   })
   @ApiResponse({
     status: 400,
-    description: 'Invalid input data',
+    description: "Invalid input data",
   })
   async create(@Body() dto: CreateUserDto): Promise<UserDto> {
     return this.usersService.create(dto);
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Get user by ID' })
+  @Get(":id")
+  @ApiOperation({ summary: "Get user by ID" })
   @ApiParam({
-    name: 'id',
-    description: 'User unique identifier',
-    example: '123',
+    name: "id",
+    description: "User unique identifier",
+    example: "123",
   })
   @ApiResponse({ status: 200, type: UserDto })
-  @ApiResponse({ status: 404, description: 'User not found' })
-  async findOne(@Param('id') id: string): Promise<UserDto> {
+  @ApiResponse({ status: 404, description: "User not found" })
+  async findOne(@Param("id") id: string): Promise<UserDto> {
     return this.usersService.findOne(id);
   }
 }
@@ -53,13 +53,13 @@ export class UsersController {
 ### DTO Documentation
 
 ```typescript
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsString, MinLength } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { IsEmail, IsString, MinLength } from "class-validator";
 
 export class CreateUserDto {
   @ApiProperty({
     description: "User's display name",
-    example: 'John Doe',
+    example: "John Doe",
     minLength: 1,
     maxLength: 100,
   })
@@ -69,14 +69,14 @@ export class CreateUserDto {
 
   @ApiProperty({
     description: "User's email address",
-    example: 'john@example.com',
+    example: "john@example.com",
   })
   @IsEmail()
   email: string;
 
   @ApiPropertyOptional({
-    description: 'Profile picture URL',
-    example: 'https://example.com/avatar.jpg',
+    description: "Profile picture URL",
+    example: "https://example.com/avatar.jpg",
   })
   avatarUrl?: string;
 }
@@ -89,22 +89,22 @@ Express uses JSDoc comments with swagger annotations.
 ### Setup
 
 ```javascript
-const swaggerJsdoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 
 const options = {
   definition: {
-    openapi: '3.0.0',
+    openapi: "3.0.0",
     info: {
-      title: 'API Documentation',
-      version: '1.0.0',
+      title: "API Documentation",
+      version: "1.0.0",
     },
   },
-  apis: ['./routes/*.js'],
+  apis: ["./routes/*.js"],
 };
 
 const specs = swaggerJsdoc(options);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 ```
 
 ### Route Documentation
@@ -132,7 +132,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
  *       400:
  *         description: Invalid input
  */
-router.post('/users', createUser);
+router.post("/users", createUser);
 
 /**
  * @swagger
@@ -157,7 +157,7 @@ router.post('/users', createUser);
  *       404:
  *         description: User not found
  */
-router.get('/users/:id', getUser);
+router.get("/users/:id", getUser);
 ```
 
 ### Schema Documentation

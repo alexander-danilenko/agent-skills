@@ -9,8 +9,12 @@ function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
 }
 
 // Multiple constraints
-interface HasId { id: number; }
-interface HasName { name: string; }
+interface HasId {
+  id: number;
+}
+interface HasName {
+  name: string;
+}
 
 function merge<T extends HasId, U extends HasName>(obj1: T, obj2: U): T & U {
   return { ...obj1, ...obj2 };
@@ -41,11 +45,8 @@ type ToArrayNonDist<T> = [T] extends [any] ? T[] : never;
 type BothArray = ToArrayNonDist<string | number>; // (string | number)[]
 
 // Nested conditionals for type extraction
-type Flatten<T> = T extends Array<infer U>
-  ? U extends Array<infer V>
-    ? Flatten<V>
-    : U
-  : T;
+type Flatten<T> =
+  T extends Array<infer U> ? (U extends Array<infer V> ? Flatten<V> : U) : T;
 
 type Nested = Flatten<string[][][]>; // string
 
@@ -96,8 +97,8 @@ type StringFields = PickByType<Person, string>; // { name: string }
 
 ```typescript
 // Basic template literal
-type EmailLocale = 'en' | 'es' | 'fr';
-type EmailType = 'welcome' | 'reset-password';
+type EmailLocale = "en" | "es" | "fr";
+type EmailType = "welcome" | "reset-password";
 type EmailTemplate = `${EmailLocale}_${EmailType}`;
 // 'en_welcome' | 'en_reset-password' | 'es_welcome' | ...
 
@@ -108,11 +109,11 @@ type Capitalize<S extends string> = intrinsic;
 type Uncapitalize<S extends string> = intrinsic;
 
 type EventName<T extends string> = `on${Capitalize<T>}`;
-type ClickEvent = EventName<'click'>; // 'onClick'
+type ClickEvent = EventName<"click">; // 'onClick'
 
 // Template literal with mapped types
 type CSSProperties = {
-  [K in 'color' | 'background' | 'border' as `--${K}`]: string;
+  [K in "color" | "background" | "border" as `--${K}`]: string;
 };
 // { '--color': string; '--background': string; '--border': string }
 
@@ -121,10 +122,10 @@ type ExtractRouteParams<T extends string> =
   T extends `${infer _Start}/:${infer Param}/${infer Rest}`
     ? Param | ExtractRouteParams<`/${Rest}`>
     : T extends `${infer _Start}/:${infer Param}`
-    ? Param
-    : never;
+      ? Param
+      : never;
 
-type Params = ExtractRouteParams<'/users/:id/posts/:postId'>; // 'id' | 'postId'
+type Params = ExtractRouteParams<"/users/:id/posts/:postId">; // 'id' | 'postId'
 ```
 
 ## Higher-Kinded Types (Simulation)
@@ -136,22 +137,19 @@ interface TypeClass<F> {
 }
 
 // Functor pattern
-type Maybe<T> = { type: 'just'; value: T } | { type: 'nothing' };
+type Maybe<T> = { type: "just"; value: T } | { type: "nothing" };
 
 const MaybeFunctor: TypeClass<Maybe<any>> = {
   map: <A, B>(f: (a: A) => B, ma: Maybe<A>): Maybe<B> => {
-    return ma.type === 'just'
-      ? { type: 'just', value: f(ma.value) }
-      : { type: 'nothing' };
-  }
+    return ma.type === "just"
+      ? { type: "just", value: f(ma.value) }
+      : { type: "nothing" };
+  },
 };
 
 // Builder pattern with generics
 type Builder<T, K extends keyof T = never> = {
-  with<P extends Exclude<keyof T, K>>(
-    key: P,
-    value: T[P]
-  ): Builder<T, K | P>;
+  with<P extends Exclude<keyof T, K>>(key: P, value: T[P]): Builder<T, K | P>;
   build(): K extends keyof T ? T : never;
 };
 ```
@@ -169,23 +167,29 @@ type JSONValue =
   | { [key: string]: JSONValue };
 
 // Deep partial
-type DeepPartial<T> = T extends object ? {
-  [K in keyof T]?: DeepPartial<T[K]>;
-} : T;
+type DeepPartial<T> = T extends object
+  ? {
+      [K in keyof T]?: DeepPartial<T[K]>;
+    }
+  : T;
 
 // Deep readonly
-type DeepReadonly<T> = T extends object ? {
-  readonly [K in keyof T]: DeepReadonly<T[K]>;
-} : T;
+type DeepReadonly<T> = T extends object
+  ? {
+      readonly [K in keyof T]: DeepReadonly<T[K]>;
+    }
+  : T;
 
 // Path type for nested objects
-type PathsToProps<T> = T extends object ? {
-  [K in keyof T]: K extends string
-    ? T[K] extends object
-      ? K | `${K}.${PathsToProps<T[K]>}`
-      : K
-    : never;
-}[keyof T] : never;
+type PathsToProps<T> = T extends object
+  ? {
+      [K in keyof T]: K extends string
+        ? T[K] extends object
+          ? K | `${K}.${PathsToProps<T[K]>}`
+          : K
+        : never;
+    }[keyof T]
+  : never;
 
 interface User {
   profile: {
@@ -205,7 +209,7 @@ type UserPaths = PathsToProps<User>;
 ```typescript
 // Covariance (return types)
 type Producer<T> = () => T;
-let stringProducer: Producer<string> = () => 'hello';
+let stringProducer: Producer<string> = () => "hello";
 let objectProducer: Producer<object> = stringProducer; // OK: string is object
 
 // Contravariance (parameter types)
@@ -219,7 +223,7 @@ interface Box<T> {
   setValue(v: T): void;
 }
 
-let stringBox: Box<string> = { value: '', setValue: (v) => {} };
+let stringBox: Box<string> = { value: "", setValue: (v) => {} };
 // let objectBox: Box<object> = stringBox; // Error: invariant
 ```
 
@@ -227,17 +231,19 @@ let stringBox: Box<string> = { value: '', setValue: (v) => {} };
 
 ```typescript
 // Type-level addition (limited)
-type Length<T extends any[]> = T['length'];
+type Length<T extends any[]> = T["length"];
 type Concat<A extends any[], B extends any[]> = [...A, ...B];
 
 // Type-level conditionals
-type If<Condition extends boolean, Then, Else> =
-  Condition extends true ? Then : Else;
+type If<Condition extends boolean, Then, Else> = Condition extends true
+  ? Then
+  : Else;
 
 // Type-level equality
 type Equal<X, Y> =
-  (<T>() => T extends X ? 1 : 2) extends
-  (<T>() => T extends Y ? 1 : 2) ? true : false;
+  (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2
+    ? true
+    : false;
 
 // Assert equal types (for testing)
 type Assert<T extends true> = T;

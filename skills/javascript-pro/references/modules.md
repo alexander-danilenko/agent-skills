@@ -23,30 +23,30 @@ export default class Database {
 }
 
 // Re-exports
-export { add, multiply } from './math.js';
-export * from './utils.js';
-export * as helpers from './helpers.js';
+export { add, multiply } from "./math.js";
+export * from "./utils.js";
+export * as helpers from "./helpers.js";
 ```
 
 ## Import Patterns
 
 ```javascript
 // Named imports
-import { add, multiply } from './math.js';
-import { add as addition } from './math.js';
+import { add, multiply } from "./math.js";
+import { add as addition } from "./math.js";
 
 // Default import
-import Database from './database.js';
+import Database from "./database.js";
 
 // Namespace import
-import * as math from './math.js';
+import * as math from "./math.js";
 math.add(1, 2);
 
 // Mixed imports
-import Database, { connect, disconnect } from './database.js';
+import Database, { connect, disconnect } from "./database.js";
 
 // Side-effect only import
-import './polyfills.js';
+import "./polyfills.js";
 
 // Type-only imports (for documentation)
 /** @typedef {import('./types.js').User} User */
@@ -56,24 +56,24 @@ import './polyfills.js';
 
 ```javascript
 // Basic dynamic import
-const module = await import('./module.js');
+const module = await import("./module.js");
 module.default();
 
 // Conditional loading
 const loadFeature = async (feature) => {
-  if (feature === 'advanced') {
-    const { AdvancedFeature } = await import('./advanced.js');
+  if (feature === "advanced") {
+    const { AdvancedFeature } = await import("./advanced.js");
     return new AdvancedFeature();
   }
-  const { BasicFeature } = await import('./basic.js');
+  const { BasicFeature } = await import("./basic.js");
   return new BasicFeature();
 };
 
 // Code splitting by route
 const router = {
-  '/home': () => import('./pages/home.js'),
-  '/about': () => import('./pages/about.js'),
-  '/profile': () => import('./pages/profile.js')
+  "/home": () => import("./pages/home.js"),
+  "/about": () => import("./pages/about.js"),
+  "/profile": () => import("./pages/profile.js"),
 };
 
 const loadPage = async (route) => {
@@ -150,19 +150,19 @@ import feature from 'my-package/feature'; // Conditional based on NODE_ENV
 ```html
 <!-- In HTML -->
 <script type="importmap">
-{
-  "imports": {
-    "lodash": "/node_modules/lodash-es/lodash.js",
-    "react": "https://esm.sh/react@18",
-    "utils/": "/src/utils/"
+  {
+    "imports": {
+      "lodash": "/node_modules/lodash-es/lodash.js",
+      "react": "https://esm.sh/react@18",
+      "utils/": "/src/utils/"
+    }
   }
-}
 </script>
 
 <script type="module">
-import _ from 'lodash';
-import React from 'react';
-import { helper } from 'utils/helper.js';
+  import _ from "lodash";
+  import React from "react";
+  import { helper } from "utils/helper.js";
 </script>
 ```
 
@@ -170,17 +170,17 @@ import { helper } from 'utils/helper.js';
 
 ```javascript
 // ESM consuming CommonJS
-import cjsModule from './commonjs-module.cjs';
-import { named } from './commonjs-module.cjs'; // May not work
+import cjsModule from "./commonjs-module.cjs";
+import { named } from "./commonjs-module.cjs"; // May not work
 
 // Use createRequire for CommonJS in ESM
-import { createRequire } from 'module';
+import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-const cjsModule = require('./commonjs-module.cjs');
+const cjsModule = require("./commonjs-module.cjs");
 
 // Access CommonJS metadata in ESM
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -190,15 +190,15 @@ const __dirname = dirname(__filename);
 
 ```javascript
 // Explicit file extensions required in ESM
-import utils from './utils.js'; // Correct
-import utils from './utils';    // Error in ESM
+import utils from "./utils.js"; // Correct
+import utils from "./utils"; // Error in ESM
 
 // Directory imports require index.js
-import api from './api/index.js';
+import api from "./api/index.js";
 
 // Using import.meta
 console.log(import.meta.url); // file:///path/to/module.js
-console.log(import.meta.resolve('./other.js')); // Resolve relative path
+console.log(import.meta.resolve("./other.js")); // Resolve relative path
 
 // Detect if module is main
 if (import.meta.url === `file://${process.argv[1]}`) {
@@ -211,15 +211,15 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
 ```javascript
 // moduleA.js
-import { b } from './moduleB.js';
-export const a = 'A';
+import { b } from "./moduleB.js";
+export const a = "A";
 export function useB() {
   return b;
 }
 
 // moduleB.js
-import { a } from './moduleA.js';
-export const b = 'B';
+import { a } from "./moduleA.js";
+export const b = "B";
 export function useA() {
   return a; // Works because 'a' is hoisted
 }
@@ -228,15 +228,15 @@ export function useA() {
 // factory.js
 export function createA(dependencies) {
   return {
-    name: 'A',
-    useB: () => dependencies.b
+    name: "A",
+    useB: () => dependencies.b,
   };
 }
 
 export function createB(dependencies) {
   return {
-    name: 'B',
-    useA: () => dependencies.a
+    name: "B",
+    useA: () => dependencies.a,
   };
 }
 
@@ -291,18 +291,18 @@ export default new Database();
 
 // Factory pattern
 // loggerFactory.js
-export function createLogger(level = 'info') {
+export function createLogger(level = "info") {
   return {
-    info: (msg) => level !== 'silent' && console.log(msg),
-    error: (msg) => console.error(msg)
+    info: (msg) => level !== "silent" && console.log(msg),
+    error: (msg) => console.error(msg),
   };
 }
 
 // Facade pattern
 // api.js
-import { get, post, put, del } from './httpClient.js';
-import { auth } from './auth.js';
-import { cache } from './cache.js';
+import { get, post, put, del } from "./httpClient.js";
+import { auth } from "./auth.js";
+import { cache } from "./cache.js";
 
 export const api = {
   async getUser(id) {
@@ -313,7 +313,7 @@ export const api = {
     const user = await get(`/users/${id}`, { token });
     cache.set(`user:${id}`, user);
     return user;
-  }
+  },
 };
 ```
 

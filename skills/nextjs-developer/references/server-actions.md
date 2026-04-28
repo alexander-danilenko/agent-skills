@@ -4,20 +4,20 @@
 
 ```tsx
 // app/actions.ts
-'use server'
+"use server";
 
-import { db } from '@/lib/db'
-import { revalidatePath } from 'next/cache'
+import { db } from "@/lib/db";
+import { revalidatePath } from "next/cache";
 
 export async function createPost(formData: FormData) {
-  const title = formData.get('title') as string
-  const content = formData.get('content') as string
+  const title = formData.get("title") as string;
+  const content = formData.get("content") as string;
 
   await db.post.create({
-    data: { title, content }
-  })
+    data: { title, content },
+  });
 
-  revalidatePath('/posts')
+  revalidatePath("/posts");
 }
 ```
 
@@ -25,7 +25,7 @@ export async function createPost(formData: FormData) {
 
 ```tsx
 // app/posts/new/page.tsx
-import { createPost } from '@/app/actions'
+import { createPost } from "@/app/actions";
 
 export default function NewPost() {
   return (
@@ -34,7 +34,7 @@ export default function NewPost() {
       <textarea name="content" required />
       <button type="submit">Create Post</button>
     </form>
-  )
+  );
 }
 ```
 
@@ -42,36 +42,36 @@ export default function NewPost() {
 
 ```tsx
 // app/actions.ts
-'use server'
+"use server";
 
-import { z } from 'zod'
-import { revalidatePath } from 'next/cache'
+import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 const CreatePostSchema = z.object({
   title: z.string().min(3).max(100),
   content: z.string().min(10),
-})
+});
 
 export async function createPost(formData: FormData) {
   const validatedFields = CreatePostSchema.safeParse({
-    title: formData.get('title'),
-    content: formData.get('content'),
-  })
+    title: formData.get("title"),
+    content: formData.get("content"),
+  });
 
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-    }
+    };
   }
 
-  const { title, content } = validatedFields.data
+  const { title, content } = validatedFields.data;
 
   await db.post.create({
-    data: { title, content }
-  })
+    data: { title, content },
+  });
 
-  revalidatePath('/posts')
-  return { success: true }
+  revalidatePath("/posts");
+  return { success: true };
 }
 ```
 
@@ -79,27 +79,27 @@ export async function createPost(formData: FormData) {
 
 ```tsx
 // components/create-post-form.tsx
-'use client'
+"use client";
 
-import { createPost } from '@/app/actions'
-import { useFormState, useFormStatus } from 'react-dom'
+import { createPost } from "@/app/actions";
+import { useFormState, useFormStatus } from "react-dom";
 
 const initialState = {
   errors: {},
-}
+};
 
 function SubmitButton() {
-  const { pending } = useFormStatus()
+  const { pending } = useFormStatus();
 
   return (
     <button type="submit" disabled={pending}>
-      {pending ? 'Creating...' : 'Create Post'}
+      {pending ? "Creating..." : "Create Post"}
     </button>
-  )
+  );
 }
 
 export function CreatePostForm() {
-  const [state, formAction] = useFormState(createPost, initialState)
+  const [state, formAction] = useFormState(createPost, initialState);
 
   return (
     <form action={formAction}>
@@ -115,7 +115,7 @@ export function CreatePostForm() {
 
       <SubmitButton />
     </form>
-  )
+  );
 }
 ```
 
@@ -123,21 +123,21 @@ export function CreatePostForm() {
 
 ```tsx
 // app/actions.ts
-'use server'
+"use server";
 
-import { redirect } from 'next/navigation'
-import { revalidatePath } from 'next/cache'
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export async function createPost(formData: FormData) {
   const post = await db.post.create({
     data: {
-      title: formData.get('title') as string,
-      content: formData.get('content') as string,
-    }
-  })
+      title: formData.get("title") as string,
+      content: formData.get("content") as string,
+    },
+  });
 
-  revalidatePath('/posts')
-  redirect(`/posts/${post.id}`)
+  revalidatePath("/posts");
+  redirect(`/posts/${post.id}`);
 }
 ```
 
@@ -145,32 +145,32 @@ export async function createPost(formData: FormData) {
 
 ```tsx
 // components/todo-list.tsx
-'use client'
+"use client";
 
-import { experimental_useOptimistic as useOptimistic } from 'react'
-import { toggleTodo } from '@/app/actions'
+import { experimental_useOptimistic as useOptimistic } from "react";
+import { toggleTodo } from "@/app/actions";
 
 export function TodoList({ todos }: { todos: Todo[] }) {
   const [optimisticTodos, addOptimisticTodo] = useOptimistic(
     todos,
-    (state, newTodo: Todo) => [...state, newTodo]
-  )
+    (state, newTodo: Todo) => [...state, newTodo],
+  );
 
   async function handleSubmit(formData: FormData) {
-    const title = formData.get('title') as string
-    const newTodo = { id: crypto.randomUUID(), title, completed: false }
+    const title = formData.get("title") as string;
+    const newTodo = { id: crypto.randomUUID(), title, completed: false };
 
     // Optimistically update UI
-    addOptimisticTodo(newTodo)
+    addOptimisticTodo(newTodo);
 
     // Send to server
-    await createTodo(formData)
+    await createTodo(formData);
   }
 
   return (
     <div>
       <ul>
-        {optimisticTodos.map(todo => (
+        {optimisticTodos.map((todo) => (
           <li key={todo.id}>{todo.title}</li>
         ))}
       </ul>
@@ -180,7 +180,7 @@ export function TodoList({ todos }: { todos: Todo[] }) {
         <button type="submit">Add</button>
       </form>
     </div>
-  )
+  );
 }
 ```
 
@@ -188,27 +188,27 @@ export function TodoList({ todos }: { todos: Todo[] }) {
 
 ```tsx
 // app/actions.ts
-'use server'
+"use server";
 
-import { auth } from '@/lib/auth'
-import { redirect } from 'next/navigation'
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export async function createPost(formData: FormData) {
-  const session = await auth()
+  const session = await auth();
 
   if (!session) {
-    redirect('/login')
+    redirect("/login");
   }
 
   await db.post.create({
     data: {
-      title: formData.get('title') as string,
-      content: formData.get('content') as string,
+      title: formData.get("title") as string,
+      content: formData.get("content") as string,
       authorId: session.user.id,
-    }
-  })
+    },
+  });
 
-  revalidatePath('/posts')
+  revalidatePath("/posts");
 }
 ```
 
@@ -216,23 +216,23 @@ export async function createPost(formData: FormData) {
 
 ```tsx
 // app/posts/page.tsx
-import { db } from '@/lib/db'
-import { revalidatePath } from 'next/cache'
+import { db } from "@/lib/db";
+import { revalidatePath } from "next/cache";
 
 export default async function Posts() {
-  const posts = await db.post.findMany()
+  const posts = await db.post.findMany();
 
   async function deletePost(formData: FormData) {
-    'use server'
+    "use server";
 
-    const id = formData.get('id') as string
-    await db.post.delete({ where: { id } })
-    revalidatePath('/posts')
+    const id = formData.get("id") as string;
+    await db.post.delete({ where: { id } });
+    revalidatePath("/posts");
   }
 
   return (
     <ul>
-      {posts.map(post => (
+      {posts.map((post) => (
         <li key={post.id}>
           {post.title}
           <form action={deletePost}>
@@ -242,7 +242,7 @@ export default async function Posts() {
         </li>
       ))}
     </ul>
-  )
+  );
 }
 ```
 
@@ -250,30 +250,26 @@ export default async function Posts() {
 
 ```tsx
 // components/delete-button.tsx
-'use client'
+"use client";
 
-import { deletePost } from '@/app/actions'
+import { deletePost } from "@/app/actions";
 
 export function DeleteButton({ postId }: { postId: string }) {
   async function handleDelete() {
-    if (confirm('Are you sure?')) {
-      await deletePost(postId)
+    if (confirm("Are you sure?")) {
+      await deletePost(postId);
     }
   }
 
-  return (
-    <button onClick={handleDelete}>
-      Delete
-    </button>
-  )
+  return <button onClick={handleDelete}>Delete</button>;
 }
 
 // app/actions.ts
-'use server'
+("use server");
 
 export async function deletePost(postId: string) {
-  await db.post.delete({ where: { id: postId } })
-  revalidatePath('/posts')
+  await db.post.delete({ where: { id: postId } });
+  revalidatePath("/posts");
 }
 ```
 
@@ -281,22 +277,22 @@ export async function deletePost(postId: string) {
 
 ```tsx
 // app/actions.ts
-'use server'
+"use server";
 
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function updatePost(id: string, data: UpdatePostData) {
-  await db.post.update({ where: { id }, data })
+  await db.post.update({ where: { id }, data });
 
   // Revalidate specific path
-  revalidatePath('/posts')
-  revalidatePath(`/posts/${id}`)
+  revalidatePath("/posts");
+  revalidatePath(`/posts/${id}`);
 
   // Revalidate all paths in a layout
-  revalidatePath('/posts', 'layout')
+  revalidatePath("/posts", "layout");
 
   // Revalidate by cache tag
-  revalidateTag('posts')
+  revalidateTag("posts");
 }
 ```
 
@@ -304,37 +300,37 @@ export async function updatePost(id: string, data: UpdatePostData) {
 
 ```tsx
 // app/actions.ts
-'use server'
+"use server";
 
-import { writeFile } from 'fs/promises'
-import { join } from 'path'
+import { writeFile } from "fs/promises";
+import { join } from "path";
 
 export async function uploadAvatar(formData: FormData) {
-  const file = formData.get('avatar') as File
+  const file = formData.get("avatar") as File;
 
   if (!file) {
-    return { error: 'No file uploaded' }
+    return { error: "No file uploaded" };
   }
 
-  const bytes = await file.arrayBuffer()
-  const buffer = Buffer.from(bytes)
+  const bytes = await file.arrayBuffer();
+  const buffer = Buffer.from(bytes);
 
-  const path = join(process.cwd(), 'public', 'uploads', file.name)
-  await writeFile(path, buffer)
+  const path = join(process.cwd(), "public", "uploads", file.name);
+  await writeFile(path, buffer);
 
-  return { success: true, path: `/uploads/${file.name}` }
+  return { success: true, path: `/uploads/${file.name}` };
 }
 
 // components/upload-form.tsx
-'use client'
+("use client");
 
-import { uploadAvatar } from '@/app/actions'
+import { uploadAvatar } from "@/app/actions";
 
 export function UploadForm() {
   async function handleSubmit(formData: FormData) {
-    const result = await uploadAvatar(formData)
+    const result = await uploadAvatar(formData);
     if (result.success) {
-      console.log('Uploaded to:', result.path)
+      console.log("Uploaded to:", result.path);
     }
   }
 
@@ -343,7 +339,7 @@ export function UploadForm() {
       <input type="file" name="avatar" accept="image/*" />
       <button type="submit">Upload</button>
     </form>
-  )
+  );
 }
 ```
 
@@ -351,39 +347,39 @@ export function UploadForm() {
 
 ```tsx
 // app/actions.ts
-'use server'
+"use server";
 
 export async function createPost(formData: FormData) {
   try {
     await db.post.create({
       data: {
-        title: formData.get('title') as string,
-        content: formData.get('content') as string,
-      }
-    })
+        title: formData.get("title") as string,
+        content: formData.get("content") as string,
+      },
+    });
 
-    revalidatePath('/posts')
-    return { success: true }
+    revalidatePath("/posts");
+    return { success: true };
   } catch (error) {
-    console.error('Failed to create post:', error)
-    return { error: 'Failed to create post' }
+    console.error("Failed to create post:", error);
+    return { error: "Failed to create post" };
   }
 }
 
 // components/form.tsx
-'use client'
+("use client");
 
 export function CreatePostForm() {
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(formData: FormData) {
-    const result = await createPost(formData)
+    const result = await createPost(formData);
 
     if (result.error) {
-      setError(result.error)
+      setError(result.error);
     } else {
       // Success
-      router.push('/posts')
+      router.push("/posts");
     }
   }
 
@@ -392,7 +388,7 @@ export function CreatePostForm() {
       {error && <div className="error">{error}</div>}
       {/* form fields */}
     </form>
-  )
+  );
 }
 ```
 
@@ -400,21 +396,21 @@ export function CreatePostForm() {
 
 ```tsx
 // app/actions.ts
-'use server'
+"use server";
 
-import { cookies } from 'next/headers'
+import { cookies } from "next/headers";
 
-export async function setTheme(theme: 'light' | 'dark') {
-  cookies().set('theme', theme, {
+export async function setTheme(theme: "light" | "dark") {
+  cookies().set("theme", theme, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60 * 24 * 365, // 1 year
-    path: '/',
-  })
+    path: "/",
+  });
 }
 
 export async function getTheme() {
-  return cookies().get('theme')?.value ?? 'light'
+  return cookies().get("theme")?.value ?? "light";
 }
 ```
 
@@ -422,16 +418,16 @@ export async function getTheme() {
 
 ```tsx
 // app/actions.ts
-'use server'
+"use server";
 
-import { ratelimit } from '@/lib/redis'
+import { ratelimit } from "@/lib/redis";
 
 export async function createPost(formData: FormData) {
-  const session = await auth()
-  const { success } = await ratelimit.limit(session.user.id)
+  const session = await auth();
+  const { success } = await ratelimit.limit(session.user.id);
 
   if (!success) {
-    return { error: 'Rate limit exceeded' }
+    return { error: "Rate limit exceeded" };
   }
 
   // Create post...

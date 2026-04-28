@@ -3,14 +3,20 @@
 ## use() Hook
 
 ```tsx
-import { use, Suspense } from 'react';
+import { use, Suspense } from "react";
 
 // Read promises in render
-function Comments({ commentsPromise }: { commentsPromise: Promise<Comment[]> }) {
+function Comments({
+  commentsPromise,
+}: {
+  commentsPromise: Promise<Comment[]>;
+}) {
   const comments = use(commentsPromise);
   return (
     <ul>
-      {comments.map(c => <li key={c.id}>{c.text}</li>)}
+      {comments.map((c) => (
+        <li key={c.id}>{c.text}</li>
+      ))}
     </ul>
   );
 }
@@ -42,23 +48,26 @@ function Theme({ children }: { children: React.ReactNode }) {
 ## useActionState
 
 ```tsx
-'use client';
-import { useActionState } from 'react';
+"use client";
+import { useActionState } from "react";
 
 interface FormState {
   error?: string;
   success?: boolean;
 }
 
-async function submitAction(prevState: FormState, formData: FormData): Promise<FormState> {
-  'use server';
-  const email = formData.get('email') as string;
+async function submitAction(
+  prevState: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  "use server";
+  const email = formData.get("email") as string;
 
   try {
     await subscribe(email);
     return { success: true };
   } catch {
-    return { error: 'Failed to subscribe' };
+    return { error: "Failed to subscribe" };
   }
 }
 
@@ -69,7 +78,7 @@ function NewsletterForm() {
     <form action={formAction}>
       <input name="email" type="email" required disabled={isPending} />
       <button type="submit" disabled={isPending}>
-        {isPending ? 'Subscribing...' : 'Subscribe'}
+        {isPending ? "Subscribing..." : "Subscribe"}
       </button>
       {state.error && <p className="error">{state.error}</p>}
       {state.success && <p className="success">Subscribed!</p>}
@@ -81,15 +90,15 @@ function NewsletterForm() {
 ## useFormStatus
 
 ```tsx
-'use client';
-import { useFormStatus } from 'react-dom';
+"use client";
+import { useFormStatus } from "react-dom";
 
 function SubmitButton() {
   const { pending, data, method, action } = useFormStatus();
 
   return (
     <button type="submit" disabled={pending}>
-      {pending ? 'Submitting...' : 'Submit'}
+      {pending ? "Submitting..." : "Submit"}
     </button>
   );
 }
@@ -108,20 +117,20 @@ function ContactForm() {
 ## useOptimistic
 
 ```tsx
-'use client';
-import { useOptimistic } from 'react';
+"use client";
+import { useOptimistic } from "react";
 
 function TodoList({ todos }: { todos: Todo[] }) {
   const [optimisticTodos, addOptimisticTodo] = useOptimistic(
     todos,
-    (state, newTodo: Todo) => [...state, newTodo]
+    (state, newTodo: Todo) => [...state, newTodo],
   );
 
   async function addTodo(formData: FormData) {
-    const text = formData.get('text') as string;
+    const text = formData.get("text") as string;
 
     // Immediately update UI
-    addOptimisticTodo({ id: 'temp', text, completed: false });
+    addOptimisticTodo({ id: "temp", text, completed: false });
 
     // Then persist
     await createTodo(text);
@@ -130,7 +139,7 @@ function TodoList({ todos }: { todos: Todo[] }) {
   return (
     <>
       <ul>
-        {optimisticTodos.map(todo => (
+        {optimisticTodos.map((todo) => (
           <li key={todo.id}>{todo.text}</li>
         ))}
       </ul>

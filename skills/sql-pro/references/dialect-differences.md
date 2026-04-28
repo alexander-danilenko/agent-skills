@@ -375,18 +375,18 @@ WHEN NOT MATCHED THEN
 
 ## Data Type Mapping
 
-| Concept   | PostgreSQL       | MySQL                | SQL Server          | Oracle                 |
-| --------- | ---------------- | -------------------- | ------------------- | ---------------------- |
-| Integer   | INT, BIGINT      | INT, BIGINT          | INT, BIGINT         | NUMBER(10), NUMBER(19) |
-| Decimal   | NUMERIC, DECIMAL | DECIMAL              | DECIMAL, NUMERIC    | NUMBER(p,s)            |
-| String    | VARCHAR, TEXT    | VARCHAR, TEXT        | VARCHAR, NVARCHAR   | VARCHAR2, CLOB         |
-| Binary    | BYTEA            | BLOB, BINARY         | VARBINARY, IMAGE    | BLOB, RAW              |
-| Boolean   | BOOLEAN          | BOOLEAN/TINYINT(1)   | BIT                 | NUMBER(1)              |
-| Date      | DATE             | DATE                 | DATE                | DATE                   |
-| Timestamp | TIMESTAMP        | DATETIME, TIMESTAMP  | DATETIME, DATETIME2 | TIMESTAMP              |
-| UUID      | UUID             | CHAR(36), BINARY(16) | UNIQUEIDENTIFIER    | RAW(16)                |
-| JSON      | JSON, JSONB      | JSON                 | NVARCHAR(MAX)       | CLOB                   |
-| Array     | ARRAY            | JSON                 | Table variable      | VARRAY, nested table   |
+| Concept | PostgreSQL | MySQL | SQL Server | Oracle |
+| --- | --- | --- | --- | --- |
+| Integer | INT, BIGINT | INT, BIGINT | INT, BIGINT | NUMBER(10), NUMBER(19) |
+| Decimal | NUMERIC, DECIMAL | DECIMAL | DECIMAL, NUMERIC | NUMBER(p,s) |
+| String | VARCHAR, TEXT | VARCHAR, TEXT | VARCHAR, NVARCHAR | VARCHAR2, CLOB |
+| Binary | BYTEA | BLOB, BINARY | VARBINARY, IMAGE | BLOB, RAW |
+| Boolean | BOOLEAN | BOOLEAN/TINYINT(1) | BIT | NUMBER(1) |
+| Date | DATE | DATE | DATE | DATE |
+| Timestamp | TIMESTAMP | DATETIME, TIMESTAMP | DATETIME, DATETIME2 | TIMESTAMP |
+| UUID | UUID | CHAR(36), BINARY(16) | UNIQUEIDENTIFIER | RAW(16) |
+| JSON | JSON, JSONB | JSON | NVARCHAR(MAX) | CLOB |
+| Array | ARRAY | JSON | Table variable | VARRAY, nested table |
 
 ## Performance Tips by Database
 

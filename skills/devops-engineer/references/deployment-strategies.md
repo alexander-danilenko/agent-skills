@@ -2,12 +2,12 @@
 
 ## Strategy Comparison
 
-| Strategy       | Use When                                      | Rollback                    | Risk   |
-| -------------- | --------------------------------------------- | --------------------------- | ------ |
-| **Rolling**    | Standard updates, can tolerate mixed versions | Automatic via health checks | Low    |
-| **Blue-Green** | Zero downtime, instant rollback needed        | Switch traffic to old env   | Medium |
-| **Canary**     | Risk mitigation, gradual rollout              | Scale down canary           | Low    |
-| **Recreate**   | Stateful apps, breaking changes               | Redeploy previous version   | High   |
+| Strategy | Use When | Rollback | Risk |
+| --- | --- | --- | --- |
+| **Rolling** | Standard updates, can tolerate mixed versions | Automatic via health checks | Low |
+| **Blue-Green** | Zero downtime, instant rollback needed | Switch traffic to old env | Medium |
+| **Canary** | Risk mitigation, gradual rollout | Scale down canary | Low |
+| **Recreate** | Stateful apps, breaking changes | Redeploy previous version | High |
 
 ## Rolling Deployment (Kubernetes)
 
@@ -18,8 +18,8 @@ spec:
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 25%        # Max pods above desired
-      maxUnavailable: 25%  # Max pods unavailable
+      maxSurge: 25% # Max pods above desired
+      maxUnavailable: 25% # Max pods unavailable
 ```
 
 ## Blue-Green with Ingress
@@ -48,7 +48,7 @@ metadata:
   name: app
 spec:
   selector:
-    version: blue  # Switch to 'green' for cutover
+    version: blue # Switch to 'green' for cutover
 ```
 
 ## Canary with Istio
@@ -156,8 +156,7 @@ Track four key metrics:
   expr: count_over_time(deployment_completed[1d])
 
 - record: deployment:lead_time:p95
-  expr: histogram_quantile(0.95,
-    rate(commit_to_deploy_seconds_bucket[1h]))
+  expr: histogram_quantile(0.95, rate(commit_to_deploy_seconds_bucket[1h]))
 
 - record: deployment:failure_rate
   expr: |

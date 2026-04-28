@@ -26,18 +26,18 @@
 
 ## Concept Mapping: Express → NestJS
 
-| Express Concept             | NestJS Equivalent                | Key Difference               |
-| --------------------------- | -------------------------------- | ---------------------------- |
-| `app.get('/path', handler)` | `@Get('/path')` decorator        | Declarative vs imperative    |
-| Middleware functions        | Guards, Interceptors, Pipes      | Specialized by purpose       |
-| `req.params`, `req.body`    | `@Param()`, `@Body()` decorators | Automatic injection          |
-| Manual `require()`          | Dependency Injection             | IoC container managed        |
-| `express.Router()`          | Controller classes               | Object-oriented grouping     |
-| `app.use(express.json())`   | Built-in body parsing            | Automatic configuration      |
-| Error handling middleware   | Exception Filters                | Class-based with inheritance |
-| `app.listen(3000)`          | `NestFactory.create()`           | Bootstrap pattern            |
-| Custom validation           | `class-validator` pipes          | Decorator-based validation   |
-| Manual service instances    | Provider registration            | Singleton by default         |
+| Express Concept | NestJS Equivalent | Key Difference |
+| --- | --- | --- |
+| `app.get('/path', handler)` | `@Get('/path')` decorator | Declarative vs imperative |
+| Middleware functions | Guards, Interceptors, Pipes | Specialized by purpose |
+| `req.params`, `req.body` | `@Param()`, `@Body()` decorators | Automatic injection |
+| Manual `require()` | Dependency Injection | IoC container managed |
+| `express.Router()` | Controller classes | Object-oriented grouping |
+| `app.use(express.json())` | Built-in body parsing | Automatic configuration |
+| Error handling middleware | Exception Filters | Class-based with inheritance |
+| `app.listen(3000)` | `NestFactory.create()` | Bootstrap pattern |
+| Custom validation | `class-validator` pipes | Decorator-based validation |
+| Manual service instances | Provider registration | Singleton by default |
 
 ---
 
@@ -95,13 +95,13 @@ src/
 
 ```typescript
 // routes/users.js
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const UserService = require('../services/userService');
+const UserService = require("../services/userService");
 
 const userService = new UserService();
 
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -111,20 +111,20 @@ router.get('/', async (req, res, next) => {
       success: true,
       data: users,
       page,
-      limit
+      limit,
     });
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
     const user = await userService.findById(req.params.id);
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'User not found'
+        message: "User not found",
       });
     }
     res.json({ success: true, data: user });
@@ -133,7 +133,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     const { email, name } = req.body;
 
@@ -141,7 +141,7 @@ router.post('/', async (req, res, next) => {
     if (!email || !name) {
       return res.status(400).json({
         success: false,
-        message: 'Email and name are required'
+        message: "Email and name are required",
       });
     }
 
@@ -159,7 +159,7 @@ module.exports = router;
 
 ```typescript
 // users/dto/create-user.dto.ts
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
 
 export class CreateUserDto {
   @IsEmail()
@@ -172,8 +172,8 @@ export class CreateUserDto {
 }
 
 // users/dto/pagination-query.dto.ts
-import { IsOptional, IsInt, Min, Max } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsOptional, IsInt, Min, Max } from "class-validator";
+import { Type } from "class-transformer";
 
 export class PaginationQueryDto {
   @IsOptional()
@@ -201,12 +201,12 @@ import {
   HttpCode,
   HttpStatus,
   ParseIntPipe,
-} from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { PaginationQueryDto } from './dto/pagination-query.dto';
+} from "@nestjs/common";
+import { UsersService } from "./users.service";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { PaginationQueryDto } from "./dto/pagination-query.dto";
 
-@Controller('users')
+@Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -221,8 +221,8 @@ export class UsersController {
     };
   }
 
-  @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
+  @Get(":id")
+  async findOne(@Param("id", ParseIntPipe) id: number) {
     const user = await this.usersService.findById(id);
     return { success: true, data: user };
   }
@@ -244,15 +244,15 @@ export class UsersController {
 
 ```typescript
 // middleware/auth.js
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 function authMiddleware(req, res, next) {
-  const token = req.headers.authorization?.split(' ')[1];
+  const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
     return res.status(401).json({
       success: false,
-      message: 'No token provided'
+      message: "No token provided",
     });
   }
 
@@ -263,13 +263,13 @@ function authMiddleware(req, res, next) {
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: 'Invalid token'
+      message: "Invalid token",
     });
   }
 }
 
 // Usage in routes
-router.get('/profile', authMiddleware, async (req, res) => {
+router.get("/profile", authMiddleware, async (req, res) => {
   const user = await userService.findById(req.user.id);
   res.json({ success: true, data: user });
 });
@@ -284,9 +284,9 @@ import {
   CanActivate,
   ExecutionContext,
   UnauthorizedException,
-} from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
+} from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { Request } from "express";
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -297,32 +297,32 @@ export class JwtAuthGuard implements CanActivate {
     const token = this.extractTokenFromHeader(request);
 
     if (!token) {
-      throw new UnauthorizedException('No token provided');
+      throw new UnauthorizedException("No token provided");
     }
 
     try {
       const payload = await this.jwtService.verifyAsync(token);
-      request['user'] = payload;
+      request["user"] = payload;
     } catch {
-      throw new UnauthorizedException('Invalid token');
+      throw new UnauthorizedException("Invalid token");
     }
 
     return true;
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+    const [type, token] = request.headers.authorization?.split(" ") ?? [];
+    return type === "Bearer" ? token : undefined;
   }
 }
 
 // Usage in controller
-import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { UseGuards } from "@nestjs/common";
+import { JwtAuthGuard } from "../common/guards/jwt-auth.guard";
 
-@Controller('users')
+@Controller("users")
 export class UsersController {
-  @Get('profile')
+  @Get("profile")
   @UseGuards(JwtAuthGuard)
   async getProfile(@Request() req) {
     return this.usersService.findById(req.user.id);
@@ -337,9 +337,11 @@ export class UsersController {
 function loggerMiddleware(req, res, next) {
   const start = Date.now();
 
-  res.on('finish', () => {
+  res.on("finish", () => {
     const duration = Date.now() - start;
-    console.log(`${req.method} ${req.path} - ${res.statusCode} - ${duration}ms`);
+    console.log(
+      `${req.method} ${req.path} - ${res.statusCode} - ${duration}ms`,
+    );
   });
 
   next();
@@ -359,9 +361,9 @@ import {
   ExecutionContext,
   CallHandler,
   Logger,
-} from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+} from "@nestjs/common";
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -385,9 +387,9 @@ export class LoggingInterceptor implements NestInterceptor {
 }
 
 // main.ts - Apply globally
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { LoggingInterceptor } from "./common/interceptors/logging.interceptor";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -405,8 +407,8 @@ bootstrap();
 
 ```typescript
 // services/userService.js
-const UserRepository = require('../repositories/userRepository');
-const EmailService = require('./emailService');
+const UserRepository = require("../repositories/userRepository");
+const EmailService = require("./emailService");
 
 class UserService {
   constructor() {
@@ -424,7 +426,7 @@ class UserService {
 module.exports = UserService;
 
 // controllers/userController.js
-const UserService = require('../services/userService');
+const UserService = require("../services/userService");
 const userService = new UserService();
 
 async function createUser(req, res) {
@@ -437,10 +439,10 @@ async function createUser(req, res) {
 
 ```typescript
 // users/users.repository.ts
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { User } from "./entities/user.entity";
 
 @Injectable()
 export class UsersRepository {
@@ -460,7 +462,7 @@ export class UsersRepository {
 }
 
 // email/email.service.ts
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from "@nestjs/common";
 
 @Injectable()
 export class EmailService {
@@ -473,11 +475,11 @@ export class EmailService {
 }
 
 // users/users.service.ts
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { UsersRepository } from './users.repository';
-import { EmailService } from '../email/email.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './entities/user.entity';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { UsersRepository } from "./users.repository";
+import { EmailService } from "../email/email.service";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { User } from "./entities/user.entity";
 
 @Injectable()
 export class UsersService {
@@ -502,13 +504,13 @@ export class UsersService {
 }
 
 // users/users.module.ts
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
-import { UsersRepository } from './users.repository';
-import { User } from './entities/user.entity';
-import { EmailModule } from '../email/email.module';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { UsersController } from "./users.controller";
+import { UsersService } from "./users.service";
+import { UsersRepository } from "./users.repository";
+import { User } from "./entities/user.entity";
+import { EmailModule } from "../email/email.module";
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), EmailModule],
@@ -530,24 +532,24 @@ export class UsersModule {}
 function errorHandler(err, req, res, next) {
   console.error(err.stack);
 
-  if (err.name === 'ValidationError') {
+  if (err.name === "ValidationError") {
     return res.status(400).json({
       success: false,
-      message: 'Validation failed',
-      errors: err.errors
+      message: "Validation failed",
+      errors: err.errors,
     });
   }
 
-  if (err.name === 'UnauthorizedError') {
+  if (err.name === "UnauthorizedError") {
     return res.status(401).json({
       success: false,
-      message: 'Unauthorized'
+      message: "Unauthorized",
     });
   }
 
   res.status(500).json({
     success: false,
-    message: 'Internal server error'
+    message: "Internal server error",
   });
 }
 
@@ -566,8 +568,8 @@ import {
   HttpException,
   HttpStatus,
   Logger,
-} from '@nestjs/common';
-import { Request, Response } from 'express';
+} from "@nestjs/common";
+import { Request, Response } from "express";
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -579,14 +581,14 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
 
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
-    let message = 'Internal server error';
+    let message = "Internal server error";
     let errors: any = undefined;
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
       const exceptionResponse = exception.getResponse();
 
-      if (typeof exceptionResponse === 'object') {
+      if (typeof exceptionResponse === "object") {
         message = (exceptionResponse as any).message || message;
         errors = (exceptionResponse as any).errors;
       } else {
@@ -609,9 +611,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
 }
 
 // main.ts
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { HttpExceptionFilter } from "./common/filters/http-exception.filter";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -629,21 +631,21 @@ bootstrap();
 
 ```typescript
 // routes/users.js
-const { body, validationResult } = require('express-validator');
+const { body, validationResult } = require("express-validator");
 
 router.post(
-  '/',
+  "/",
   [
-    body('email').isEmail().normalizeEmail(),
-    body('name').trim().isLength({ min: 2, max: 50 }),
-    body('age').optional().isInt({ min: 0, max: 120 }),
+    body("email").isEmail().normalizeEmail(),
+    body("name").trim().isLength({ min: 2, max: 50 }),
+    body("age").optional().isInt({ min: 0, max: 120 }),
   ],
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
         success: false,
-        errors: errors.array()
+        errors: errors.array(),
       });
     }
 
@@ -653,7 +655,7 @@ router.post(
     } catch (error) {
       next(error);
     }
-  }
+  },
 );
 ```
 
@@ -671,8 +673,8 @@ import {
   IsInt,
   Min,
   Max,
-} from 'class-validator';
-import { Transform } from 'class-transformer';
+} from "class-validator";
+import { Transform } from "class-transformer";
 
 export class CreateUserDto {
   @IsEmail()
@@ -694,11 +696,11 @@ export class CreateUserDto {
 }
 
 // users/users.controller.ts
-import { Controller, Post, Body, ValidationPipe } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { Controller, Post, Body, ValidationPipe } from "@nestjs/common";
+import { UsersService } from "./users.service";
+import { CreateUserDto } from "./dto/create-user.dto";
 
-@Controller('users')
+@Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -710,7 +712,7 @@ export class UsersController {
 }
 
 // main.ts - Global validation pipe
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from "@nestjs/common";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -736,32 +738,32 @@ async function bootstrap() {
 
 ```typescript
 // test/users.test.js
-const request = require('supertest');
-const { expect } = require('chai');
-const app = require('../src/app');
+const request = require("supertest");
+const { expect } = require("chai");
+const app = require("../src/app");
 
-describe('Users API', () => {
-  describe('POST /users', () => {
-    it('should create a new user', async () => {
+describe("Users API", () => {
+  describe("POST /users", () => {
+    it("should create a new user", async () => {
       const userData = {
-        email: 'test@example.com',
-        name: 'Test User'
+        email: "test@example.com",
+        name: "Test User",
       };
 
       const response = await request(app)
-        .post('/users')
+        .post("/users")
         .send(userData)
         .expect(201);
 
       expect(response.body.success).to.be.true;
-      expect(response.body.data).to.have.property('id');
+      expect(response.body.data).to.have.property("id");
       expect(response.body.data.email).to.equal(userData.email);
     });
 
-    it('should return 400 for invalid email', async () => {
+    it("should return 400 for invalid email", async () => {
       const response = await request(app)
-        .post('/users')
-        .send({ email: 'invalid', name: 'Test' })
+        .post("/users")
+        .send({ email: "invalid", name: "Test" })
         .expect(400);
 
       expect(response.body.success).to.be.false;
@@ -774,12 +776,12 @@ describe('Users API', () => {
 
 ```typescript
 // users/users.controller.spec.ts
-import { Test, TestingModule } from '@nestjs/testing';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { Test, TestingModule } from "@nestjs/testing";
+import { UsersController } from "./users.controller";
+import { UsersService } from "./users.service";
+import { CreateUserDto } from "./dto/create-user.dto";
 
-describe('UsersController', () => {
+describe("UsersController", () => {
   let controller: UsersController;
   let service: UsersService;
 
@@ -808,11 +810,11 @@ describe('UsersController', () => {
     jest.clearAllMocks();
   });
 
-  describe('create', () => {
-    it('should create a new user', async () => {
+  describe("create", () => {
+    it("should create a new user", async () => {
       const createUserDto: CreateUserDto = {
-        email: 'test@example.com',
-        name: 'Test User',
+        email: "test@example.com",
+        name: "Test User",
       };
 
       const expectedUser = {
@@ -832,13 +834,13 @@ describe('UsersController', () => {
     });
   });
 
-  describe('findOne', () => {
-    it('should return a user by id', async () => {
+  describe("findOne", () => {
+    it("should return a user by id", async () => {
       const userId = 1;
       const expectedUser = {
         id: userId,
-        email: 'test@example.com',
-        name: 'Test User',
+        email: "test@example.com",
+        name: "Test User",
       };
 
       mockUsersService.findById.mockResolvedValue(expectedUser);
@@ -852,13 +854,13 @@ describe('UsersController', () => {
 });
 
 // users/users.service.spec.ts
-import { Test, TestingModule } from '@nestjs/testing';
-import { NotFoundException } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UsersRepository } from './users.repository';
-import { EmailService } from '../email/email.service';
+import { Test, TestingModule } from "@nestjs/testing";
+import { NotFoundException } from "@nestjs/common";
+import { UsersService } from "./users.service";
+import { UsersRepository } from "./users.repository";
+import { EmailService } from "../email/email.service";
 
-describe('UsersService', () => {
+describe("UsersService", () => {
   let service: UsersService;
   let repository: UsersRepository;
   let emailService: EmailService;
@@ -892,11 +894,11 @@ describe('UsersService', () => {
     emailService = module.get<EmailService>(EmailService);
   });
 
-  describe('create', () => {
-    it('should create user and send welcome email', async () => {
+  describe("create", () => {
+    it("should create user and send welcome email", async () => {
       const createUserDto = {
-        email: 'test@example.com',
-        name: 'Test User',
+        email: "test@example.com",
+        name: "Test User",
       };
 
       const createdUser = { id: 1, ...createUserDto };
@@ -914,13 +916,13 @@ describe('UsersService', () => {
     });
   });
 
-  describe('findById', () => {
-    it('should throw NotFoundException when user not found', async () => {
+  describe("findById", () => {
+    it("should throw NotFoundException when user not found", async () => {
       mockUsersRepository.findById.mockResolvedValue(null);
 
       await expect(service.findById(999)).rejects.toThrow(NotFoundException);
       await expect(service.findById(999)).rejects.toThrow(
-        'User with ID 999 not found',
+        "User with ID 999 not found",
       );
     });
   });
@@ -928,12 +930,12 @@ describe('UsersService', () => {
 
 // E2E Testing
 // test/users.e2e-spec.ts
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import * as request from 'supertest';
-import { AppModule } from '../src/app.module';
+import { Test, TestingModule } from "@nestjs/testing";
+import { INestApplication, ValidationPipe } from "@nestjs/common";
+import * as request from "supertest";
+import { AppModule } from "../src/app.module";
 
-describe('UsersController (e2e)', () => {
+describe("UsersController (e2e)", () => {
   let app: INestApplication;
 
   beforeAll(async () => {
@@ -950,28 +952,28 @@ describe('UsersController (e2e)', () => {
     await app.close();
   });
 
-  describe('/users (POST)', () => {
-    it('should create a new user', () => {
+  describe("/users (POST)", () => {
+    it("should create a new user", () => {
       return request(app.getHttpServer())
-        .post('/users')
+        .post("/users")
         .send({
-          email: 'test@example.com',
-          name: 'Test User',
+          email: "test@example.com",
+          name: "Test User",
         })
         .expect(201)
         .expect((res) => {
           expect(res.body.success).toBe(true);
-          expect(res.body.data).toHaveProperty('id');
-          expect(res.body.data.email).toBe('test@example.com');
+          expect(res.body.data).toHaveProperty("id");
+          expect(res.body.data.email).toBe("test@example.com");
         });
     });
 
-    it('should return 400 for invalid email', () => {
+    it("should return 400 for invalid email", () => {
       return request(app.getHttpServer())
-        .post('/users')
+        .post("/users")
         .send({
-          email: 'invalid-email',
-          name: 'Test',
+          email: "invalid-email",
+          name: "Test",
         })
         .expect(400);
     });
@@ -991,10 +993,10 @@ Gradually replace Express routes with NestJS while both run simultaneously.
 
 ```typescript
 // main.ts - Running both Express and NestJS
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import * as express from 'express';
-import { expressApp } from './legacy/express-app';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import * as express from "express";
+import { expressApp } from "./legacy/express-app";
 
 async function bootstrap() {
   const nestApp = await NestFactory.create(AppModule);
@@ -1003,10 +1005,10 @@ async function bootstrap() {
   const app = express();
 
   // NestJS routes (new implementation)
-  app.use('/api/v2', nestApp.getHttpAdapter().getInstance());
+  app.use("/api/v2", nestApp.getHttpAdapter().getInstance());
 
   // Express routes (legacy)
-  app.use('/api', expressApp);
+  app.use("/api", expressApp);
 
   await app.listen(3000);
 }
@@ -1049,8 +1051,8 @@ Wrap Express services in NestJS providers during transition.
 
 ```typescript
 // Adapter for legacy Express service
-import { Injectable } from '@nestjs/common';
-const LegacyUserService = require('../legacy/services/userService');
+import { Injectable } from "@nestjs/common";
+const LegacyUserService = require("../legacy/services/userService");
 
 @Injectable()
 export class UserServiceAdapter {
@@ -1066,7 +1068,7 @@ export class UserServiceAdapter {
 }
 
 // Use in NestJS controller while migrating
-@Controller('users')
+@Controller("users")
 export class UsersController {
   constructor(private readonly userService: UserServiceAdapter) {}
 
@@ -1168,7 +1170,7 @@ export class UsersModule {}
 // main.ts
 const app = await NestFactory.create(AppModule);
 app.enableCors({
-  origin: process.env.ALLOWED_ORIGINS?.split(','),
+  origin: process.env.ALLOWED_ORIGINS?.split(","),
   credentials: true,
 });
 ```
@@ -1181,9 +1183,9 @@ app.enableCors({
 
 ```typescript
 // Throw NestJS exceptions
-throw new NotFoundException('User not found');
-throw new BadRequestException('Invalid input');
-throw new UnauthorizedException('Invalid credentials');
+throw new NotFoundException("User not found");
+throw new BadRequestException("Invalid input");
+throw new UnauthorizedException("Invalid credentials");
 ```
 
 ### 8. Not Configuring ValidationPipe Globally

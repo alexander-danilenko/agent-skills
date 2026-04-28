@@ -3,12 +3,12 @@
 ## Unit Test Setup
 
 ```typescript
-import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { NotFoundException } from '@nestjs/common';
+import { Test, TestingModule } from "@nestjs/testing";
+import { getRepositoryToken } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { NotFoundException } from "@nestjs/common";
 
-describe('UsersService', () => {
+describe("UsersService", () => {
   let service: UsersService;
   let repo: jest.Mocked<Repository<User>>;
 
@@ -39,10 +39,10 @@ describe('UsersService', () => {
 ## Service Tests
 
 ```typescript
-describe('create', () => {
-  it('should create user', async () => {
-    const dto = { email: 'test@test.com', password: 'pass', name: 'Test' };
-    const user = { id: '1', ...dto };
+describe("create", () => {
+  it("should create user", async () => {
+    const dto = { email: "test@test.com", password: "pass", name: "Test" };
+    const user = { id: "1", ...dto };
 
     repo.create.mockReturnValue(user as User);
     repo.save.mockResolvedValue(user as User);
@@ -55,18 +55,18 @@ describe('create', () => {
   });
 });
 
-describe('findOne', () => {
-  it('should return user', async () => {
-    const user = { id: '1', email: 'test@test.com' };
+describe("findOne", () => {
+  it("should return user", async () => {
+    const user = { id: "1", email: "test@test.com" };
     repo.findOne.mockResolvedValue(user as User);
 
-    const result = await service.findOne('1');
+    const result = await service.findOne("1");
     expect(result).toEqual(user);
   });
 
-  it('should throw NotFoundException', async () => {
+  it("should throw NotFoundException", async () => {
     repo.findOne.mockResolvedValue(null);
-    await expect(service.findOne('1')).rejects.toThrow(NotFoundException);
+    await expect(service.findOne("1")).rejects.toThrow(NotFoundException);
   });
 });
 ```
@@ -74,7 +74,7 @@ describe('findOne', () => {
 ## Controller Tests
 
 ```typescript
-describe('UsersController', () => {
+describe("UsersController", () => {
   let controller: UsersController;
   let service: jest.Mocked<UsersService>;
 
@@ -96,9 +96,9 @@ describe('UsersController', () => {
     service = module.get(UsersService);
   });
 
-  it('should create user', async () => {
-    const dto = { email: 'test@test.com', password: 'pass', name: 'Test' };
-    const user = { id: '1', ...dto };
+  it("should create user", async () => {
+    const dto = { email: "test@test.com", password: "pass", name: "Test" };
+    const user = { id: "1", ...dto };
     service.create.mockResolvedValue(user as User);
 
     const result = await controller.create(dto);
@@ -110,10 +110,10 @@ describe('UsersController', () => {
 ## E2E Tests
 
 ```typescript
-import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import { INestApplication } from "@nestjs/common";
+import * as request from "supertest";
 
-describe('UsersController (e2e)', () => {
+describe("UsersController (e2e)", () => {
   let app: INestApplication;
   let authToken: string;
 
@@ -128,28 +128,28 @@ describe('UsersController (e2e)', () => {
 
     // Get auth token
     const response = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send({ email: 'test@test.com', password: 'password' });
+      .post("/auth/login")
+      .send({ email: "test@test.com", password: "password" });
     authToken = response.body.access_token;
   });
 
   afterAll(() => app.close());
 
-  it('/users (POST)', () => {
+  it("/users (POST)", () => {
     return request(app.getHttpServer())
-      .post('/users')
-      .set('Authorization', `Bearer ${authToken}`)
-      .send({ email: 'new@test.com', password: 'Test1234', name: 'New' })
+      .post("/users")
+      .set("Authorization", `Bearer ${authToken}`)
+      .send({ email: "new@test.com", password: "Test1234", name: "New" })
       .expect(201)
       .expect((res) => {
-        expect(res.body.email).toBe('new@test.com');
+        expect(res.body.email).toBe("new@test.com");
       });
   });
 
-  it('/users/:id (GET) - 404', () => {
+  it("/users/:id (GET) - 404", () => {
     return request(app.getHttpServer())
-      .get('/users/nonexistent-id')
-      .set('Authorization', `Bearer ${authToken}`)
+      .get("/users/nonexistent-id")
+      .set("Authorization", `Bearer ${authToken}`)
       .expect(404);
   });
 });

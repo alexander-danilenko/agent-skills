@@ -235,14 +235,11 @@ Content-Type: application/hal+json
 
 ### Idempotent Operations
 
-**PUT - Always idempotent:**
-Multiple identical PUT requests produce the same result as a single request.
+**PUT - Always idempotent:** Multiple identical PUT requests produce the same result as a single request.
 
-**DELETE - Idempotent:**
-First DELETE returns 204, subsequent DELETEs return 404 (same end state).
+**DELETE - Idempotent:** First DELETE returns 204, subsequent DELETEs return 404 (same end state).
 
-**POST - Not idempotent by default:**
-Use `Idempotency-Key` header for idempotent POST:
+**POST - Not idempotent by default:** Use `Idempotency-Key` header for idempotent POST:
 
 ```http
 POST /payments

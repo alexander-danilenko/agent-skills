@@ -150,14 +150,14 @@ slo:
 policy:
   # Actions based on remaining error budget
   actions:
-    - threshold: 100%  # Budget healthy
+    - threshold: 100% # Budget healthy
       state: normal_operations
       actions:
         - "Continue feature development"
         - "Deploy during business hours"
         - "Standard change review process"
 
-    - threshold: 50%   # Budget warning
+    - threshold: 50% # Budget warning
       state: careful_operations
       actions:
         - "Increase code review rigor"
@@ -165,7 +165,7 @@ policy:
         - "Conduct pre-deployment risk assessment"
         - "Enhanced monitoring during deploys"
 
-    - threshold: 25%   # Budget critical
+    - threshold: 25% # Budget critical
       state: restricted_operations
       actions:
         - "Halt non-critical feature work"
@@ -174,7 +174,7 @@ policy:
         - "Deploy only critical bug fixes"
         - "Daily error budget review meetings"
 
-    - threshold: 0%    # Budget exhausted
+    - threshold: 0% # Budget exhausted
       state: feature_freeze
       actions:
         - "Immediate feature freeze"

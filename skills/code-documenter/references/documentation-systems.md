@@ -22,30 +22,30 @@ docs/
 
 ```javascript
 module.exports = {
-  title: 'My API',
-  tagline: 'Build amazing things',
-  url: 'https://docs.example.com',
-  baseUrl: '/',
+  title: "My API",
+  tagline: "Build amazing things",
+  url: "https://docs.example.com",
+  baseUrl: "/",
 
   themeConfig: {
     navbar: {
       items: [
-        {to: '/docs/intro', label: 'Docs', position: 'left'},
-        {to: '/api', label: 'API', position: 'left'},
+        { to: "/docs/intro", label: "Docs", position: "left" },
+        { to: "/api", label: "API", position: "left" },
       ],
     },
 
     // Algolia search
     algolia: {
-      apiKey: 'YOUR_API_KEY',
-      indexName: 'your_index',
+      apiKey: "YOUR_API_KEY",
+      indexName: "your_index",
       contextualSearch: true,
     },
 
     prism: {
       theme: lightCodeTheme,
       darkTheme: darkCodeTheme,
-      additionalLanguages: ['python', 'rust'],
+      additionalLanguages: ["python", "rust"],
     },
   },
 };
@@ -100,33 +100,33 @@ nav:
 ```typescript
 // .vitepress/config.ts
 export default defineConfig({
-  title: 'API Docs',
-  description: 'Developer documentation',
+  title: "API Docs",
+  description: "Developer documentation",
 
   themeConfig: {
     nav: [
-      { text: 'Guide', link: '/guide/' },
-      { text: 'API', link: '/api/' },
+      { text: "Guide", link: "/guide/" },
+      { text: "API", link: "/api/" },
     ],
 
     sidebar: {
-      '/guide/': [
+      "/guide/": [
         {
-          text: 'Introduction',
+          text: "Introduction",
           items: [
-            { text: 'Getting Started', link: '/guide/getting-started' },
-            { text: 'Configuration', link: '/guide/config' },
+            { text: "Getting Started", link: "/guide/getting-started" },
+            { text: "Configuration", link: "/guide/config" },
           ],
         },
       ],
     },
 
     search: {
-      provider: 'local',
+      provider: "local",
     },
 
     editLink: {
-      pattern: 'https://github.com/user/repo/edit/main/docs/:path',
+      pattern: "https://github.com/user/repo/edit/main/docs/:path",
     },
   },
 });
@@ -151,16 +151,19 @@ export default defineConfig({
 
 ### Migration Guides
 
-```markdown
+````markdown
 # Migration Guide: v1 to v2
 
 ## Breaking Changes
 
 ### Authentication
+
 **v1:**
+
 ```python
 client.authenticate(api_key)
 ```
+````
 
 **v2:**
 
@@ -181,7 +184,7 @@ client = Client(api_key=api_key)  # Pass in constructor
 - v2.0: Released Jan 2025
 - v2.1: Current (June 2025)
 
-```text
+````text
 
 ## Search Implementation
 
@@ -200,21 +203,21 @@ client = Client(api_key=api_key)  # Pass in constructor
     container: '#docsearch',
   });
 </script>
-```
+````
 
 ### Local Search (Lunr.js)
 
 ```javascript
-const idx = lunr(function() {
-  this.ref('id');
-  this.field('title', { boost: 10 });
-  this.field('content');
+const idx = lunr(function () {
+  this.ref("id");
+  this.field("title", { boost: 10 });
+  this.field("content");
 
-  documents.forEach(doc => this.add(doc));
+  documents.forEach((doc) => this.add(doc));
 });
 
 // Search
-const results = idx.search('authentication');
+const results = idx.search("authentication");
 ```
 
 ## Documentation Testing
@@ -249,10 +252,10 @@ python -m doctest -v docs/*.md
 ```javascript
 // Jest for TypeScript examples
 // Extract code blocks and test
-import { runExamples } from './test-docs';
+import { runExamples } from "./test-docs";
 
-test('API examples work', async () => {
-  const examples = extractExamples('./docs/api.md');
+test("API examples work", async () => {
+  const examples = extractExamples("./docs/api.md");
   await expect(runExamples(examples)).resolves.toBeTruthy();
 });
 ```
@@ -268,14 +271,14 @@ export default {
     rollupOptions: {
       output: {
         manualChunks: {
-          'vendor': ['react', 'react-dom'],
+          vendor: ["react", "react-dom"],
         },
       },
     },
   },
 
   optimizeDeps: {
-    include: ['prismjs'],
+    include: ["prismjs"],
   },
 };
 ```
@@ -312,7 +315,7 @@ gtag: {
 ```javascript
 // Track search queries
 function trackSearch(query, results) {
-  analytics.track('docs_search', {
+  analytics.track("docs_search", {
     query,
     resultCount: results.length,
     timestamp: new Date(),

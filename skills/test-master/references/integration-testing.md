@@ -3,36 +3,34 @@
 ## API Testing (Supertest)
 
 ```typescript
-import request from 'supertest';
-import { app } from '../app';
+import request from "supertest";
+import { app } from "../app";
 
-describe('POST /api/users', () => {
-  it('creates user with valid data', async () => {
+describe("POST /api/users", () => {
+  it("creates user with valid data", async () => {
     const response = await request(app)
-      .post('/api/users')
-      .send({ email: 'test@test.com', name: 'Test' })
+      .post("/api/users")
+      .send({ email: "test@test.com", name: "Test" })
       .expect(201);
 
     expect(response.body).toMatchObject({
-      email: 'test@test.com',
-      name: 'Test',
+      email: "test@test.com",
+      name: "Test",
     });
     expect(response.body.id).toBeDefined();
   });
 
-  it('returns 400 for invalid email', async () => {
+  it("returns 400 for invalid email", async () => {
     const response = await request(app)
-      .post('/api/users')
-      .send({ email: 'invalid', name: 'Test' })
+      .post("/api/users")
+      .send({ email: "invalid", name: "Test" })
       .expect(400);
 
-    expect(response.body.error).toContain('email');
+    expect(response.body.error).toContain("email");
   });
 
-  it('returns 401 without auth token', async () => {
-    await request(app)
-      .get('/api/users/me')
-      .expect(401);
+  it("returns 401 without auth token", async () => {
+    await request(app).get("/api/users/me").expect(401);
   });
 });
 ```
@@ -40,20 +38,20 @@ describe('POST /api/users', () => {
 ## Authenticated Requests
 
 ```typescript
-describe('Protected endpoints', () => {
+describe("Protected endpoints", () => {
   let authToken: string;
 
   beforeAll(async () => {
     const response = await request(app)
-      .post('/api/auth/login')
-      .send({ email: 'test@test.com', password: 'password' });
+      .post("/api/auth/login")
+      .send({ email: "test@test.com", password: "password" });
     authToken = response.body.token;
   });
 
-  it('accesses protected route', async () => {
+  it("accesses protected route", async () => {
     await request(app)
-      .get('/api/users/me')
-      .set('Authorization', `Bearer ${authToken}`)
+      .get("/api/users/me")
+      .set("Authorization", `Bearer ${authToken}`)
       .expect(200);
   });
 });
@@ -62,21 +60,21 @@ describe('Protected endpoints', () => {
 ## Database Testing
 
 ```typescript
-import { db } from '../database';
+import { db } from "../database";
 
-describe('UserRepository', () => {
+describe("UserRepository", () => {
   beforeEach(async () => {
-    await db.query('DELETE FROM users');
+    await db.query("DELETE FROM users");
   });
 
   afterAll(async () => {
     await db.end();
   });
 
-  it('creates and retrieves user', async () => {
+  it("creates and retrieves user", async () => {
     const user = await userRepo.create({
-      email: 'test@test.com',
-      name: 'Test',
+      email: "test@test.com",
+      name: "Test",
     });
 
     const found = await userRepo.findById(user.id);

@@ -10,10 +10,10 @@ const result = api?.fetchData?.();
 
 // Nullish coalescing - default only for null/undefined
 const port = config.port ?? 3000;
-const name = user.name ?? 'Anonymous';
+const name = user.name ?? "Anonymous";
 
 // Combining both patterns
-const displayName = user?.profile?.name ?? user?.email ?? 'Guest';
+const displayName = user?.profile?.name ?? user?.email ?? "Guest";
 
 // Optional chaining with delete
 delete user?.temporaryData?.cache;
@@ -29,7 +29,7 @@ class BankAccount {
 
   // Private method
   #validateAmount(amount) {
-    if (amount <= 0) throw new Error('Invalid amount');
+    if (amount <= 0) throw new Error("Invalid amount");
   }
 
   constructor(accountNumber, initialBalance = 0) {
@@ -62,7 +62,7 @@ class Config {
 
 ```javascript
 // No need for async IIFE wrapper
-const data = await fetch('/api/config').then(r => r.json());
+const data = await fetch("/api/config").then((r) => r.json());
 const db = await connectDatabase(data.dbUrl);
 
 // Dynamic imports with await
@@ -73,7 +73,7 @@ try {
   const config = await loadConfig();
   startServer(config);
 } catch (error) {
-  console.error('Failed to start:', error);
+  console.error("Failed to start:", error);
   process.exit(1);
 }
 ```
@@ -86,30 +86,30 @@ const last = items.at(-1);
 const secondLast = items.at(-2);
 
 // findLast() and findLastIndex()
-const lastEven = numbers.findLast(n => n % 2 === 0);
-const lastIndex = numbers.findLastIndex(n => n > 10);
+const lastEven = numbers.findLast((n) => n % 2 === 0);
+const lastIndex = numbers.findLastIndex((n) => n > 10);
 
 // toSorted(), toReversed(), toSpliced() - non-mutating
 const sorted = items.toSorted((a, b) => a - b);
 const reversed = items.toReversed();
-const spliced = items.toSpliced(1, 2, 'new');
+const spliced = items.toSpliced(1, 2, "new");
 
 // with() - replace at index
-const updated = items.with(2, 'newValue');
+const updated = items.with(2, "newValue");
 
 // flatMap() for transform and flatten
-const nestedResults = users.flatMap(user => user.posts);
+const nestedResults = users.flatMap((user) => user.posts);
 ```
 
 ## Object and String Enhancements
 
 ```javascript
 // Object.groupBy() - group array elements
-const groupedByAge = Object.groupBy(users, user => user.age);
-const groupedByStatus = Object.groupBy(orders, o => o.status);
+const groupedByAge = Object.groupBy(users, (user) => user.age);
+const groupedByStatus = Object.groupBy(orders, (o) => o.status);
 
 // Object.hasOwn() - safer hasOwnProperty
-if (Object.hasOwn(obj, 'key')) {
+if (Object.hasOwn(obj, "key")) {
   // safer than obj.hasOwnProperty('key')
 }
 
@@ -118,8 +118,8 @@ const firstChar = str.at(0);
 const lastChar = str.at(-1);
 
 // replaceAll()
-const cleaned = text.replaceAll('old', 'new');
-const sanitized = input.replaceAll(/[<>]/g, '');
+const cleaned = text.replaceAll("old", "new");
+const sanitized = input.replaceAll(/[<>]/g, "");
 ```
 
 ## WeakRef and FinalizationRegistry
@@ -162,14 +162,14 @@ class Resource {
 ```javascript
 // ||= - assign if falsy
 config.timeout ||= 5000;
-user.name ||= 'Anonymous';
+user.name ||= "Anonymous";
 
 // &&= - assign if truthy
 user.profile &&= sanitize(user.profile);
 
 // ??= - assign if nullish
 options.port ??= 3000;
-settings.theme ??= 'dark';
+settings.theme ??= "dark";
 ```
 
 ## Numeric Separators and BigInt
@@ -177,7 +177,7 @@ settings.theme ??= 'dark';
 ```javascript
 // Numeric separators for readability
 const billion = 1_000_000_000;
-const bytes = 0xFF_EC_DE_5E;
+const bytes = 0xff_ec_de_5e;
 const trillion = 1_000_000_000_000n;
 
 // BigInt for large integers
@@ -196,9 +196,9 @@ const power = 2n ** 64n;
 // Using switch with enhanced patterns (when available)
 function processValue(value) {
   switch (true) {
-    case typeof value === 'string':
+    case typeof value === "string":
       return value.toUpperCase();
-    case typeof value === 'number':
+    case typeof value === "number":
       return value * 2;
     case Array.isArray(value):
       return value.length;
@@ -221,8 +221,8 @@ function handleResponse({ status, data, error }) {
 // When available - chaining iterator operations
 const result = [1, 2, 3, 4, 5]
   .values()
-  .map(x => x * 2)
-  .filter(x => x > 5)
+  .map((x) => x * 2)
+  .filter((x) => x > 5)
   .toArray();
 
 // Custom iterators
@@ -231,7 +231,7 @@ const range = {
     for (let i = 0; i < 10; i++) {
       yield i;
     }
-  }
+  },
 };
 
 for (const num of range) {
@@ -243,18 +243,18 @@ for (const num of range) {
 
 ```javascript
 // Modern date/time handling (when available)
-import { Temporal } from '@js-temporal/polyfill';
+import { Temporal } from "@js-temporal/polyfill";
 
 const now = Temporal.Now.instant();
-const date = Temporal.PlainDate.from('2024-01-15');
-const time = Temporal.PlainTime.from('14:30:00');
+const date = Temporal.PlainDate.from("2024-01-15");
+const time = Temporal.PlainTime.from("14:30:00");
 
 // Duration calculations
 const duration = Temporal.Duration.from({ hours: 2, minutes: 30 });
 const later = now.add(duration);
 
 // Timezone handling
-const zonedTime = now.toZonedDateTimeISO('America/New_York');
+const zonedTime = now.toZonedDateTimeISO("America/New_York");
 ```
 
 ## Quick Reference

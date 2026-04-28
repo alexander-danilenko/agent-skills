@@ -16,7 +16,7 @@
         "countType": "imageCountMoreThan",
         "countNumber": 10
       },
-      "action": {"type": "expire"}
+      "action": { "type": "expire" }
     },
     {
       "rulePriority": 2,
@@ -27,7 +27,7 @@
         "countUnit": "days",
         "countNumber": 7
       },
-      "action": {"type": "expire"}
+      "action": { "type": "expire" }
     }
   ]
 }

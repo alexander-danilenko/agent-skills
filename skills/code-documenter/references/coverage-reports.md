@@ -2,27 +2,29 @@
 
 ## Documentation Coverage Report Template
 
-```markdown
+````markdown
 # Documentation Report: {project_name}
 
 ## Summary
+
 - **Files analyzed**: 45
 - **Functions documented**: 120/150 (80%)
 - **Classes documented**: 25/25 (100%)
 - **API endpoints documented**: 30/30 (100%)
 
 ## Coverage Before/After
+
 - Before: 45%
 - After: 92%
 
 ## Files Modified
 
-| File | Functions Added | Notes |
-|------|-----------------|-------|
-| src/services/user.ts | 8 | All public methods |
-| src/services/auth.ts | 5 | Added examples |
-| src/controllers/users.ts | 6 | Added @Api decorators |
-| src/dto/user.dto.ts | 4 | Added @ApiProperty |
+| File                     | Functions Added | Notes                 |
+| ------------------------ | --------------- | --------------------- |
+| src/services/user.ts     | 8               | All public methods    |
+| src/services/auth.ts     | 5               | Added examples        |
+| src/controllers/users.ts | 6               | Added @Api decorators |
+| src/dto/user.dto.ts      | 4               | Added @ApiProperty    |
 
 ## API Documentation
 
@@ -40,18 +42,21 @@
 ## Next Steps
 
 ### Recommendations
+
 1. Run `npm run docs:lint` to validate JSDoc
 2. Add `eslint-plugin-jsdoc` to enforce documentation
 3. Consider adding examples for complex functions
 4. Set up documentation CI checks
 
 ### Missing Documentation
-| File | Missing | Priority |
-|------|---------|----------|
-| src/utils/crypto.ts | 3 functions | High |
-| src/helpers/date.ts | 2 functions | Medium |
+
+| File                | Missing     | Priority |
+| ------------------- | ----------- | -------- |
+| src/utils/crypto.ts | 3 functions | High     |
+| src/helpers/date.ts | 2 functions | Medium   |
 
 ### CI Integration
+
 ```yaml
 # Add to CI pipeline
 - name: Check documentation
@@ -60,8 +65,9 @@
 - name: Generate API docs
   run: npm run docs:generate
 ```
+````
 
-```text
+````text
 
 ## Checklist During Documentation
 
@@ -98,7 +104,7 @@
 - [ ] Verified Swagger UI renders correctly
 - [ ] No inaccurate documentation
 - [ ] Coverage report generated
-```
+````
 
 ## Framework-Specific Linting
 

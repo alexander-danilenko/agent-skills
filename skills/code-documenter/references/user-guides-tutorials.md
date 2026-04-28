@@ -4,11 +4,13 @@
 
 ### Progressive Learning Path
 
-```markdown
+````markdown
 # Getting Started with API
 
 ## Prerequisites
+
 Before you begin, ensure you have:
+
 - [ ] Node.js 18+ installed
 - [ ] An API key from your dashboard
 - [ ] Basic knowledge of REST APIs
@@ -16,16 +18,18 @@ Before you begin, ensure you have:
 ## Quick Start (5 minutes)
 
 ### 1. Install the SDK
+
 ```bash
 npm install @myapi/sdk
 ```
+````
 
 ### 2. Create Your First Request
 
 ```typescript
-import { Client } from '@myapi/sdk';
+import { Client } from "@myapi/sdk";
 
-const client = new Client({ apiKey: 'your_key' });
+const client = new Client({ apiKey: "your_key" });
 const users = await client.users.list();
 console.log(users);
 ```
@@ -52,7 +56,7 @@ Run the code and you should see a list of users.
 - [Advanced Queries](/docs/queries) - Filtering, sorting, pagination
 - [Error Handling](/docs/errors) - Handle errors gracefully
 
-```text
+````text
 
 ### Step-by-Step Tutorial
 
@@ -76,14 +80,14 @@ mkdir user-dashboard
 cd user-dashboard
 npm init -y
 npm install @myapi/sdk react
-```
+````
 
 ## Step 2: Fetch Users
 
 Create `src/api/users.ts`:
 
 ```typescript
-import { Client } from '@myapi/sdk';
+import { Client } from "@myapi/sdk";
 
 const client = new Client({ apiKey: process.env.API_KEY });
 
@@ -167,7 +171,7 @@ At this point, you have:
 
 [Continue to Step 5 →](/docs/tutorial/step-5)
 
-```text
+````text
 
 ## Information Architecture
 
@@ -207,13 +211,13 @@ Documentation/
     ├── FAQ
     ├── Best Practices
     └── Migration Guides
-```
+````
 
 ## Writing Techniques
 
 ### Task-Based Writing
 
-```markdown
+````markdown
 # How to Upload a File
 
 **Goal:** Upload an image file to your account storage
@@ -223,40 +227,41 @@ Documentation/
 ## Steps
 
 ### 1. Prepare the file
+
 Get the file from user input or file system:
+
 ```typescript
 const file = document.querySelector('input[type="file"]').files[0];
 ```
+````
 
 ### 2. Create form data
 
 ```typescript
 const formData = new FormData();
-formData.append('file', file);
-formData.append('folder', 'avatars');
+formData.append("file", file);
+formData.append("folder", "avatars");
 ```
 
 ### 3. Upload with the SDK
 
 ```typescript
 const result = await client.files.upload(formData);
-console.log('File URL:', result.url);
+console.log("File URL:", result.url);
 ```
 
 ## Common Issues
 
-**"File too large" error:**
-Maximum file size is 10MB. Compress images before uploading.
+**"File too large" error:** Maximum file size is 10MB. Compress images before uploading.
 
-**"Invalid file type" error:**
-Only .jpg, .png, .gif are allowed. Check the file extension.
+**"Invalid file type" error:** Only .jpg, .png, .gif are allowed. Check the file extension.
 
 ## Related
 
 - [File API Reference](/api/files)
 - [Handling Upload Progress](/guides/upload-progress)
 
-```text
+````text
 
 ### Progressive Disclosure
 
@@ -269,7 +274,7 @@ API keys are the simplest way to authenticate.
 
 ```typescript
 const client = new Client({ apiKey: 'your_key' });
-```
+````
 
 **When to use:** Scripts, internal tools, testing
 
@@ -286,8 +291,8 @@ For user-facing applications, use OAuth 2.0.
 
 ```typescript
 const authUrl = client.oauth.getAuthUrl({
-  redirectUri: 'https://yourapp.com/callback',
-  scopes: ['read:users', 'write:users'],
+  redirectUri: "https://yourapp.com/callback",
+  scopes: ["read:users", "write:users"],
 });
 window.location.href = authUrl;
 ```
@@ -295,7 +300,7 @@ window.location.href = authUrl;
 1. Handle the callback:
 
 ```typescript
-const code = new URLSearchParams(window.location.search).get('code');
+const code = new URLSearchParams(window.location.search).get("code");
 const tokens = await client.oauth.exchangeCode(code);
 ```
 
@@ -306,6 +311,7 @@ const client = new Client({ accessToken: tokens.access_token });
 ```
 
 [Full OAuth guide →](/guides/oauth)
+
 </details>
 
 <details>
@@ -315,8 +321,8 @@ For service-to-service authentication, use JWTs.
 
 ```typescript
 const jwt = createJWT({
-  issuer: 'your-service',
-  subject: 'service-account-id',
+  issuer: "your-service",
+  subject: "service-account-id",
   privateKey: process.env.PRIVATE_KEY,
 });
 
@@ -324,6 +330,7 @@ const client = new Client({ jwt });
 ```
 
 [JWT setup guide →](/guides/jwt)
+
 </details>
 ```
 
@@ -331,7 +338,7 @@ const client = new Client({ jwt });
 
 ### Diagram Integration
 
-```markdown
+````markdown
 # System Architecture
 
 ## Request Flow
@@ -351,6 +358,7 @@ sequenceDiagram
     API->>Cache: Store user
     API-->>Client: 201 Created
 ```
+````
 
 ## Data Model
 
@@ -375,7 +383,7 @@ erDiagram
     }
 ```
 
-```text
+````text
 
 ### Screenshot Annotations
 
@@ -401,13 +409,13 @@ erDiagram
 5. **Important:** Copy the key immediately - it won't be shown again
 
 ![Create API key dialog](./images/create-key.png)
-```
+````
 
 ## Troubleshooting Guides
 
 ### Problem-Solution Format
 
-```markdown
+````markdown
 # Troubleshooting
 
 ## Authentication Errors
@@ -415,10 +423,12 @@ erDiagram
 ### "Invalid API key"
 
 **Symptoms:**
+
 - 401 Unauthorized error
 - Error message: "Invalid API key"
 
 **Causes:**
+
 1. API key was copied incorrectly (extra spaces)
 2. API key was revoked
 3. Using test key in production environment
@@ -426,10 +436,12 @@ erDiagram
 **Solutions:**
 
 **1. Verify the key:**
+
 ```bash
 # Check for extra spaces
 echo -n "$API_KEY" | wc -c  # Should be exactly 32 characters
 ```
+````
 
 **2. Regenerate the key:**
 
@@ -440,12 +452,11 @@ echo -n "$API_KEY" | wc -c  # Should be exactly 32 characters
 **3. Check environment:**
 
 ```typescript
-console.log('Environment:', process.env.NODE_ENV);
-console.log('API URL:', client.baseUrl);
+console.log("Environment:", process.env.NODE_ENV);
+console.log("API URL:", client.baseUrl);
 ```
 
-**Still not working?**
-[Contact support](/support) with your request ID from the error response.
+**Still not working?** [Contact support](/support) with your request ID from the error response.
 
 ---
 
@@ -456,8 +467,7 @@ console.log('API URL:', client.baseUrl);
 - 429 Too Many Requests error
 - Requests failing intermittently
 
-**Immediate fix:**
-Wait 60 seconds and retry.
+**Immediate fix:** Wait 60 seconds and retry.
 
 **Long-term solutions:**
 
@@ -479,13 +489,11 @@ async function retryWithBackoff(fn, maxRetries = 3) {
 }
 ```
 
-**2. Batch requests:**
-Instead of 100 individual requests, use batch endpoints.
+**2. Batch requests:** Instead of 100 individual requests, use batch endpoints.
 
-**3. Upgrade your plan:**
-[View plans](/pricing) - Higher tiers have increased limits.
+**3. Upgrade your plan:** [View plans](/pricing) - Higher tiers have increased limits.
 
-```yaml
+````yaml
 
 ## FAQ Section
 
@@ -535,7 +543,7 @@ Credit card, PayPal, wire transfer (annual plans only).
 - [Browse all docs](/docs)
 - [Ask the community](https://community.example.com)
 - [Contact support](/support)
-```
+````
 
 ## Quick Reference
 

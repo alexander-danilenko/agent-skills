@@ -4,20 +4,20 @@
 
 ## Model Comparison Matrix
 
-| Model                       | Dimensions         | Max Tokens | Strengths                        | Provider              |
-| --------------------------- | ------------------ | ---------- | -------------------------------- | --------------------- |
-| **text-embedding-3-large**  | 3072 (or 256-3072) | 8191       | Best quality, flexible dims      | OpenAI                |
-| **text-embedding-3-small**  | 1536 (or 256-1536) | 8191       | Cost-effective, good quality     | OpenAI                |
-| **embed-english-v3.0**      | 1024               | 512        | Excellent compression, fast      | Cohere                |
-| **embed-multilingual-v3.0** | 1024               | 512        | 100+ languages                   | Cohere                |
-| **voyage-large-2**          | 1536               | 16000      | Long context, code-aware         | Voyage AI             |
-| **voyage-code-2**           | 1536               | 16000      | Code retrieval specialist        | Voyage AI             |
-| **BGE-large-en-v1.5**       | 1024               | 512        | Open source, high quality        | BAAI                  |
-| **BGE-M3**                  | 1024               | 8192       | Multi-lingual, multi-granularity | BAAI                  |
-| **E5-large-v2**             | 1024               | 512        | Strong benchmark performance     | Microsoft             |
-| **GTE-large**               | 1024               | 512        | Good general-purpose             | Alibaba               |
-| **all-MiniLM-L6-v2**        | 384                | 256        | Fast, lightweight                | Sentence Transformers |
-| **nomic-embed-text-v1.5**   | 768                | 8192       | Long context, open weights       | Nomic AI              |
+| Model | Dimensions | Max Tokens | Strengths | Provider |
+| --- | --- | --- | --- | --- |
+| **text-embedding-3-large** | 3072 (or 256-3072) | 8191 | Best quality, flexible dims | OpenAI |
+| **text-embedding-3-small** | 1536 (or 256-1536) | 8191 | Cost-effective, good quality | OpenAI |
+| **embed-english-v3.0** | 1024 | 512 | Excellent compression, fast | Cohere |
+| **embed-multilingual-v3.0** | 1024 | 512 | 100+ languages | Cohere |
+| **voyage-large-2** | 1536 | 16000 | Long context, code-aware | Voyage AI |
+| **voyage-code-2** | 1536 | 16000 | Code retrieval specialist | Voyage AI |
+| **BGE-large-en-v1.5** | 1024 | 512 | Open source, high quality | BAAI |
+| **BGE-M3** | 1024 | 8192 | Multi-lingual, multi-granularity | BAAI |
+| **E5-large-v2** | 1024 | 512 | Strong benchmark performance | Microsoft |
+| **GTE-large** | 1024 | 512 | Good general-purpose | Alibaba |
+| **all-MiniLM-L6-v2** | 384 | 256 | Fast, lightweight | Sentence Transformers |
+| **nomic-embed-text-v1.5** | 768 | 8192 | Long context, open weights | Nomic AI |
 
 ---
 
@@ -306,12 +306,12 @@ colbert_embeddings = output["colbert_vecs"]
 
 ### When to Fine-Tune
 
-| Scenario                                | Recommendation                          |
-| --------------------------------------- | --------------------------------------- |
-| Domain-specific jargon (legal, medical) | Fine-tune on domain corpus              |
-| Low retrieval precision (<80%)          | Fine-tune with hard negatives           |
-| Out-of-distribution queries             | Fine-tune with query-doc pairs          |
-| Cost optimization                       | Fine-tune smaller model to match larger |
+| Scenario | Recommendation |
+| --- | --- |
+| Domain-specific jargon (legal, medical) | Fine-tune on domain corpus |
+| Low retrieval precision (<80%) | Fine-tune with hard negatives |
+| Out-of-distribution queries | Fine-tune with query-doc pairs |
+| Cost optimization | Fine-tune smaller model to match larger |
 
 ### Fine-Tuning with Sentence Transformers
 

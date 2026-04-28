@@ -35,19 +35,19 @@
 
 ## Lifecycle to Hooks Concept Map
 
-| Class Component            | Modern React Equivalent              | Notes                             |
-| -------------------------- | ------------------------------------ | --------------------------------- |
-| `constructor`              | `useState` initialization            | No separate constructor needed    |
-| `componentDidMount`        | `useEffect(() => {}, [])`            | Empty dependency array            |
-| `componentDidUpdate`       | `useEffect(() => {})`                | Runs after every render           |
-| `componentWillUnmount`     | `useEffect` cleanup                  | Return cleanup function           |
-| `shouldComponentUpdate`    | `React.memo`                         | Wrap component, custom comparator |
-| `getDerivedStateFromProps` | Avoid or use render-time calculation | Usually an anti-pattern           |
-| `getSnapshotBeforeUpdate`  | `useLayoutEffect`                    | Rarely needed                     |
-| `componentDidCatch`        | No hook equivalent                   | Keep class component              |
-| `this.forceUpdate()`       | `useState` + setter toggle           | Avoid, fix architecture           |
-| `this.state`               | `useState` or `useReducer`           | Multiple state slices             |
-| `this.setState` callback   | `useEffect` watching state           | Separate effect                   |
+| Class Component | Modern React Equivalent | Notes |
+| --- | --- | --- |
+| `constructor` | `useState` initialization | No separate constructor needed |
+| `componentDidMount` | `useEffect(() => {}, [])` | Empty dependency array |
+| `componentDidUpdate` | `useEffect(() => {})` | Runs after every render |
+| `componentWillUnmount` | `useEffect` cleanup | Return cleanup function |
+| `shouldComponentUpdate` | `React.memo` | Wrap component, custom comparator |
+| `getDerivedStateFromProps` | Avoid or use render-time calculation | Usually an anti-pattern |
+| `getSnapshotBeforeUpdate` | `useLayoutEffect` | Rarely needed |
+| `componentDidCatch` | No hook equivalent | Keep class component |
+| `this.forceUpdate()` | `useState` + setter toggle | Avoid, fix architecture |
+| `this.state` | `useState` or `useReducer` | Multiple state slices |
+| `this.setState` callback | `useEffect` watching state | Separate effect |
 
 ---
 
@@ -113,7 +113,7 @@ function Counter({ initialCount, userId }: Props) {
 
   // Arrow functions no longer need binding
   const increment = () => {
-    setCount(prev => prev + 1); // Functional update for safety
+    setCount((prev) => prev + 1); // Functional update for safety
   };
 
   return (
@@ -148,7 +148,7 @@ class UserProfile extends React.Component<{ userId: string }, State> {
   async componentDidMount() {
     await this.fetchUser();
     await this.fetchPosts();
-    window.addEventListener('resize', this.handleResize);
+    window.addEventListener("resize", this.handleResize);
   }
 
   async componentDidUpdate(prevProps: Props) {
@@ -159,7 +159,7 @@ class UserProfile extends React.Component<{ userId: string }, State> {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener("resize", this.handleResize);
   }
 
   fetchUser = async () => {
@@ -246,11 +246,11 @@ function UserProfile({ userId }: Props) {
       // Handle resize
     }
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     // Cleanup removes listener
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []); // Empty array = mount/unmount only
 
@@ -284,10 +284,10 @@ class ExpensiveList extends React.Component<Props> {
 
   render() {
     const { items, filter } = this.props;
-    const filtered = items.filter(item => item.includes(filter));
+    const filtered = items.filter((item) => item.includes(filter));
     return (
       <ul>
-        {filtered.map(item => (
+        {filtered.map((item) => (
           <li key={item}>{item}</li>
         ))}
       </ul>
@@ -310,13 +310,13 @@ const ExpensiveList = React.memo<Props>(
   ({ items, filter, onItemClick }) => {
     // useMemo for expensive calculations
     const filtered = useMemo(
-      () => items.filter(item => item.includes(filter)),
-      [items, filter]
+      () => items.filter((item) => item.includes(filter)),
+      [items, filter],
     );
 
     return (
       <ul>
-        {filtered.map(item => (
+        {filtered.map((item) => (
           <li key={item} onClick={() => onItemClick?.(item)}>
             {item}
           </li>
@@ -331,10 +331,10 @@ const ExpensiveList = React.memo<Props>(
       prevProps.filter === nextProps.filter &&
       prevProps.onItemClick === nextProps.onItemClick
     );
-  }
+  },
 );
 
-ExpensiveList.displayName = 'ExpensiveList';
+ExpensiveList.displayName = "ExpensiveList";
 ```
 
 **Optimization Checklist:**
@@ -355,27 +355,27 @@ ExpensiveList.displayName = 'ExpensiveList';
 class TodoManager extends React.Component<{}, State> {
   state = {
     todos: [] as Todo[],
-    filter: 'all' as Filter,
+    filter: "all" as Filter,
     editingId: null as string | null,
   };
 
   addTodo = (text: string) => {
-    this.setState(prev => ({
+    this.setState((prev) => ({
       todos: [...prev.todos, { id: uuid(), text, completed: false }],
     }));
   };
 
   toggleTodo = (id: string) => {
-    this.setState(prev => ({
-      todos: prev.todos.map(todo =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    this.setState((prev) => ({
+      todos: prev.todos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
       ),
     }));
   };
 
   deleteTodo = (id: string) => {
-    this.setState(prev => ({
-      todos: prev.todos.filter(todo => todo.id !== id),
+    this.setState((prev) => ({
+      todos: prev.todos.filter((todo) => todo.id !== id),
     }));
   };
 
@@ -394,7 +394,7 @@ interface Todo {
   completed: boolean;
 }
 
-type Filter = 'all' | 'active' | 'completed';
+type Filter = "all" | "active" | "completed";
 
 interface State {
   todos: Todo[];
@@ -403,16 +403,16 @@ interface State {
 }
 
 type Action =
-  | { type: 'ADD_TODO'; text: string }
-  | { type: 'TOGGLE_TODO'; id: string }
-  | { type: 'DELETE_TODO'; id: string }
-  | { type: 'SET_FILTER'; filter: Filter }
-  | { type: 'START_EDITING'; id: string }
-  | { type: 'STOP_EDITING' };
+  | { type: "ADD_TODO"; text: string }
+  | { type: "TOGGLE_TODO"; id: string }
+  | { type: "DELETE_TODO"; id: string }
+  | { type: "SET_FILTER"; filter: Filter }
+  | { type: "START_EDITING"; id: string }
+  | { type: "STOP_EDITING" };
 
 function todoReducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'ADD_TODO':
+    case "ADD_TODO":
       return {
         ...state,
         todos: [
@@ -421,29 +421,29 @@ function todoReducer(state: State, action: Action): State {
         ],
       };
 
-    case 'TOGGLE_TODO':
+    case "TOGGLE_TODO":
       return {
         ...state,
-        todos: state.todos.map(todo =>
+        todos: state.todos.map((todo) =>
           todo.id === action.id
             ? { ...todo, completed: !todo.completed }
-            : todo
+            : todo,
         ),
       };
 
-    case 'DELETE_TODO':
+    case "DELETE_TODO":
       return {
         ...state,
-        todos: state.todos.filter(todo => todo.id !== action.id),
+        todos: state.todos.filter((todo) => todo.id !== action.id),
       };
 
-    case 'SET_FILTER':
+    case "SET_FILTER":
       return { ...state, filter: action.filter };
 
-    case 'START_EDITING':
+    case "START_EDITING":
       return { ...state, editingId: action.id };
 
-    case 'STOP_EDITING':
+    case "STOP_EDITING":
       return { ...state, editingId: null };
 
     default:
@@ -454,26 +454,26 @@ function todoReducer(state: State, action: Action): State {
 function TodoManager() {
   const [state, dispatch] = useReducer(todoReducer, {
     todos: [],
-    filter: 'all',
+    filter: "all",
     editingId: null,
   });
 
   // Action creators
   const addTodo = (text: string) => {
-    dispatch({ type: 'ADD_TODO', text });
+    dispatch({ type: "ADD_TODO", text });
   };
 
   const toggleTodo = (id: string) => {
-    dispatch({ type: 'TOGGLE_TODO', id });
+    dispatch({ type: "TOGGLE_TODO", id });
   };
 
   // Derived state with useMemo
   const visibleTodos = useMemo(() => {
     switch (state.filter) {
-      case 'active':
-        return state.todos.filter(t => !t.completed);
-      case 'completed':
-        return state.todos.filter(t => t.completed);
+      case "active":
+        return state.todos.filter((t) => !t.completed);
+      case "completed":
+        return state.todos.filter((t) => t.completed);
       default:
         return state.todos;
     }
@@ -481,7 +481,7 @@ function TodoManager() {
 
   return (
     <div>
-      {visibleTodos.map(todo => (
+      {visibleTodos.map((todo) => (
         <TodoItem
           key={todo.id}
           todo={todo}
@@ -567,7 +567,7 @@ function FormWithFocus() {
 
   const handleDelayedAction = () => {
     timeoutIdRef.current = window.setTimeout(() => {
-      console.log('Delayed action');
+      console.log("Delayed action");
     }, 1000);
   };
 
@@ -598,7 +598,7 @@ function FormWithFocus() {
 ```tsx
 // HOC
 function withAuth<P extends object>(
-  Component: React.ComponentType<P & { user: User }>
+  Component: React.ComponentType<P & { user: User }>,
 ) {
   return class extends React.Component<P> {
     state = { user: null as User | null };
@@ -650,7 +650,7 @@ function useAuth() {
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err : new Error('Auth failed'));
+          setError(err instanceof Error ? err : new Error("Auth failed"));
           setLoading(false);
         }
       }
@@ -719,11 +719,11 @@ class Mouse extends React.Component<
   };
 
   componentDidMount() {
-    window.addEventListener('mousemove', this.handleMouseMove);
+    window.addEventListener("mousemove", this.handleMouseMove);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('mousemove', this.handleMouseMove);
+    window.removeEventListener("mousemove", this.handleMouseMove);
   }
 
   render() {
@@ -738,7 +738,7 @@ class Mouse extends React.Component<
       Mouse at {x}, {y}
     </div>
   )}
-</Mouse>
+</Mouse>;
 ```
 
 ### Modern React with Custom Hook
@@ -757,10 +757,10 @@ function useMouse(): MousePosition {
       setPosition({ x: e.clientX, y: e.clientY });
     }
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
@@ -793,7 +793,7 @@ function MouseTracker() {
 ### Class Component
 
 ```tsx
-const ThemeContext = React.createContext<Theme>('light');
+const ThemeContext = React.createContext<Theme>("light");
 
 class ThemedButton extends React.Component {
   static contextType = ThemeContext;
@@ -809,7 +809,7 @@ class ThemedButton2 extends React.Component {
   render() {
     return (
       <ThemeContext.Consumer>
-        {theme => <button className={theme}>{this.props.children}</button>}
+        {(theme) => <button className={theme}>{this.props.children}</button>}
       </ThemeContext.Consumer>
     );
   }
@@ -819,7 +819,7 @@ class ThemedButton2 extends React.Component {
 ### Modern React
 
 ```tsx
-type Theme = 'light' | 'dark';
+type Theme = "light" | "dark";
 
 interface ThemeContextValue {
   theme: Theme;
@@ -827,28 +827,25 @@ interface ThemeContextValue {
 }
 
 const ThemeContext = React.createContext<ThemeContextValue | undefined>(
-  undefined
+  undefined,
 );
 
 function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error('useTheme must be used within ThemeProvider');
+    throw new Error("useTheme must be used within ThemeProvider");
   }
   return context;
 }
 
 function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setTheme] = useState<Theme>("light");
 
   const toggleTheme = useCallback(() => {
-    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
   }, []);
 
-  const value = useMemo(
-    () => ({ theme, toggleTheme }),
-    [theme, toggleTheme]
-  );
+  const value = useMemo(() => ({ theme, toggleTheme }), [theme, toggleTheme]);
 
   return (
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
@@ -883,15 +880,15 @@ Modern Next.js 13+ supports Server Components, which cannot use hooks.
 ### Client Component (Hooks)
 
 ```tsx
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export function ClientCounter() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    console.log('Client-side effect');
+    console.log("Client-side effect");
   }, []);
 
   return <button onClick={() => setCount(count + 1)}>{count}</button>;
@@ -914,7 +911,11 @@ async function getUser(id: string): Promise<User> {
   return res.json();
 }
 
-export default async function UserProfile({ params }: { params: { id: string } }) {
+export default async function UserProfile({
+  params,
+}: {
+  params: { id: string };
+}) {
   const user = await getUser(params.id);
 
   return (
@@ -972,7 +973,7 @@ function Counter() {
   useEffect(() => {
     const id = setInterval(() => {
       // Functional update - always has latest state
-      setCount(prev => prev + 1);
+      setCount((prev) => prev + 1);
     }, 1000);
 
     return () => clearInterval(id);
@@ -1034,12 +1035,12 @@ function TodoList({ todos }: { todos: Todo[] }) {
 
   // Unnecessary - simple function
   const handleClick = useCallback(() => {
-    console.log('clicked');
+    console.log("clicked");
   }, []);
 
   return (
     <ul>
-      {memoizedTodos.map(todo => (
+      {memoizedTodos.map((todo) => (
         <li key={todo.id} onClick={handleClick}>
           {todo.text}
         </li>
@@ -1055,8 +1056,8 @@ function TodoList({ todos }: { todos: Todo[] }) {
 function TodoList({ todos }: { todos: Todo[] }) {
   // Only memoize expensive computations
   const completedCount = useMemo(
-    () => todos.filter(t => t.completed).length,
-    [todos]
+    () => todos.filter((t) => t.completed).length,
+    [todos],
   );
 
   // Only useCallback for props to memoized children
@@ -1064,7 +1065,7 @@ function TodoList({ todos }: { todos: Todo[] }) {
     <div>
       <p>Completed: {completedCount}</p>
       <ul>
-        {todos.map(todo => (
+        {todos.map((todo) => (
           <TodoItem key={todo.id} todo={todo} />
         ))}
       </ul>

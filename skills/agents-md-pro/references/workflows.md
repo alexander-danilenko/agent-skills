@@ -34,34 +34,36 @@ Read selectively, focusing on:
 # [Project] | [Tech Stack]
 
 ## COMMANDS
+
 - Dev: `[command]`
 - Build: `[command]`
 - Test: `[command]`
 - Lint: `[command] --fix`
 
 ## STRUCTURE
+
 - `[dir]/` - [purpose]
 - `[dir]/` - [purpose]
 
 ## PATTERNS
+
 [1-2 key architectural patterns with minimal code examples]
 
 ## CODE STYLE
-See `[config files]`
-[Only project-specific rules NOT in configs]
+
+See `[config files]` [Only project-specific rules NOT in configs]
 
 ## DOMAIN
-[Only non-obvious project-specific terms]
-| Term | Definition |
-|------|------------|
-| ... | ... |
+
+[Only non-obvious project-specific terms] | Term | Definition | |------|------------| | ... | ... |
 
 ## SECURITY
+
 [Critical auth/validation patterns only]
 
 ## GIT
-Format: `[convention]`
-[Hooks if any]
+
+Format: `[convention]` [Hooks if any]
 ```
 
 **Monorepo Root:**
@@ -70,19 +72,24 @@ Format: `[convention]`
 # [Monorepo] | [Shared Stack]
 
 ## STRUCTURE
+
 Projects:
+
 - `/[project-a]` - [purpose]
 - `/[project-b]` - [purpose]
 
 ## SHARED COMMANDS
+
 - Install: `[command]`
 - Build all: `[command]`
 - Test all: `[command]`
 
 ## SHARED STANDARDS
+
 See: `.eslintrc`, `.prettierrc` (root)
 
 ## PROJECT DOCS
+
 See AGENTS.md in each project directory.
 ```
 
@@ -92,15 +99,19 @@ See AGENTS.md in each project directory.
 # [Project] | [Tech Stack]
 
 ## COMMANDS
+
 [Project-specific commands]
 
 ## PATTERNS
+
 [Project-specific patterns]
 
 ## SHARED STANDARDS
+
 See root AGENTS.md
 
 ## DOMAIN
+
 [Project-specific terms only]
 ```
 

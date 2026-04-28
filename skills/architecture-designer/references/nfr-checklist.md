@@ -74,26 +74,31 @@
 ## Non-Functional Requirements
 
 ### Performance
+
 - API response time: < 200ms p95
 - Page load time: < 2s
 - Database query time: < 50ms
 
 ### Scalability
+
 - Concurrent users: 10,000
 - Requests per second: 1,000
 - Data volume: 1TB
 
 ### Availability
+
 - Target: 99.9% (8.76 hours/year downtime)
 - RPO: 1 hour
 - RTO: 4 hours
 
 ### Security
+
 - Authentication: JWT with refresh tokens
 - Authorization: Role-based (admin, user, guest)
 - Compliance: GDPR, SOC 2
 
 ### Observability
+
 - Logging: Structured JSON to ELK
 - Metrics: Prometheus + Grafana
 - Tracing: OpenTelemetry

@@ -45,7 +45,7 @@ paths:
       tags:
         - Users
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
@@ -55,7 +55,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/User'
+                      $ref: "#/components/schemas/User"
 
 components:
   schemas:
@@ -186,21 +186,21 @@ paths:
         - bearerAuth: []
 
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserListResponse'
+                $ref: "#/components/schemas/UserListResponse"
               examples:
                 success:
-                  $ref: '#/components/examples/UserListSuccess'
+                  $ref: "#/components/examples/UserListSuccess"
 
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "401":
+          $ref: "#/components/responses/Unauthorized"
 
-        '429':
-          $ref: '#/components/responses/RateLimitExceeded'
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
 
     post:
       summary: Create user
@@ -214,13 +214,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUserRequest'
+              $ref: "#/components/schemas/CreateUserRequest"
             examples:
               basic:
-                $ref: '#/components/examples/CreateUserBasic'
+                $ref: "#/components/examples/CreateUserBasic"
 
       responses:
-        '201':
+        "201":
           description: User created successfully
           headers:
             Location:
@@ -231,17 +231,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
 
-        '400':
-          $ref: '#/components/responses/ValidationError'
+        "400":
+          $ref: "#/components/responses/ValidationError"
 
-        '409':
+        "409":
           description: User already exists
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
   /users/{userId}:
     parameters:
@@ -261,15 +261,15 @@ paths:
         - Users
 
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
 
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "404":
+          $ref: "#/components/responses/NotFound"
 
     put:
       summary: Update user
@@ -283,18 +283,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateUserRequest'
+              $ref: "#/components/schemas/UpdateUserRequest"
 
       responses:
-        '200':
+        "200":
           description: User updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
 
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "404":
+          $ref: "#/components/responses/NotFound"
 
     delete:
       summary: Delete user
@@ -304,11 +304,11 @@ paths:
         - Users
 
       responses:
-        '204':
+        "204":
           description: User deleted successfully
 
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "404":
+          $ref: "#/components/responses/NotFound"
 ```
 
 ## Components
@@ -382,9 +382,9 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/User'
+            $ref: "#/components/schemas/User"
         pagination:
-          $ref: '#/components/schemas/Pagination'
+          $ref: "#/components/schemas/Pagination"
 
     Pagination:
       type: object
@@ -467,7 +467,7 @@ paths:
     get:
       security:
         - bearerAuth: []
-        - apiKey: []  # Alternative auth method
+        - apiKey: [] # Alternative auth method
 ```
 
 ### Responses
@@ -482,7 +482,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
           example:
             error:
               code: RESOURCE_NOT_FOUND
@@ -498,14 +498,14 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
 
     ValidationError:
       description: Validation failed
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
           example:
             error:
               code: VALIDATION_ERROR
@@ -538,7 +538,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
 ```
 
 ### Examples
@@ -680,17 +680,17 @@ default: active
 ```yaml
 # OneOf - exactly one schema matches
 oneOf:
-  - $ref: '#/components/schemas/CreditCard'
-  - $ref: '#/components/schemas/BankAccount'
+  - $ref: "#/components/schemas/CreditCard"
+  - $ref: "#/components/schemas/BankAccount"
 
 # AnyOf - one or more schemas match
 anyOf:
-  - $ref: '#/components/schemas/User'
-  - $ref: '#/components/schemas/Organization'
+  - $ref: "#/components/schemas/User"
+  - $ref: "#/components/schemas/Organization"
 
 # AllOf - all schemas must match (inheritance)
 allOf:
-  - $ref: '#/components/schemas/BaseUser'
+  - $ref: "#/components/schemas/BaseUser"
   - type: object
     properties:
       admin_level:
@@ -715,7 +715,7 @@ format: email
 type: integer
 minimum: 0
 maximum: 100
-exclusiveMinimum: true  # > 0 instead of >= 0
+exclusiveMinimum: true # > 0 instead of >= 0
 multipleOf: 5
 ```
 
@@ -752,7 +752,7 @@ paths:
 
 ### Markdown Support
 
-```yaml
+````yaml
 description: |
   # User Management
 
@@ -772,9 +772,9 @@ description: |
     "name": "John Doe",
     "email": "john@example.com"
   }
-  ```
+````
 
-```text
+````text
 
 ## Code Generation
 
@@ -798,7 +798,7 @@ openapi-generator-cli generate \
   -i openapi.yaml \
   -g nodejs-express-server \
   -o ./server
-```
+````
 
 ## Validation Tools
 

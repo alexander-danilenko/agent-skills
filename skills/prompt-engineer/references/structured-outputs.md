@@ -34,12 +34,12 @@
 
 ```yaml
 Extract the following information from the text and return as JSON:
-- person_name: string
-- company: string
-- role: string
-- email: string or null
+  - person_name: string
+  - company: string
+  - role: string
+  - email: string or null
 
-Text: {text}
+Text: { text }
 
 Return only valid JSON, no other text:
 ```
@@ -342,18 +342,18 @@ result = json.loads(fn_call.arguments)
     "order": {
       "type": "object",
       "properties": {
-        "id": {"type": "string"},
-        "total": {"type": "number"},
-        "currency": {"type": "string", "enum": ["USD", "EUR", "GBP"]},
+        "id": { "type": "string" },
+        "total": { "type": "number" },
+        "currency": { "type": "string", "enum": ["USD", "EUR", "GBP"] },
         "items": {
           "type": "array",
           "items": {
             "type": "object",
             "properties": {
-              "product_id": {"type": "string"},
-              "name": {"type": "string"},
-              "quantity": {"type": "integer", "minimum": 1},
-              "unit_price": {"type": "number", "minimum": 0}
+              "product_id": { "type": "string" },
+              "name": { "type": "string" },
+              "quantity": { "type": "integer", "minimum": 1 },
+              "unit_price": { "type": "number", "minimum": 0 }
             },
             "required": ["product_id", "quantity", "unit_price"]
           }
@@ -369,11 +369,11 @@ result = json.loads(fn_call.arguments)
     "address": {
       "type": "object",
       "properties": {
-        "street": {"type": "string"},
-        "city": {"type": "string"},
-        "state": {"type": "string"},
-        "postal_code": {"type": "string"},
-        "country": {"type": "string", "pattern": "^[A-Z]{2}$"}
+        "street": { "type": "string" },
+        "city": { "type": "string" },
+        "state": { "type": "string" },
+        "postal_code": { "type": "string" },
+        "country": { "type": "string", "pattern": "^[A-Z]{2}$" }
       },
       "required": ["street", "city", "country"]
     }
@@ -391,23 +391,23 @@ result = json.loads(fn_call.arguments)
       "type": "string",
       "enum": ["email", "phone", "mail"]
     },
-    "email": {"type": "string", "format": "email"},
-    "phone": {"type": "string"},
-    "address": {"$ref": "#/definitions/address"}
+    "email": { "type": "string", "format": "email" },
+    "phone": { "type": "string" },
+    "address": { "$ref": "#/definitions/address" }
   },
   "required": ["contact_method"],
   "allOf": [
     {
-      "if": {"properties": {"contact_method": {"const": "email"}}},
-      "then": {"required": ["email"]}
+      "if": { "properties": { "contact_method": { "const": "email" } } },
+      "then": { "required": ["email"] }
     },
     {
-      "if": {"properties": {"contact_method": {"const": "phone"}}},
-      "then": {"required": ["phone"]}
+      "if": { "properties": { "contact_method": { "const": "phone" } } },
+      "then": { "required": ["phone"] }
     },
     {
-      "if": {"properties": {"contact_method": {"const": "mail"}}},
-      "then": {"required": ["address"]}
+      "if": { "properties": { "contact_method": { "const": "mail" } } },
+      "then": { "required": ["address"] }
     }
   ]
 }
@@ -467,14 +467,14 @@ def parse_analysis(llm_response: str) -> CodeAnalysis:
 ### Zod Validation (TypeScript)
 
 ```typescript
-import { z } from 'zod';
+import { z } from "zod";
 
-const SeveritySchema = z.enum(['critical', 'high', 'medium', 'low']);
+const SeveritySchema = z.enum(["critical", "high", "medium", "low"]);
 
 const CodeIssueSchema = z.object({
   severity: SeveritySchema,
-  type: z.enum(['bug', 'security', 'performance', 'style']),
-  location: z.string().regex(/[:()]/, 'Must be file:line or function()'),
+  type: z.enum(["bug", "security", "performance", "style"]),
+  location: z.string().regex(/[:()]/, "Must be file:line or function()"),
   description: z.string().min(10).max(500),
   suggestion: z.string().optional(),
 });
@@ -704,14 +704,14 @@ Response (JSON array only):"""
 
 ## Common Pitfalls
 
-| Pitfall                | Problem                   | Solution                             |
-| ---------------------- | ------------------------- | ------------------------------------ |
-| No schema in prompt    | Model invents structure   | Always specify expected schema       |
-| Ambiguous field names  | Inconsistent extraction   | Use descriptive names with examples  |
-| Missing null handling  | Errors on optional fields | Explicitly state "null if not found" |
-| Complex nested schemas | Inconsistent output       | Flatten when possible                |
-| No validation          | Silent failures           | Always validate with Pydantic/Zod    |
-| Large schemas          | Token waste, confusion    | Split into multiple calls            |
+| Pitfall | Problem | Solution |
+| --- | --- | --- |
+| No schema in prompt | Model invents structure | Always specify expected schema |
+| Ambiguous field names | Inconsistent extraction | Use descriptive names with examples |
+| Missing null handling | Errors on optional fields | Explicitly state "null if not found" |
+| Complex nested schemas | Inconsistent output | Flatten when possible |
+| No validation | Silent failures | Always validate with Pydantic/Zod |
+| Large schemas | Token waste, confusion | Split into multiple calls |
 
 ---
 

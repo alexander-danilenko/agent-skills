@@ -4,22 +4,22 @@
 
 ```tsx
 // app/page.tsx - Server Component by default
-import { db } from '@/lib/db'
+import { db } from "@/lib/db";
 
 export default async function Page() {
   // Data fetching in Server Component
-  const users = await db.user.findMany()
+  const users = await db.user.findMany();
 
   return (
     <div>
       <h1>Users</h1>
       <ul>
-        {users.map(user => (
+        {users.map((user) => (
           <li key={user.id}>{user.name}</li>
         ))}
       </ul>
     </div>
-  )
+  );
 }
 ```
 
@@ -35,18 +35,14 @@ export default async function Page() {
 
 ```tsx
 // components/counter.tsx
-'use client' // Required directive
+"use client"; // Required directive
 
-import { useState } from 'react'
+import { useState } from "react";
 
 export function Counter() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
-  return (
-    <button onClick={() => setCount(count + 1)}>
-      Count: {count}
-    </button>
-  )
+  return <button onClick={() => setCount(count + 1)}>Count: {count}</button>;
 }
 ```
 
@@ -65,11 +61,11 @@ Use `'use client'` when you need:
 
 ```tsx
 // app/page.tsx - Server Component
-import { ClientWrapper } from './client-wrapper'
-import { db } from '@/lib/db'
+import { ClientWrapper } from "./client-wrapper";
+import { db } from "@/lib/db";
 
 export default async function Page() {
-  const data = await db.query()
+  const data = await db.query();
 
   return (
     <div>
@@ -82,20 +78,20 @@ export default async function Page() {
         <ServerSidebar />
       </ClientWrapper>
     </div>
-  )
+  );
 }
 
 // components/client-wrapper.tsx
-'use client'
+("use client");
 
 export function ClientWrapper({
   children,
   initialData,
 }: {
-  children: React.ReactNode
-  initialData: Data
+  children: React.ReactNode;
+  initialData: Data;
 }) {
-  const [data, setData] = useState(initialData)
+  const [data, setData] = useState(initialData);
 
   return (
     <div>
@@ -104,7 +100,7 @@ export function ClientWrapper({
       {/* Server Component children */}
       {children}
     </div>
-  )
+  );
 }
 ```
 
@@ -112,9 +108,9 @@ export function ClientWrapper({
 
 ```tsx
 // app/page.tsx
-import { Suspense } from 'react'
-import { SlowComponent } from './slow-component'
-import { FastComponent } from './fast-component'
+import { Suspense } from "react";
+import { SlowComponent } from "./slow-component";
+import { FastComponent } from "./fast-component";
 
 export default function Page() {
   return (
@@ -127,18 +123,18 @@ export default function Page() {
         <SlowComponent />
       </Suspense>
     </div>
-  )
+  );
 }
 
 // components/slow-component.tsx
 async function getData() {
-  await new Promise(resolve => setTimeout(resolve, 3000))
-  return { data: 'Loaded!' }
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  return { data: "Loaded!" };
 }
 
 export async function SlowComponent() {
-  const data = await getData()
-  return <div>{data.data}</div>
+  const data = await getData();
+  return <div>{data.data}</div>;
 }
 ```
 
@@ -147,26 +143,23 @@ export async function SlowComponent() {
 ```tsx
 // app/dashboard/page.tsx
 async function getUser() {
-  return fetch('https://api.example.com/user')
+  return fetch("https://api.example.com/user");
 }
 
 async function getPosts() {
-  return fetch('https://api.example.com/posts')
+  return fetch("https://api.example.com/posts");
 }
 
 export default async function Dashboard() {
   // Fetch in parallel
-  const [user, posts] = await Promise.all([
-    getUser(),
-    getPosts(),
-  ])
+  const [user, posts] = await Promise.all([getUser(), getPosts()]);
 
   return (
     <div>
       <UserProfile user={user} />
       <PostsList posts={posts} />
     </div>
-  )
+  );
 }
 ```
 
@@ -175,24 +168,28 @@ export default async function Dashboard() {
 ```tsx
 // app/artist/[id]/page.tsx
 async function getArtist(id: string) {
-  return fetch(`https://api.example.com/artists/${id}`)
+  return fetch(`https://api.example.com/artists/${id}`);
 }
 
 async function getAlbums(artistId: string) {
-  return fetch(`https://api.example.com/artists/${artistId}/albums`)
+  return fetch(`https://api.example.com/artists/${artistId}/albums`);
 }
 
-export default async function ArtistPage({ params }: { params: { id: string } }) {
+export default async function ArtistPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   // Sequential: albums depends on artist
-  const artist = await getArtist(params.id)
-  const albums = await getAlbums(artist.id)
+  const artist = await getArtist(params.id);
+  const albums = await getAlbums(artist.id);
 
   return (
     <div>
       <h1>{artist.name}</h1>
       <Albums albums={albums} />
     </div>
-  )
+  );
 }
 ```
 
@@ -200,32 +197,32 @@ export default async function ArtistPage({ params }: { params: { id: string } })
 
 ```tsx
 // lib/data.ts
-import { cache } from 'react'
+import { cache } from "react";
 
 export const getUser = cache(async (id: string) => {
-  return db.user.findUnique({ where: { id } })
-})
+  return db.user.findUnique({ where: { id } });
+});
 
 // components/user-profile.tsx
 export async function UserProfile({ userId }: { userId: string }) {
-  const user = await getUser(userId)
-  return <div>{user.name}</div>
+  const user = await getUser(userId);
+  return <div>{user.name}</div>;
 }
 
 // app/page.tsx
-import { getUser } from '@/lib/data'
-import { UserProfile } from '@/components/user-profile'
+import { getUser } from "@/lib/data";
+import { UserProfile } from "@/components/user-profile";
 
 export default async function Page() {
   // Preload
-  getUser('123')
+  getUser("123");
 
   return (
     <div>
       {/* This will use cached result */}
       <UserProfile userId="123" />
     </div>
-  )
+  );
 }
 ```
 
@@ -235,23 +232,23 @@ export default async function Page() {
 
 ```tsx
 // app/dashboard/layout.tsx
-import { auth } from '@/lib/auth'
-import { db } from '@/lib/db'
+import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
 
 export default async function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const session = await auth()
-  const user = await db.user.findUnique({ where: { id: session.userId } })
+  const session = await auth();
+  const user = await db.user.findUnique({ where: { id: session.userId } });
 
   return (
     <div>
       <Sidebar user={user} />
       <main>{children}</main>
     </div>
-  )
+  );
 }
 ```
 
@@ -259,17 +256,17 @@ export default async function DashboardLayout({
 
 ```tsx
 // app/page.tsx
-import { ClientComponent } from './client-component'
+import { ClientComponent } from "./client-component";
 
 export default async function Page() {
-  const data = await fetchData()
+  const data = await fetchData();
 
   // Only render Client Component when needed
   if (data.requiresInteractivity) {
-    return <ClientComponent data={data} />
+    return <ClientComponent data={data} />;
   }
 
-  return <div>{data.content}</div>
+  return <div>{data.content}</div>;
 }
 ```
 
@@ -277,10 +274,14 @@ export default async function Page() {
 
 ```tsx
 // app/blog/[slug]/page.tsx
-import { LikeButton } from './like-button'
+import { LikeButton } from "./like-button";
 
-export default async function BlogPost({ params }: { params: { slug: string } }) {
-  const post = await getPost(params.slug)
+export default async function BlogPost({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const post = await getPost(params.slug);
 
   return (
     <article>
@@ -292,7 +293,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
       {/* Client island for interactivity */}
       <LikeButton postId={post.id} initialLikes={post.likes} />
     </article>
-  )
+  );
 }
 ```
 
@@ -300,21 +301,21 @@ export default async function BlogPost({ params }: { params: { slug: string } })
 
 ```tsx
 // app/providers.tsx
-'use client'
+"use client";
 
-import { ThemeProvider } from 'next-themes'
+import { ThemeProvider } from "next-themes";
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  return <ThemeProvider>{children}</ThemeProvider>
+  return <ThemeProvider>{children}</ThemeProvider>;
 }
 
 // app/layout.tsx
-import { Providers } from './providers'
+import { Providers } from "./providers";
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html>
@@ -322,7 +323,7 @@ export default function RootLayout({
         <Providers>{children}</Providers>
       </body>
     </html>
-  )
+  );
 }
 ```
 
@@ -330,20 +331,20 @@ export default function RootLayout({
 
 ```tsx
 // components/carousel-wrapper.tsx
-'use client'
+"use client";
 
-import { Carousel } from 'third-party-carousel'
+import { Carousel } from "third-party-carousel";
 
 export function CarouselWrapper({ items }: { items: Item[] }) {
-  return <Carousel items={items} />
+  return <Carousel items={items} />;
 }
 
 // app/page.tsx
-import { CarouselWrapper } from '@/components/carousel-wrapper'
+import { CarouselWrapper } from "@/components/carousel-wrapper";
 
 export default async function Page() {
-  const items = await fetchItems()
-  return <CarouselWrapper items={items} />
+  const items = await fetchItems();
+  return <CarouselWrapper items={items} />;
 }
 ```
 
@@ -351,17 +352,17 @@ export default async function Page() {
 
 ```tsx
 // app/api/route.ts
-export const runtime = 'edge'
+export const runtime = "edge";
 
 export async function GET() {
-  return new Response('Hello from Edge!')
+  return new Response("Hello from Edge!");
 }
 
 // app/page.tsx
-export const runtime = 'edge'
+export const runtime = "edge";
 
 export default async function Page() {
-  return <div>Edge-rendered page</div>
+  return <div>Edge-rendered page</div>;
 }
 ```
 

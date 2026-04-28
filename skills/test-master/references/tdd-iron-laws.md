@@ -49,7 +49,7 @@ There is no middle ground. Code written without a prior failing test is not test
 
 ```typescript
 // Start with the smallest possible failing test
-it('should return 0 for empty array', () => {
+it("should return 0 for empty array", () => {
   expect(sum([])).toBe(0);
 });
 // Run: ✗ FAIL - sum is not defined
@@ -102,14 +102,14 @@ function sum(numbers: number[]): number {
 
 These thoughts indicate you're about to violate TDD:
 
-| Rationalization                                        | Why It's Wrong                                   |
-| ------------------------------------------------------ | ------------------------------------------------ |
-| "I can manually test this quickly"                     | Manual testing doesn't prevent regression        |
-| "I'll write tests after to save time"                  | You'll skip edge cases and test implementation   |
-| "This is too simple to need a test"                    | Simple code changes; tests document expectations |
-| "I've already written the code, I can't delete it now" | Sunk cost fallacy; delete it                     |
-| "I know this works, I've done it before"               | Your memory isn't documentation                  |
-| "We're in a hurry"                                     | Technical debt costs more than TDD               |
+| Rationalization | Why It's Wrong |
+| --- | --- |
+| "I can manually test this quickly" | Manual testing doesn't prevent regression |
+| "I'll write tests after to save time" | You'll skip edge cases and test implementation |
+| "This is too simple to need a test" | Simple code changes; tests document expectations |
+| "I've already written the code, I can't delete it now" | Sunk cost fallacy; delete it |
+| "I know this works, I've done it before" | Your memory isn't documentation |
+| "We're in a hurry" | Technical debt costs more than TDD |
 
 ---
 
@@ -119,9 +119,9 @@ These thoughts indicate you're about to violate TDD:
 
 ```typescript
 // 1. RED: Write failing test for simplest behavior
-describe('UserValidator', () => {
-  it('should reject empty email', () => {
-    expect(validateEmail('')).toBe(false);
+describe("UserValidator", () => {
+  it("should reject empty email", () => {
+    expect(validateEmail("")).toBe(false);
   });
 });
 
@@ -131,13 +131,13 @@ function validateEmail(email: string): boolean {
 }
 
 // 3. RED: Add next failing test
-it('should reject email without @', () => {
-  expect(validateEmail('invalid')).toBe(false);
+it("should reject email without @", () => {
+  expect(validateEmail("invalid")).toBe(false);
 });
 
 // 4. GREEN: Extend to pass both tests
 function validateEmail(email: string): boolean {
-  return email.length > 0 && email.includes('@');
+  return email.length > 0 && email.includes("@");
 }
 
 // Continue cycle...
@@ -147,7 +147,7 @@ function validateEmail(email: string): boolean {
 
 ```typescript
 // 1. RED: Write test that exposes the bug
-it('should handle negative numbers in sum', () => {
+it("should handle negative numbers in sum", () => {
   expect(sum([-1, -2, -3])).toBe(-6);
 });
 // Run: ✗ FAIL - got 0 instead of -6
@@ -176,4 +176,4 @@ Before claiming any code is complete:
 
 ---
 
-*Content adapted from [obra/superpowers](https://github.com/obra/superpowers) by Jesse Vincent (@obra), MIT License.*
+_Content adapted from [obra/superpowers](https://github.com/obra/superpowers) by Jesse Vincent (@obra), MIT License._

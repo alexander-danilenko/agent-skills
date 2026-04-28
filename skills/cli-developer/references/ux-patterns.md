@@ -60,13 +60,13 @@ Choose based on:
 ### Semantic Colors
 
 ```yaml
-Red:     Errors, failures, destructive actions
-Yellow:  Warnings, deprecations, non-critical issues
-Green:   Success, completion, positive feedback
-Blue:    Information, hints, neutral messages
-Cyan:    Commands, code, technical details
+Red: Errors, failures, destructive actions
+Yellow: Warnings, deprecations, non-critical issues
+Green: Success, completion, positive feedback
+Blue: Information, hints, neutral messages
+Cyan: Commands, code, technical details
 Magenta: Highlights, special items
-Gray:    Less important, metadata, timestamps
+Gray: Less important, metadata, timestamps
 
 Examples:
 ✓ Success: Deployment complete
@@ -79,9 +79,8 @@ Examples:
 
 ```javascript
 // Detect non-TTY output (piped to file, etc.)
-const noColor = !process.stdout.isTTY ||
-                process.env.NO_COLOR ||
-                process.env.CI === 'true';
+const noColor =
+  !process.stdout.isTTY || process.env.NO_COLOR || process.env.CI === "true";
 
 if (noColor) {
   // Disable colors

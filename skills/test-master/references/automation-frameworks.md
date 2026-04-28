@@ -9,21 +9,24 @@
 export class Actor {
   constructor(private page: Page) {}
   attemptsTo(...tasks: Task[]) {
-    return Promise.all(tasks.map(t => t.performAs(this)));
+    return Promise.all(tasks.map((t) => t.performAs(this)));
   }
 }
 
 class Login implements Task {
-  constructor(private email: string, private password: string) {}
+  constructor(
+    private email: string,
+    private password: string,
+  ) {}
   async performAs(actor: Actor) {
-    await actor.page.getByLabel('Email').fill(this.email);
-    await actor.page.getByLabel('Password').fill(this.password);
-    await actor.page.getByRole('button', { name: 'Login' }).click();
+    await actor.page.getByLabel("Email").fill(this.email);
+    await actor.page.getByLabel("Password").fill(this.password);
+    await actor.page.getByRole("button", { name: "Login" }).click();
   }
 }
 
 // Clear, maintainable test code
-await new Actor(page).attemptsTo(new Login('user@test.com', 'pass'));
+await new Actor(page).attemptsTo(new Login("user@test.com", "pass"));
 ```
 
 ### Keyword-Driven Testing
@@ -38,9 +41,9 @@ const keywords = {
 
 // Data drives execution - ideal for non-technical authors
 const steps = [
-  { keyword: 'NAVIGATE', args: ['/login'] },
-  { keyword: 'TYPE', args: ['#email', 'user@test.com'] },
-  { keyword: 'CLICK', args: ['#submit'] },
+  { keyword: "NAVIGATE", args: ["/login"] },
+  { keyword: "TYPE", args: ["#email", "user@test.com"] },
+  { keyword: "CLICK", args: ["#submit"] },
 ];
 
 for (const step of steps) await keywords[step.keyword](page, ...step.args);
@@ -51,9 +54,13 @@ for (const step of steps) await keywords[step.keyword](page, ...step.args);
 ```typescript
 // State machine defines valid transitions
 const cartModel = {
-  empty: { addItem: 'hasItems' },
-  hasItems: { addItem: 'hasItems', removeItem: 'hasItems|empty', checkout: 'checkingOut' },
-  checkingOut: { confirm: 'complete', cancel: 'hasItems' },
+  empty: { addItem: "hasItems" },
+  hasItems: {
+    addItem: "hasItems",
+    removeItem: "hasItems|empty",
+    checkout: "checkingOut",
+  },
+  checkingOut: { confirm: "complete", cancel: "hasItems" },
 };
 
 // Generate comprehensive test paths automatically
@@ -69,16 +76,16 @@ const testPaths = generatePathsFromModel(cartModel);
 async function findElement(page: Page, strategies: string[]): Promise<Locator> {
   for (const selector of strategies) {
     const el = page.locator(selector);
-    if (await el.count() > 0) return el;
+    if ((await el.count()) > 0) return el;
   }
-  throw new Error(`Not found: ${strategies.join(', ')}`);
+  throw new Error(`Not found: ${strategies.join(", ")}`);
 }
 
 // Usage: tries best -> good -> fallback
 const submit = await findElement(page, [
-  '[data-testid="submit"]',     // Best: stable test ID
-  'button:has-text("Submit")',  // Good: semantic
-  'button.primary',             // Fallback: CSS
+  '[data-testid="submit"]', // Best: stable test ID
+  'button:has-text("Submit")', // Good: semantic
+  "button.primary", // Fallback: CSS
 ]);
 ```
 
@@ -94,19 +101,22 @@ async function clickWithRecovery(page: Page, selector: string, retries = 3) {
     } catch (e) {
       if (i === retries - 1) throw e;
       await page.reload();
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState("networkidle");
     }
   }
 }
 
 // Exponential backoff for flaky operations
-async function retryWithBackoff<T>(fn: () => Promise<T>, retries = 3): Promise<T> {
+async function retryWithBackoff<T>(
+  fn: () => Promise<T>,
+  retries = 3,
+): Promise<T> {
   for (let i = 0; i < retries; i++) {
     try {
       return await fn();
     } catch (e) {
       if (i === retries - 1) throw e;
-      await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
+      await new Promise((r) => setTimeout(r, 1000 * Math.pow(2, i)));
     }
   }
 }
@@ -122,12 +132,14 @@ export default defineConfig({
   workers: process.env.CI ? 8 : 4,
   fullyParallel: true,
   retries: process.env.CI ? 2 : 0,
-  
+
   // Shard tests across multiple machines
-  shard: process.env.SHARD ? {
-    current: parseInt(process.env.SHARD_INDEX),
-    total: parseInt(process.env.SHARD_TOTAL),
-  } : undefined,
+  shard: process.env.SHARD
+    ? {
+        current: parseInt(process.env.SHARD_INDEX),
+        total: parseInt(process.env.SHARD_TOTAL),
+      }
+    : undefined,
 });
 ```
 
@@ -152,7 +164,7 @@ test.beforeAll(async () => {
   context = await browser.newContext();
 });
 
-test('test 1', async () => {
+test("test 1", async () => {
   const page = await context.newPage();
   // Test logic
   await page.close();
@@ -178,17 +190,17 @@ jobs:
     strategy:
       matrix:
         shard: [1, 2, 3, 4]
-    
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
       - run: npm ci
       - run: npx playwright install --with-deps
-      
+
       - run: npx playwright test --shard=${{ matrix.shard }}/4
         env:
           CI: true
-      
+
       - uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -205,7 +217,7 @@ export class UserFactory {
       id: faker.string.uuid(),
       email: faker.internet.email(),
       name: faker.person.fullName(),
-      role: 'user',
+      role: "user",
       ...overrides,
     };
   }
@@ -217,7 +229,7 @@ export class UserFactory {
 
 // Seed test data
 test.beforeEach(async ({ page }) => {
-  await page.request.post('/api/test/seed', {
+  await page.request.post("/api/test/seed", {
     data: { users: UserFactory.createMany(10) },
   });
 });
@@ -228,10 +240,7 @@ test.beforeEach(async ({ page }) => {
 ### Training Program
 
 ```markdown
-**Week 1-2**: Framework basics, page objects, first test
-**Week 3-4**: Data-driven, API integration, CI/CD
-**Week 5-6**: Performance, error handling, scaling
-**Ongoing**: Code reviews, knowledge sharing
+**Week 1-2**: Framework basics, page objects, first test **Week 3-4**: Data-driven, API integration, CI/CD **Week 5-6**: Performance, error handling, scaling **Ongoing**: Code reviews, knowledge sharing
 ```
 
 ### Code Review Checklist
@@ -254,7 +263,8 @@ test.beforeEach(async ({ page }) => {
 const manual = { timePerRun: 30, runsPerSprint: 10 };
 const automation = { development: 120, maintenance: 5 };
 
-const timeSaved = (manual.timePerRun * manual.runsPerSprint) - automation.maintenance;
+const timeSaved =
+  manual.timePerRun * manual.runsPerSprint - automation.maintenance;
 const breakEven = Math.ceil(automation.development / timeSaved);
 const annualSavings = (timeSaved * 26 - automation.development) / 60; // hours
 
@@ -264,8 +274,7 @@ const annualSavings = (timeSaved * 26 - automation.development) / 60; // hours
 ### Selection Criteria
 
 ```markdown
-**Automate**: Repetitive, stable UI, critical paths, data-driven, positive ROI
-**Don't Automate**: Exploratory, changing UI, one-time, usability, negative ROI
+**Automate**: Repetitive, stable UI, critical paths, data-driven, positive ROI **Don't Automate**: Exploratory, changing UI, one-time, usability, negative ROI
 ```
 
 ## Reporting & Metrics

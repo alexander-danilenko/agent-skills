@@ -26,18 +26,18 @@ type ReadonlyUser = Readonly<User>;
 // { readonly id: number; readonly name: string; readonly email: string; }
 
 // Pick - Select specific properties
-type UserSummary = Pick<User, 'id' | 'name'>;
+type UserSummary = Pick<User, "id" | "name">;
 // { id: number; name: string; }
 
 // Omit - Exclude specific properties
-type UserWithoutEmail = Omit<User, 'email'>;
+type UserWithoutEmail = Omit<User, "email">;
 // { id: number; name: string; }
 
 // Record - Create object type with specific keys
-type UserRoles = Record<string, 'admin' | 'user' | 'guest'>;
+type UserRoles = Record<string, "admin" | "user" | "guest">;
 // { [key: string]: 'admin' | 'user' | 'guest' }
 
-type PageInfo = Record<'home' | 'about' | 'contact', { title: string }>;
+type PageInfo = Record<"home" | "about" | "contact", { title: string }>;
 // { home: { title: string }, about: { title: string }, contact: { title: string } }
 ```
 
@@ -45,7 +45,7 @@ type PageInfo = Record<'home' | 'about' | 'contact', { title: string }>;
 
 ```typescript
 // Extract - Extract types from union
-type AllTypes = 'a' | 'b' | 'c' | 1 | 2 | 3;
+type AllTypes = "a" | "b" | "c" | 1 | 2 | 3;
 type StringTypes = Extract<AllTypes, string>; // 'a' | 'b' | 'c'
 type NumberTypes = Extract<AllTypes, number>; // 1 | 2 | 3
 
@@ -58,7 +58,7 @@ type DefiniteString = NonNullable<MaybeString>; // string
 
 // ReturnType - Extract function return type
 function getUser() {
-  return { id: 1, name: 'John' };
+  return { id: 1, name: "John" };
 }
 
 type User = ReturnType<typeof getUser>; // { id: number; name: string }
@@ -72,7 +72,10 @@ type CreateUserParams = Parameters<typeof createUser>; // [string, number]
 
 // ConstructorParameters - Extract constructor parameters
 class Point {
-  constructor(public x: number, public y: number) {}
+  constructor(
+    public x: number,
+    public y: number,
+  ) {}
 }
 
 type PointParams = ConstructorParameters<typeof Point>; // [number, number]
@@ -85,9 +88,11 @@ type PointInstance = InstanceType<typeof Point>; // Point
 
 ```typescript
 // DeepPartial - Recursive partial
-type DeepPartial<T> = T extends object ? {
-  [K in keyof T]?: DeepPartial<T[K]>;
-} : T;
+type DeepPartial<T> = T extends object
+  ? {
+      [K in keyof T]?: DeepPartial<T[K]>;
+    }
+  : T;
 
 interface Config {
   database: {
@@ -104,9 +109,11 @@ type PartialConfig = DeepPartial<Config>;
 // All nested properties are optional
 
 // DeepReadonly - Recursive readonly
-type DeepReadonly<T> = T extends object ? {
-  readonly [K in keyof T]: DeepReadonly<T[K]>;
-} : T;
+type DeepReadonly<T> = T extends object
+  ? {
+      readonly [K in keyof T]: DeepReadonly<T[K]>;
+    }
+  : T;
 
 // Mutable - Remove readonly
 type Mutable<T> = {
@@ -187,8 +194,10 @@ interface Codes {
 type StatusCode = ValueOf<Codes>; // 200 | 404 | 500
 
 // RequireAtLeastOne - Require at least one property
-type RequireAtLeastOne<T, Keys extends keyof T = keyof T> =
-  Pick<T, Exclude<keyof T, Keys>> &
+type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<
+  T,
+  Exclude<keyof T, Keys>
+> &
   {
     [K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<Keys, K>>>;
   }[Keys];
@@ -203,11 +212,12 @@ type AtLeastOne = RequireAtLeastOne<Options>;
 // Must have at least one of id, name, or email
 
 // RequireOnlyOne - Require exactly one property
-type RequireOnlyOne<T, Keys extends keyof T = keyof T> =
-  Pick<T, Exclude<keyof T, Keys>> &
+type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<
+  T,
+  Exclude<keyof T, Keys>
+> &
   {
-    [K in Keys]-?:
-      Required<Pick<T, K>> &
+    [K in Keys]-?: Required<Pick<T, K>> &
       Partial<Record<Exclude<Keys, K>, undefined>>;
   }[Keys];
 
@@ -263,10 +273,9 @@ type Prepend<T extends any[], U> = [U, ...T];
 type WithString = Prepend<[number, boolean], string>; // [string, number, boolean]
 
 // Reverse - Reverse tuple
-type Reverse<T extends any[]> =
-  T extends [infer First, ...infer Rest]
-    ? [...Reverse<Rest>, First]
-    : [];
+type Reverse<T extends any[]> = T extends [infer First, ...infer Rest]
+  ? [...Reverse<Rest>, First]
+  : [];
 
 type Reversed = Reverse<[1, 2, 3]>; // [3, 2, 1]
 ```
@@ -275,40 +284,41 @@ type Reversed = Reverse<[1, 2, 3]>; // [3, 2, 1]
 
 ```typescript
 // Split - Split string into tuple
-type Split<S extends string, D extends string> =
-  S extends `${infer T}${D}${infer U}`
-    ? [T, ...Split<U, D>]
-    : [S];
+type Split<
+  S extends string,
+  D extends string,
+> = S extends `${infer T}${D}${infer U}` ? [T, ...Split<U, D>] : [S];
 
-type Parts = Split<'a-b-c', '-'>; // ['a', 'b', 'c']
+type Parts = Split<"a-b-c", "-">; // ['a', 'b', 'c']
 
 // Join - Join tuple into string
-type Join<T extends string[], D extends string> =
-  T extends [infer F extends string, ...infer R extends string[]]
-    ? R extends []
-      ? F
-      : `${F}${D}${Join<R, D>}`
-    : '';
+type Join<T extends string[], D extends string> = T extends [
+  infer F extends string,
+  ...infer R extends string[],
+]
+  ? R extends []
+    ? F
+    : `${F}${D}${Join<R, D>}`
+  : "";
 
-type Joined = Join<['a', 'b', 'c'], '-'>; // 'a-b-c'
+type Joined = Join<["a", "b", "c"], "-">; // 'a-b-c'
 
 // Replace - Replace substring
 type Replace<
   S extends string,
   From extends string,
-  To extends string
-> = S extends `${infer L}${From}${infer R}`
-  ? `${L}${To}${R}`
-  : S;
+  To extends string,
+> = S extends `${infer L}${From}${infer R}` ? `${L}${To}${R}` : S;
 
-type Replaced = Replace<'hello world', 'world', 'TypeScript'>;
+type Replaced = Replace<"hello world", "world", "TypeScript">;
 // 'hello TypeScript'
 
 // TrimLeft - Remove leading whitespace
-type TrimLeft<S extends string> =
-  S extends ` ${infer Rest}` ? TrimLeft<Rest> : S;
+type TrimLeft<S extends string> = S extends ` ${infer Rest}`
+  ? TrimLeft<Rest>
+  : S;
 
-type Trimmed = TrimLeft<'  hello'>; // 'hello'
+type Trimmed = TrimLeft<"  hello">; // 'hello'
 ```
 
 ## Quick Reference

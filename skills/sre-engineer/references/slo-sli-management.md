@@ -69,7 +69,7 @@ spec:
           sum(rate(http_requests_total{status=~"2..|4..", service="payment-api"}[30d]))
           /
           sum(rate(http_requests_total{service="payment-api"}[30d]))
-      target: 0.999  # 99.9%
+      target: 0.999 # 99.9%
       window: 30d
 
     - name: latency
@@ -81,7 +81,7 @@ spec:
             sum(rate(http_request_duration_seconds_bucket{service="payment-api"}[30d]))
             by (le)
           ) < 0.5
-      target: 0.99  # 99% of requests under 500ms
+      target: 0.99 # 99% of requests under 500ms
       window: 30d
 ```
 
@@ -225,14 +225,14 @@ Before finalizing SLOs:
 ```yaml
 # Typical SLO targets by service tier
 tier_1_critical:
-  availability: 99.99%  # 4m 23s downtime/month
+  availability: 99.99% # 4m 23s downtime/month
   latency_p99: 100ms
 
 tier_2_important:
-  availability: 99.9%   # 43m 28s downtime/month
+  availability: 99.9% # 43m 28s downtime/month
   latency_p99: 500ms
 
 tier_3_standard:
-  availability: 99.5%   # 3h 37m downtime/month
+  availability: 99.5% # 3h 37m downtime/month
   latency_p99: 1000ms
 ```

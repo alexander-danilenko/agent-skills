@@ -2,18 +2,18 @@
 
 ## Comprehensive Checklist
 
-| Area                | What to Find                 | Glob/Grep Patterns              |
-| ------------------- | ---------------------------- | ------------------------------- |
-| **Entry points**    | main.ts, app.ts, index.ts    | `**/main.{ts,js,py}`            |
-| **Routes**          | Controllers, route files     | `**/routes/**/*`, `@Controller` |
-| **Models**          | Entities, schemas            | `**/models/**/*`, `@Entity`     |
-| **Auth**            | Guards, middleware, JWT      | `**/auth/**/*`, `passport`      |
-| **Validation**      | DTOs, validators, pipes      | `**/dto/**/*`, `@IsString`      |
-| **Error handling**  | Exception filters, try/catch | `ExceptionFilter`, `catch`      |
-| **External calls**  | HTTP clients, SDK usage      | `fetch(`, `axios.`              |
-| **Config**          | Env files, config modules    | `**/.env*`, `ConfigService`     |
-| **Tests**           | Test files reveal behaviors  | `**/*.spec.ts`, `**/*.test.ts`  |
-| **Background jobs** | Queues, cron, workers        | `@Cron`, `Bull`, `Queue`        |
+| Area | What to Find | Glob/Grep Patterns |
+| --- | --- | --- |
+| **Entry points** | main.ts, app.ts, index.ts | `**/main.{ts,js,py}` |
+| **Routes** | Controllers, route files | `**/routes/**/*`, `@Controller` |
+| **Models** | Entities, schemas | `**/models/**/*`, `@Entity` |
+| **Auth** | Guards, middleware, JWT | `**/auth/**/*`, `passport` |
+| **Validation** | DTOs, validators, pipes | `**/dto/**/*`, `@IsString` |
+| **Error handling** | Exception filters, try/catch | `ExceptionFilter`, `catch` |
+| **External calls** | HTTP clients, SDK usage | `fetch(`, `axios.` |
+| **Config** | Env files, config modules | `**/.env*`, `ConfigService` |
+| **Tests** | Test files reveal behaviors | `**/*.spec.ts`, `**/*.test.ts` |
+| **Background jobs** | Queues, cron, workers | `@Cron`, `Bull`, `Queue` |
 
 ## Analysis Phases
 

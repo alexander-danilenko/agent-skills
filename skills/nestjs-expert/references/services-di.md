@@ -3,9 +3,14 @@
 ## Service Pattern
 
 ```typescript
-import { Injectable, Logger, NotFoundException, ConflictException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  ConflictException,
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class UsersService {
@@ -24,8 +29,8 @@ export class UsersService {
       await this.emailService.sendWelcome(saved.email);
       return saved;
     } catch (error) {
-      if (error.code === '23505') {
-        throw new ConflictException('Email already exists');
+      if (error.code === "23505") {
+        throw new ConflictException("Email already exists");
       }
       this.logger.error(`Failed to create user: ${error.message}`);
       throw error;
@@ -62,7 +67,7 @@ export class UsersService {
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [UsersController],
   providers: [UsersService],
-  exports: [UsersService],  // Make available to other modules
+  exports: [UsersService], // Make available to other modules
 })
 export class UsersModule {}
 ```

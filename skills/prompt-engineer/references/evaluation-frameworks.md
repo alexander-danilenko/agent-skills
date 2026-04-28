@@ -35,13 +35,13 @@
 
 ### Classification Tasks
 
-| Metric            | Formula                                | When to Use                  |
-| ----------------- | -------------------------------------- | ---------------------------- |
-| **Accuracy**      | (TP + TN) / Total                      | Balanced classes             |
-| **Precision**     | TP / (TP + FP)                         | Cost of false positives high |
-| **Recall**        | TP / (TP + FN)                         | Cost of false negatives high |
-| **F1 Score**      | 2 *(P* R) / (P + R)                    | Imbalanced classes           |
-| **Cohen's Kappa** | (Accuracy - Expected) / (1 - Expected) | Inter-rater agreement        |
+| Metric | Formula | When to Use |
+| --- | --- | --- |
+| **Accuracy** | (TP + TN) / Total | Balanced classes |
+| **Precision** | TP / (TP + FP) | Cost of false positives high |
+| **Recall** | TP / (TP + FN) | Cost of false negatives high |
+| **F1 Score** | 2 _(P_ R) / (P + R) | Imbalanced classes |
+| **Cohen's Kappa** | (Accuracy - Expected) / (1 - Expected) | Inter-rater agreement |
 
 ```python
 from sklearn.metrics import classification_report, confusion_matrix
@@ -70,12 +70,12 @@ def evaluate_classification(predictions: list, labels: list) -> dict:
 
 ### Generation Tasks
 
-| Metric         | Measures                           | Limitations                 |
-| -------------- | ---------------------------------- | --------------------------- |
-| **BLEU**       | N-gram overlap with reference      | Doesn't capture semantics   |
-| **ROUGE**      | Recall of reference n-grams        | Better for summarization    |
-| **BERTScore**  | Semantic similarity via embeddings | Computationally expensive   |
-| **Perplexity** | Model confidence                   | Doesn't measure correctness |
+| Metric | Measures | Limitations |
+| --- | --- | --- |
+| **BLEU** | N-gram overlap with reference | Doesn't capture semantics |
+| **ROUGE** | Recall of reference n-grams | Better for summarization |
+| **BERTScore** | Semantic similarity via embeddings | Computationally expensive |
+| **Perplexity** | Model confidence | Doesn't measure correctness |
 
 ```python
 from evaluate import load
@@ -169,7 +169,7 @@ def evaluate_extraction(
 
 ### Basic Judge Prompt
 
-```yaml
+````yaml
 You are an expert evaluator assessing the quality of AI-generated responses.
 
 Evaluate the following response on a scale of 1-5 for each criterion:
@@ -217,7 +217,7 @@ Provide your evaluation in the following JSON format:
   "overall_score": <1-5>,
   "summary": "<one sentence summary>"
 }
-```
+````
 
 ```text
 
@@ -265,7 +265,7 @@ Respond with JSON:
 }
 ```
 
-```text
+````text
 
 ### Judge Implementation
 
@@ -325,7 +325,7 @@ class LLMJudge:
             return {"winner": "B", "confidence": "high"}
         else:
             return {"winner": "tie", "confidence": "low"}
-```
+````
 
 ### Reducing Judge Bias
 
@@ -523,12 +523,12 @@ name: Prompt Evaluation
 on:
   pull_request:
     paths:
-      - 'prompts/**'
+      - "prompts/**"
   push:
     branches:
       - main
     paths:
-      - 'prompts/**'
+      - "prompts/**"
 
 jobs:
   evaluate:
@@ -539,7 +539,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install dependencies
         run: pip install -r requirements-eval.txt
@@ -618,8 +618,8 @@ thresholds:
       min_accuracy: 0.75
 
 alerts:
-  accuracy_drop: 0.05  # Alert if accuracy drops 5% from baseline
-  latency_increase: 1.5  # Alert if latency increases 50%
+  accuracy_drop: 0.05 # Alert if accuracy drops 5% from baseline
+  latency_increase: 1.5 # Alert if latency increases 50%
 ```
 
 ---
@@ -639,12 +639,15 @@ alerts:
 ## Human Evaluation Guidelines
 
 ### Task
+
 Rate AI-generated responses for customer support quality.
 
 ### Rating Scale
+
 Use a 1-5 scale for each dimension:
 
 #### Helpfulness
+
 1. Does not address the customer's issue at all
 2. Partially addresses the issue but missing key information
 3. Addresses the main issue but could be more helpful
@@ -652,6 +655,7 @@ Use a 1-5 scale for each dimension:
 5. Exceptionally helpful, anticipates follow-up needs
 
 #### Accuracy
+
 1. Contains factually incorrect information
 2. Mostly accurate but has errors
 3. Accurate but vague
@@ -659,6 +663,7 @@ Use a 1-5 scale for each dimension:
 5. Accurate with appropriate caveats/nuance
 
 #### Tone
+
 1. Inappropriate (rude, dismissive, overly casual)
 2. Somewhat inappropriate for context
 3. Neutral/acceptable
@@ -666,6 +671,7 @@ Use a 1-5 scale for each dimension:
 5. Perfectly calibrated for the situation
 
 ### Instructions
+
 1. Read the customer question carefully
 2. Read the AI response completely
 3. Rate each dimension independently
@@ -673,6 +679,7 @@ Use a 1-5 scale for each dimension:
 5. Flag any responses that should be reviewed by a supervisor
 
 ### Examples
+
 [Include 3-5 calibration examples with scores and explanations]
 ```
 

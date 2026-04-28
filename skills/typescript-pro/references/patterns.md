@@ -24,7 +24,7 @@ class UserBuilder {
 
   build(): User {
     if (!this.data.name || !this.data.email) {
-      throw new Error('Name and email are required');
+      throw new Error("Name and email are required");
     }
     return this.data as User;
   }
@@ -32,15 +32,15 @@ class UserBuilder {
 
 // Fluent API with type safety
 const user = new UserBuilder()
-  .setName('John')
-  .setEmail('john@example.com')
+  .setName("John")
+  .setEmail("john@example.com")
   .setAge(30)
   .build();
 
 // Advanced builder with compile-time validation
 type Builder<T, K extends keyof T = never> = {
   [P in keyof T as `set${Capitalize<string & P>}`]: (
-    value: T[P]
+    value: T[P],
   ) => Builder<T, K | P>;
 } & {
   build: K extends keyof T ? () => T : never;
@@ -51,17 +51,17 @@ function createBuilder<T>(): Builder<T> {
 
   return new Proxy({} as Builder<T>, {
     get(_, prop: string) {
-      if (prop === 'build') {
+      if (prop === "build") {
         return () => data;
       }
-      if (prop.startsWith('set')) {
+      if (prop.startsWith("set")) {
         const key = prop.slice(3).toLowerCase();
         return (value: any) => {
           (data as any)[key] = value;
           return this;
         };
       }
-    }
+    },
   });
 }
 ```
@@ -88,26 +88,26 @@ class FileLogger implements Logger {
   }
 }
 
-type LoggerType = 'console' | 'file';
-type LoggerConfig<T extends LoggerType> = T extends 'file'
+type LoggerType = "console" | "file";
+type LoggerConfig<T extends LoggerType> = T extends "file"
   ? { type: T; filename: string }
   : { type: T };
 
 class LoggerFactory {
   static create<T extends LoggerType>(config: LoggerConfig<T>): Logger {
     switch (config.type) {
-      case 'console':
+      case "console":
         return new ConsoleLogger();
-      case 'file':
+      case "file":
         return new FileLogger(config.filename);
       default:
-        throw new Error('Unknown logger type');
+        throw new Error("Unknown logger type");
     }
   }
 }
 
-const consoleLogger = LoggerFactory.create({ type: 'console' });
-const fileLogger = LoggerFactory.create({ type: 'file', filename: 'app.log' });
+const consoleLogger = LoggerFactory.create({ type: "console" });
+const fileLogger = LoggerFactory.create({ type: "file", filename: "app.log" });
 
 // Generic factory with dependency injection
 type Constructor<T> = new (...args: any[]) => T;
@@ -138,15 +138,15 @@ interface Entity {
 }
 
 interface Repository<T extends Entity> {
-  find(id: T['id']): Promise<T | null>;
+  find(id: T["id"]): Promise<T | null>;
   findAll(): Promise<T[]>;
-  create(data: Omit<T, 'id'>): Promise<T>;
-  update(id: T['id'], data: Partial<Omit<T, 'id'>>): Promise<T>;
-  delete(id: T['id']): Promise<void>;
+  create(data: Omit<T, "id">): Promise<T>;
+  update(id: T["id"], data: Partial<Omit<T, "id">>): Promise<T>;
+  delete(id: T["id"]): Promise<void>;
 }
 
 class UserRepository implements Repository<User> {
-  async find(id: User['id']): Promise<User | null> {
+  async find(id: User["id"]): Promise<User | null> {
     // Database query
     return null;
   }
@@ -155,17 +155,17 @@ class UserRepository implements Repository<User> {
     return [];
   }
 
-  async create(data: Omit<User, 'id'>): Promise<User> {
+  async create(data: Omit<User, "id">): Promise<User> {
     // Insert into database
     return { id: 1, ...data };
   }
 
-  async update(id: User['id'], data: Partial<Omit<User, 'id'>>): Promise<User> {
+  async update(id: User["id"], data: Partial<Omit<User, "id">>): Promise<User> {
     // Update database
-    return { id, name: '', email: '', ...data };
+    return { id, name: "", email: "", ...data };
   }
 
-  async delete(id: User['id']): Promise<void> {
+  async delete(id: User["id"]): Promise<void> {
     // Delete from database
   }
 }
@@ -175,39 +175,39 @@ class QueryBuilder<T> {
   private conditions: Array<(item: T) => boolean> = [];
 
   where<K extends keyof T>(key: K, value: T[K]): this {
-    this.conditions.push(item => item[key] === value);
+    this.conditions.push((item) => item[key] === value);
     return this;
   }
 
   execute(items: T[]): T[] {
-    return items.filter(item =>
-      this.conditions.every(condition => condition(item))
+    return items.filter((item) =>
+      this.conditions.every((condition) => condition(item)),
     );
   }
 }
 
 const query = new QueryBuilder<User>()
-  .where('email', 'john@example.com')
-  .where('age', 30);
+  .where("email", "john@example.com")
+  .where("age", 30);
 ```
 
 ## Type-Safe API Client
 
 ```typescript
 // REST API client with type safety
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 type ApiEndpoints = {
-  '/users': {
+  "/users": {
     GET: { response: User[] };
     POST: { body: CreateUserDto; response: User };
   };
-  '/users/:id': {
+  "/users/:id": {
     GET: { params: { id: string }; response: User };
     PUT: { params: { id: string }; body: UpdateUserDto; response: User };
     DELETE: { params: { id: string }; response: void };
   };
-  '/posts': {
+  "/posts": {
     GET: { query: { userId?: string }; response: Post[] };
     POST: { body: CreatePostDto; response: Post };
   };
@@ -217,23 +217,23 @@ type ExtractParams<T extends string> =
   T extends `${infer _Start}/:${infer Param}/${infer Rest}`
     ? { [K in Param]: string } & ExtractParams<`/${Rest}`>
     : T extends `${infer _Start}/:${infer Param}`
-    ? { [K in Param]: string }
-    : {};
+      ? { [K in Param]: string }
+      : {};
 
 class ApiClient {
   async request<
     Path extends keyof ApiEndpoints,
-    Method extends keyof ApiEndpoints[Path]
+    Method extends keyof ApiEndpoints[Path],
   >(
     method: Method,
     path: Path,
     options?: ApiEndpoints[Path][Method] extends { body: infer B }
       ? { body: B }
       : ApiEndpoints[Path][Method] extends { params: infer P }
-      ? { params: P }
-      : ApiEndpoints[Path][Method] extends { query: infer Q }
-      ? { query: Q }
-      : never
+        ? { params: P }
+        : ApiEndpoints[Path][Method] extends { query: infer Q }
+          ? { query: Q }
+          : never,
   ): Promise<
     ApiEndpoints[Path][Method] extends { response: infer R } ? R : never
   > {
@@ -245,10 +245,10 @@ class ApiClient {
 const client = new ApiClient();
 
 // Type-safe API calls
-const users = await client.request('GET', '/users');
-const user = await client.request('GET', '/users/:id', { params: { id: '1' } });
-const newUser = await client.request('POST', '/users', {
-  body: { name: 'John', email: 'john@example.com' }
+const users = await client.request("GET", "/users");
+const user = await client.request("GET", "/users/:id", { params: { id: "1" } });
+const newUser = await client.request("POST", "/users", {
+  body: { name: "John", email: "john@example.com" },
 });
 ```
 
@@ -256,31 +256,31 @@ const newUser = await client.request('POST', '/users', {
 
 ```typescript
 // Type-safe state machine
-type State = 'idle' | 'loading' | 'success' | 'error';
+type State = "idle" | "loading" | "success" | "error";
 
 type Event =
-  | { type: 'FETCH' }
-  | { type: 'SUCCESS'; data: any }
-  | { type: 'ERROR'; error: Error }
-  | { type: 'RETRY' };
+  | { type: "FETCH" }
+  | { type: "SUCCESS"; data: any }
+  | { type: "ERROR"; error: Error }
+  | { type: "RETRY" };
 
 type StateMachine = {
   [S in State]: {
-    [E in Event['type']]?: State;
+    [E in Event["type"]]?: State;
   };
 };
 
 const machine: StateMachine = {
-  idle: { FETCH: 'loading' },
-  loading: { SUCCESS: 'success', ERROR: 'error' },
-  success: { FETCH: 'loading' },
-  error: { RETRY: 'loading' }
+  idle: { FETCH: "loading" },
+  loading: { SUCCESS: "success", ERROR: "error" },
+  success: { FETCH: "loading" },
+  error: { RETRY: "loading" },
 };
 
 class StateManager<S extends string, E extends { type: string }> {
   constructor(
     private state: S,
-    private transitions: Record<S, Partial<Record<E['type'], S>>>
+    private transitions: Record<S, Partial<Record<E["type"], S>>>,
   ) {}
 
   getState(): S {
@@ -297,20 +297,16 @@ class StateManager<S extends string, E extends { type: string }> {
   }
 }
 
-const manager = new StateManager<State, Event>('idle', machine);
-manager.dispatch({ type: 'FETCH' }); // 'loading'
-manager.dispatch({ type: 'SUCCESS', data: {} }); // 'success'
+const manager = new StateManager<State, Event>("idle", machine);
+manager.dispatch({ type: "FETCH" }); // 'loading'
+manager.dispatch({ type: "SUCCESS", data: {} }); // 'success'
 ```
 
 ## Decorator Pattern
 
 ```typescript
 // Method decorators with type safety
-function Log(
-  target: any,
-  propertyKey: string,
-  descriptor: PropertyDescriptor
-) {
+function Log(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
   const originalMethod = descriptor.value;
 
   descriptor.value = function (...args: any[]) {
@@ -326,7 +322,7 @@ function Log(
 function Memoize(
   target: any,
   propertyKey: string,
-  descriptor: PropertyDescriptor
+  descriptor: PropertyDescriptor,
 ) {
   const originalMethod = descriptor.value;
   const cache = new Map<string, any>();
@@ -374,17 +370,17 @@ async function fetchUser(id: string): Promise<Result<User, string>> {
   try {
     const response = await fetch(`/api/users/${id}`);
     if (!response.ok) {
-      return err('User not found');
+      return err("User not found");
     }
     const user = await response.json();
     return ok(user);
   } catch (error) {
-    return err('Network error');
+    return err("Network error");
   }
 }
 
 // Usage with pattern matching
-const result = await fetchUser('123');
+const result = await fetchUser("123");
 if (result.success) {
   console.log(result.value.name); // Type-safe access
 } else {
@@ -395,7 +391,7 @@ if (result.success) {
 class Either<L, R> {
   private constructor(
     private readonly value: L | R,
-    private readonly isRight: boolean
+    private readonly isRight: boolean,
   ) {}
 
   static left<L, R>(value: L): Either<L, R> {
@@ -464,7 +460,7 @@ function singleton<T>(factory: () => T): () => T {
 
 const getConfig = singleton(() => ({
   apiUrl: process.env.API_URL,
-  apiKey: process.env.API_KEY
+  apiKey: process.env.API_KEY,
 }));
 ```
 

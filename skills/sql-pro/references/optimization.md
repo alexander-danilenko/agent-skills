@@ -376,7 +376,7 @@ ORDER BY n_dead_tup DESC;
 2. Create indexes on foreign keys and WHERE/JOIN columns
 3. Use covering indexes for frequent queries
 4. Keep statistics up to date (ANALYZE regularly)
-5. Avoid SELECT *, specify needed columns
+5. Avoid SELECT \*, specify needed columns
 6. Use EXISTS instead of IN for subqueries
 7. Filter early, aggregate late
 8. Consider partitioning for large tables (>10M rows)

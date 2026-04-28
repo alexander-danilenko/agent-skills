@@ -14,7 +14,7 @@ const posts = await Post.findAll({ include: [User] });
 
 // Or batch load
 const posts = await Post.findAll();
-const authorIds = posts.map(p => p.authorId);
+const authorIds = posts.map((p) => p.authorId);
 const authors = await User.findByIds(authorIds);
 ```
 
@@ -22,18 +22,18 @@ const authors = await User.findByIds(authorIds);
 
 ```typescript
 // Unhandled rejection - BAD
-const data = await fetch('/api/data').then(r => r.json());
+const data = await fetch("/api/data").then((r) => r.json());
 
 // Proper error handling - GOOD
 try {
-  const response = await fetch('/api/data');
+  const response = await fetch("/api/data");
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}`);
   }
   const data = await response.json();
 } catch (error) {
-  logger.error('Failed to fetch data', { error });
-  throw new DataFetchError('Could not load data');
+  logger.error("Failed to fetch data", { error });
+  throw new DataFetchError("Could not load data");
 }
 ```
 
@@ -115,17 +115,17 @@ function createConfig(overrides = {}) {
 const name = user.profile.name;
 
 // Safe access - GOOD
-const name = user?.profile?.name ?? 'Unknown';
+const name = user?.profile?.name ?? "Unknown";
 ```
 
 ## Synchronous File Operations
 
 ```typescript
 // Blocks event loop - BAD
-const data = fs.readFileSync('file.txt');
+const data = fs.readFileSync("file.txt");
 
 // Non-blocking - GOOD
-const data = await fs.promises.readFile('file.txt');
+const data = await fs.promises.readFile("file.txt");
 ```
 
 ## Quick Reference

@@ -2,10 +2,11 @@
 
 ## Full Review Report Template
 
-```markdown
+````markdown
 # Code Review: [PR Title]
 
 ## Summary
+
 [1-2 sentence overview of the changes and overall assessment]
 
 **Verdict**: [ ] Approve | [x] Request Changes | [ ] Comment
@@ -13,6 +14,7 @@
 ## Critical Issues (Must Fix)
 
 ### 1. [File:Line] Security: SQL Injection Risk
+
 - **Current**: String interpolation in query
 - **Suggested**: Use parameterized query
 - **Impact**: Potential data breach
@@ -22,9 +24,10 @@
 const query = `SELECT * FROM users WHERE id = ${id}`;
 
 // Suggested (secure)
-const query = 'SELECT * FROM users WHERE id = $1';
+const query = "SELECT * FROM users WHERE id = $1";
 db.query(query, [id]);
 ```
+````
 
 ## Major Issues (Should Fix)
 
@@ -116,3 +119,4 @@ db.query(query, [id]);
 - [ ] At least one positive comment included
 - [ ] Questions are specific and answerable
 - [ ] Verdict matches the issues found
+```

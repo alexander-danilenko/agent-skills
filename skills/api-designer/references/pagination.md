@@ -28,8 +28,8 @@ GET /users?offset=20&limit=10
 ```json
 {
   "data": [
-    {"id": 21, "name": "User 21"},
-    {"id": 22, "name": "User 22"}
+    { "id": 21, "name": "User 21" },
+    { "id": 22, "name": "User 22" }
   ],
   "pagination": {
     "offset": 20,
@@ -123,8 +123,8 @@ GET /users?cursor=eyJpZCI6MTIzfQ&limit=10
 ```json
 {
   "data": [
-    {"id": 21, "name": "User 21"},
-    {"id": 22, "name": "User 22"}
+    { "id": 21, "name": "User 21" },
+    { "id": 22, "name": "User 22" }
   ],
   "pagination": {
     "next_cursor": "eyJpZCI6MzB9",
@@ -141,7 +141,7 @@ GET /users?cursor=eyJpZCI6MTIzfQ&limit=10
 **Cursor structure (base64 encoded):**
 
 ```json
-{"id": 30, "sort": "created_at"}
+{ "id": 30, "sort": "created_at" }
 ```
 
 **Implementation:**
@@ -196,8 +196,8 @@ GET /users?after_created_at=2024-01-15T10:30:00Z&limit=10
 ```json
 {
   "data": [
-    {"id": 21, "name": "User 21", "created_at": "2024-01-15T11:00:00Z"},
-    {"id": 22, "name": "User 22", "created_at": "2024-01-15T11:30:00Z"}
+    { "id": 21, "name": "User 21", "created_at": "2024-01-15T11:00:00Z" },
+    { "id": 22, "name": "User 22", "created_at": "2024-01-15T11:30:00Z" }
   ],
   "pagination": {
     "after_id": 30,
@@ -454,7 +454,7 @@ GET /users?limit=10&include_total=true
 
 ```json
 {
-  "data": [{"id": 150, "name": "Last User"}],
+  "data": [{ "id": 150, "name": "Last User" }],
   "pagination": {
     "offset": 140,
     "limit": 10,
@@ -515,13 +515,13 @@ Response: 404 Not Found
 
 ## Comparison Matrix
 
-| Feature        | Offset                 | Page    | Cursor        | Keyset         |
-| -------------- | ---------------------- | ------- | ------------- | -------------- |
-| Performance    | Poor for large offsets | Poor    | Excellent     | Excellent      |
-| Random access  | Yes                    | Yes     | No            | No             |
-| Total count    | Yes                    | Yes     | No            | Optional       |
-| Consistency    | Poor                   | Poor    | Excellent     | Excellent      |
-| Complexity     | Simple                 | Simple  | Medium        | Medium         |
-| Real-time data | Poor                   | Poor    | Excellent     | Excellent      |
-| Database load  | High                   | High    | Low           | Low            |
-| Use case       | Small datasets         | Web UIs | Feeds/streams | Large datasets |
+| Feature | Offset | Page | Cursor | Keyset |
+| --- | --- | --- | --- | --- |
+| Performance | Poor for large offsets | Poor | Excellent | Excellent |
+| Random access | Yes | Yes | No | No |
+| Total count | Yes | Yes | No | Optional |
+| Consistency | Poor | Poor | Excellent | Excellent |
+| Complexity | Simple | Simple | Medium | Medium |
+| Real-time data | Poor | Poor | Excellent | Excellent |
+| Database load | High | High | Low | Low |
+| Use case | Small datasets | Web UIs | Feeds/streams | Large datasets |

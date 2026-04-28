@@ -462,10 +462,7 @@ Spoke VNets (Workload subscriptions)
 
 ### Migration Patterns
 
-**Rehost**: Azure Migrate for VMs
-**Replatform**: App Service, Azure SQL Database
-**Refactor**: Container Apps, AKS, Functions
-**Rebuild**: Azure-native services (Cosmos DB, Cognitive Services)
+**Rehost**: Azure Migrate for VMs **Replatform**: App Service, Azure SQL Database **Refactor**: Container Apps, AKS, Functions **Rebuild**: Azure-native services (Cosmos DB, Cognitive Services)
 
 ## Cost Optimization
 

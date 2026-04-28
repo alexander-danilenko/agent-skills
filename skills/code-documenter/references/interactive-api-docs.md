@@ -95,38 +95,38 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
 
     Unauthorized:
       description: Authentication required
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
 
 paths:
   /users:
     get:
       summary: List users
       parameters:
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/LimitParam'
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/LimitParam"
       security:
         - BearerAuth: []
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - $ref: "#/components/schemas/PaginatedResponse"
                   - type: object
                     properties:
                       data:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: "#/components/schemas/User"
 ```
 
 ## Interactive Documentation Portals
@@ -135,11 +135,11 @@ paths:
 
 ```javascript
 // Custom Swagger UI
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./openapi.json');
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./openapi.json");
 
 const options = {
-  customCss: '.swagger-ui .topbar { display: none }',
+  customCss: ".swagger-ui .topbar { display: none }",
   customSiteTitle: "API Docs",
   customfavIcon: "/favicon.ico",
   swaggerOptions: {
@@ -148,13 +148,17 @@ const options = {
     filter: true,
     tryItOutEnabled: true,
     requestInterceptor: (req) => {
-      req.headers['X-Custom-Header'] = 'value';
+      req.headers["X-Custom-Header"] = "value";
       return req;
     },
   },
 };
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, options),
+);
 ```
 
 ### Redoc (Modern Alternative)
@@ -162,16 +166,20 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options))
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <title>API Documentation</title>
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700" rel="stylesheet">
-</head>
-<body>
-  <redoc spec-url='./openapi.yaml'
-    hide-download-button
-    required-props-first
-    native-scrollbars
-    theme='{
+  <head>
+    <title>API Documentation</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <redoc
+      spec-url="./openapi.yaml"
+      hide-download-button
+      required-props-first
+      native-scrollbars
+      theme='{
       "colors": {
         "primary": {
           "main": "#4285F4"
@@ -181,18 +189,19 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options))
         "fontSize": "16px",
         "fontFamily": "Roboto, sans-serif"
       }
-    }'>
-  </redoc>
-  <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
-</body>
+    }'
+    >
+    </redoc>
+    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+  </body>
 </html>
 ```
 
 ### Stoplight Elements
 
 ```javascript
-import { API } from '@stoplight/elements';
-import '@stoplight/elements/styles.min.css';
+import { API } from "@stoplight/elements";
+import "@stoplight/elements/styles.min.css";
 
 function App() {
   return (
@@ -236,9 +245,13 @@ type User {
   User's posts (paginated)
   """
   posts(
-    """Number of items per page (max 100)"""
+    """
+    Number of items per page (max 100)
+    """
     limit: Int = 20
-    """Page offset"""
+    """
+    Page offset
+    """
     offset: Int = 0
   ): PostConnection!
 }
@@ -248,7 +261,9 @@ type Query {
   Fetch a user by ID
   """
   user(
-    """User's unique identifier"""
+    """
+    User's unique identifier
+    """
     id: ID!
   ): User
 
@@ -256,9 +271,13 @@ type Query {
   Search users by name or email
   """
   searchUsers(
-    """Search query"""
+    """
+    Search query
+    """
     query: String!
-    """Maximum results to return"""
+    """
+    Maximum results to return
+    """
     limit: Int = 10
   ): [User!]!
 }
@@ -268,7 +287,9 @@ type Mutation {
   Create a new user account
   """
   createUser(
-    """User creation input"""
+    """
+    User creation input
+    """
     input: CreateUserInput!
   ): CreateUserPayload!
 }
@@ -277,9 +298,13 @@ type Mutation {
 Input for creating a user
 """
 input CreateUserInput {
-  """User's email address"""
+  """
+  User's email address
+  """
   email: String!
-  """Display name"""
+  """
+  Display name
+  """
   name: String!
 }
 ```
@@ -287,16 +312,16 @@ input CreateUserInput {
 **GraphQL Playground:**
 
 ```javascript
-const { ApolloServer } = require('apollo-server');
+const { ApolloServer } = require("apollo-server");
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  introspection: true,  // Enable in dev
+  introspection: true, // Enable in dev
   playground: {
     settings: {
-      'editor.theme': 'dark',
-      'editor.fontSize': 14,
+      "editor.theme": "dark",
+      "editor.fontSize": 14,
     },
   },
 });
@@ -324,13 +349,13 @@ channels:
       summary: Receive messages
       message:
         oneOf:
-          - $ref: '#/components/messages/ChatMessage'
-          - $ref: '#/components/messages/UserJoined'
+          - $ref: "#/components/messages/ChatMessage"
+          - $ref: "#/components/messages/UserJoined"
 
     publish:
       summary: Send a message
       message:
-        $ref: '#/components/messages/ChatMessage'
+        $ref: "#/components/messages/ChatMessage"
 
 components:
   messages:
@@ -404,10 +429,11 @@ message User {
 
 ### Multi-Language Examples
 
-```markdown
+````markdown
 # Create User
 
 ## Python
+
 ```python
 from myapi import Client
 
@@ -418,16 +444,17 @@ user = client.users.create(
 )
 print(user.id)
 ```
+````
 
 ## TypeScript
 
 ```typescript
-import { Client } from '@myapi/sdk';
+import { Client } from "@myapi/sdk";
 
-const client = new Client({ apiKey: 'your_key' });
+const client = new Client({ apiKey: "your_key" });
 const user = await client.users.create({
-  name: 'John Doe',
-  email: 'john@example.com',
+  name: "John Doe",
+  email: "john@example.com",
 });
 console.log(user.id);
 ```
@@ -461,7 +488,7 @@ user = client.users.create(
 puts user.id
 ```
 
-```text
+````text
 
 ### SDK Reference Template
 
@@ -471,17 +498,17 @@ puts user.id
 ## Installation
 ```bash
 npm install @myapi/sdk
-```
+````
 
 ## Configuration
 
 ```typescript
-import { Client } from '@myapi/sdk';
+import { Client } from "@myapi/sdk";
 
 const client = new Client({
   apiKey: process.env.API_KEY,
-  baseUrl: 'https://api.example.com',  // Optional
-  timeout: 30000,  // Optional, default 30s
+  baseUrl: "https://api.example.com", // Optional
+  timeout: 30000, // Optional, default 30s
 });
 ```
 
@@ -508,23 +535,23 @@ Create a new user.
 
 ```typescript
 const user = await client.users.create({
-  name: 'John Doe',
-  email: 'john@example.com',
+  name: "John Doe",
+  email: "john@example.com",
 });
 ```
 
 ## Error Handling
 
 ```typescript
-import { ValidationError, ConflictError } from '@myapi/sdk';
+import { ValidationError, ConflictError } from "@myapi/sdk";
 
 try {
   await client.users.create(data);
 } catch (error) {
   if (error instanceof ValidationError) {
-    console.error('Invalid data:', error.fields);
+    console.error("Invalid data:", error.fields);
   } else if (error instanceof ConflictError) {
-    console.error('User already exists');
+    console.error("User already exists");
   }
 }
 ```
@@ -541,3 +568,4 @@ try {
 | GraphQL Playground | GraphQL   | Explorer, history   |
 | AsyncAPI Studio    | WebSocket | Visual editor       |
 | grpcui             | gRPC      | Interactive console |
+```

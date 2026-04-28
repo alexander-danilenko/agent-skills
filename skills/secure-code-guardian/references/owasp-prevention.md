@@ -23,7 +23,7 @@
 const bad = `SELECT * FROM users WHERE id = ${userId}`;
 
 // ✅ Good
-const good = await db.query('SELECT * FROM users WHERE id = $1', [userId]);
+const good = await db.query("SELECT * FROM users WHERE id = $1", [userId]);
 
 // ✅ Good - Use ORM
 const user = await prisma.user.findUnique({ where: { id: userId } });
@@ -49,26 +49,28 @@ if (failedAttempts >= 5) {
 }
 
 // Use secure session configuration
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  cookie: {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'strict',
-    maxAge: 15 * 60 * 1000, // 15 minutes
-  },
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    cookie: {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000, // 15 minutes
+    },
+  }),
+);
 ```
 
 ## A03: Sensitive Data Exposure
 
 ```typescript
 // Encrypt sensitive data at rest
-import crypto from 'crypto';
+import crypto from "crypto";
 
 function encrypt(text: string, key: Buffer): string {
   const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+  const cipher = crypto.createCipheriv("aes-256-gcm", key, iv);
   // ... encryption logic
 }
 
@@ -90,7 +92,7 @@ async function getResource(userId: string, resourceId: string) {
 
   // Verify ownership
   if (resource.ownerId !== userId) {
-    throw new ForbiddenError('Access denied');
+    throw new ForbiddenError("Access denied");
   }
 
   return resource;
@@ -100,7 +102,7 @@ async function getResource(userId: string, resourceId: string) {
 function requireRole(...roles: string[]) {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!roles.includes(req.user.role)) {
-      return res.status(403).json({ error: 'Forbidden' });
+      return res.status(403).json({ error: "Forbidden" });
     }
     next();
   };
@@ -111,16 +113,18 @@ function requireRole(...roles: string[]) {
 
 ```typescript
 // Use Content Security Policy
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc: ["'self'"],
-    styleSrc: ["'self'", "'unsafe-inline'"],
-  },
-}));
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+    },
+  }),
+);
 
 // Sanitize user input for HTML
-import DOMPurify from 'dompurify';
+import DOMPurify from "dompurify";
 const clean = DOMPurify.sanitize(userInput);
 ```
 

@@ -3,7 +3,7 @@
 ## Password Hashing
 
 ```typescript
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 
 const SALT_ROUNDS = 12;
 
@@ -11,21 +11,28 @@ async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, SALT_ROUNDS);
 }
 
-async function verifyPassword(password: string, hash: string): Promise<boolean> {
+async function verifyPassword(
+  password: string,
+  hash: string,
+): Promise<boolean> {
   return bcrypt.compare(password, hash);
 }
 
 // Password requirements
-const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
+const PASSWORD_REGEX =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
 
-function validatePassword(password: string): { valid: boolean; errors: string[] } {
+function validatePassword(password: string): {
+  valid: boolean;
+  errors: string[];
+} {
   const errors: string[] = [];
 
-  if (password.length < 12) errors.push('Minimum 12 characters');
-  if (!/[a-z]/.test(password)) errors.push('Requires lowercase');
-  if (!/[A-Z]/.test(password)) errors.push('Requires uppercase');
-  if (!/\d/.test(password)) errors.push('Requires digit');
-  if (!/[@$!%*?&]/.test(password)) errors.push('Requires special character');
+  if (password.length < 12) errors.push("Minimum 12 characters");
+  if (!/[a-z]/.test(password)) errors.push("Requires lowercase");
+  if (!/[A-Z]/.test(password)) errors.push("Requires uppercase");
+  if (!/\d/.test(password)) errors.push("Requires digit");
+  if (!/[@$!%*?&]/.test(password)) errors.push("Requires special character");
 
   return { valid: errors.length === 0, errors };
 }
@@ -34,31 +41,27 @@ function validatePassword(password: string): { valid: boolean; errors: string[] 
 ## JWT Implementation
 
 ```typescript
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
-const ACCESS_TOKEN_EXPIRY = '15m';
-const REFRESH_TOKEN_EXPIRY = '7d';
+const ACCESS_TOKEN_EXPIRY = "15m";
+const REFRESH_TOKEN_EXPIRY = "7d";
 
 interface TokenPayload {
   sub: string;
-  type: 'access' | 'refresh';
+  type: "access" | "refresh";
 }
 
 function generateAccessToken(userId: string): string {
-  return jwt.sign(
-    { sub: userId, type: 'access' },
-    JWT_SECRET,
-    { expiresIn: ACCESS_TOKEN_EXPIRY }
-  );
+  return jwt.sign({ sub: userId, type: "access" }, JWT_SECRET, {
+    expiresIn: ACCESS_TOKEN_EXPIRY,
+  });
 }
 
 function generateRefreshToken(userId: string): string {
-  return jwt.sign(
-    { sub: userId, type: 'refresh' },
-    JWT_SECRET,
-    { expiresIn: REFRESH_TOKEN_EXPIRY }
-  );
+  return jwt.sign({ sub: userId, type: "refresh" }, JWT_SECRET, {
+    expiresIn: REFRESH_TOKEN_EXPIRY,
+  });
 }
 
 function verifyToken(token: string): TokenPayload {
@@ -72,25 +75,25 @@ function verifyToken(token: string): TokenPayload {
 function authMiddleware(req: Request, res: Response, next: NextFunction) {
   const header = req.headers.authorization;
 
-  if (!header?.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Missing token' });
+  if (!header?.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Missing token" });
   }
 
   try {
     const token = header.slice(7);
     const payload = verifyToken(token);
 
-    if (payload.type !== 'access') {
-      return res.status(401).json({ error: 'Invalid token type' });
+    if (payload.type !== "access") {
+      return res.status(401).json({ error: "Invalid token type" });
     }
 
     req.userId = payload.sub;
     next();
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
-      return res.status(401).json({ error: 'Token expired' });
+      return res.status(401).json({ error: "Token expired" });
     }
-    return res.status(401).json({ error: 'Invalid token' });
+    return res.status(401).json({ error: "Invalid token" });
   }
 }
 ```
@@ -113,8 +116,8 @@ async function handleLoginAttempt(email: string, success: boolean) {
   await redis.expire(key, LOCKOUT_DURATION / 1000);
 
   if (attempts >= MAX_ATTEMPTS) {
-    await redis.set(`login:locked:${email}`, '1', 'PX', LOCKOUT_DURATION);
-    throw new Error('Account locked. Try again later.');
+    await redis.set(`login:locked:${email}`, "1", "PX", LOCKOUT_DURATION);
+    throw new Error("Account locked. Try again later.");
   }
 }
 ```

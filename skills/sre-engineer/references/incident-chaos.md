@@ -79,7 +79,7 @@ incident_response:
     - "Create incident doc from template"
     - "Assess severity (SEV1-4)"
 
-  sev1_response:  # Critical - all hands
+  sev1_response: # Critical - all hands
     - "Page on-call lead + backup"
     - "Notify VP Engineering immediately"
     - "Start Zoom war room"
@@ -87,7 +87,7 @@ incident_response:
     - "Assign communication lead"
     - "Post status update every 15 minutes"
 
-  sev2_response:  # High - team response
+  sev2_response: # High - team response
     - "Page on-call engineer"
     - "Notify team lead"
     - "Create incident channel"
@@ -125,10 +125,7 @@ incident_response:
 ```markdown
 # Postmortem: [Incident Title]
 
-**Date:** 2024-01-15
-**Authors:** [Names]
-**Status:** Complete
-**Severity:** SEV2
+**Date:** 2024-01-15 **Authors:** [Names] **Status:** Complete **Severity:** SEV2
 
 ## Summary
 
@@ -143,24 +140,22 @@ One-paragraph summary of what happened, impact, and resolution.
 
 ## Timeline (all times UTC)
 
-| Time  | Event |
-|-------|-------|
+| Time  | Event                                          |
+| ----- | ---------------------------------------------- |
 | 14:30 | Deployment of payment-service v2.3.0 completed |
-| 14:32 | Error rate begins increasing |
-| 14:35 | Alert fires: HighErrorRate |
-| 14:36 | On-call engineer acknowledges |
-| 14:40 | Incident declared SEV2 |
-| 14:45 | Root cause identified: connection leak |
-| 14:50 | Rollback initiated |
-| 14:55 | Rollback completed |
-| 15:00 | Error rate returns to normal |
-| 15:10 | Incident resolved, monitoring continued |
+| 14:32 | Error rate begins increasing                   |
+| 14:35 | Alert fires: HighErrorRate                     |
+| 14:36 | On-call engineer acknowledges                  |
+| 14:40 | Incident declared SEV2                         |
+| 14:45 | Root cause identified: connection leak         |
+| 14:50 | Rollback initiated                             |
+| 14:55 | Rollback completed                             |
+| 15:00 | Error rate returns to normal                   |
+| 15:10 | Incident resolved, monitoring continued        |
 
 ## Root Cause
 
-The payment-service v2.3.0 deployment introduced a connection leak in the
-database connection pool. The new retry logic was not properly closing
-connections on timeout, causing the pool to exhaust after ~20 minutes.
+The payment-service v2.3.0 deployment introduced a connection leak in the database connection pool. The new retry logic was not properly closing connections on timeout, causing the pool to exhaust after ~20 minutes.
 
 ## Resolution
 
@@ -169,17 +164,19 @@ Rolled back to payment-service v2.2.1, which immediately resolved the issue.
 ## Detection
 
 **What went well:**
+
 - Alert fired within 5 minutes of issue start
 - Clear runbook helped quick diagnosis
 
 **What could be improved:**
+
 - Could have caught in staging with longer load test
 - Database connection pool metrics not monitored
 
 ## Action Items
 
 | Action | Owner | Priority | Due Date |
-|--------|-------|----------|----------|
+| --- | --- | --- | --- |
 | Add connection pool monitoring | @alice | P0 | 2024-01-20 |
 | Extend staging load tests to 30min | @bob | P1 | 2024-01-25 |
 | Review all resource cleanup in retry logic | @charlie | P1 | 2024-01-30 |
@@ -188,15 +185,18 @@ Rolled back to payment-service v2.2.1, which immediately resolved the issue.
 ## Lessons Learned
 
 **What went well:**
+
 - Quick detection and response
 - Effective team communication
 - Clear rollback procedure
 
 **What didn't go well:**
+
 - Issue not caught in pre-production testing
 - No monitoring for connection pool exhaustion
 
 **Where we got lucky:**
+
 - Issue occurred during low-traffic period
 - Only affected payment service, not critical systems
 ```

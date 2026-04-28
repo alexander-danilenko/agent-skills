@@ -13,13 +13,13 @@ function useApi<T>(url: string) {
     const controller = new AbortController();
 
     fetch(url, { signal: controller.signal })
-      .then(res => {
+      .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
       })
       .then(setData)
-      .catch(err => {
-        if (err.name !== 'AbortError') setError(err);
+      .catch((err) => {
+        if (err.name !== "AbortError") setError(err);
       })
       .finally(() => setLoading(false));
 
@@ -46,7 +46,7 @@ function useDebounce<T>(value: T, delay: number): T {
 
 // Usage
 function Search() {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const debouncedQuery = useDebounce(query, 300);
 
   useEffect(() => {
@@ -60,7 +60,7 @@ function Search() {
 ```tsx
 function useLocalStorage<T>(key: string, initialValue: T) {
   const [value, setValue] = useState<T>(() => {
-    if (typeof window === 'undefined') return initialValue;
+    if (typeof window === "undefined") return initialValue;
     const stored = localStorage.getItem(key);
     return stored ? JSON.parse(stored) : initialValue;
   });
@@ -77,16 +77,16 @@ function useLocalStorage<T>(key: string, initialValue: T) {
 
 ```tsx
 function useMediaQuery(query: string): boolean {
-  const [matches, setMatches] = useState(() =>
-    typeof window !== 'undefined' && window.matchMedia(query).matches
+  const [matches, setMatches] = useState(
+    () => typeof window !== "undefined" && window.matchMedia(query).matches,
   );
 
   useEffect(() => {
     const media = window.matchMedia(query);
     const listener = (e: MediaQueryListEvent) => setMatches(e.matches);
 
-    media.addEventListener('change', listener);
-    return () => media.removeEventListener('change', listener);
+    media.addEventListener("change", listener);
+    return () => media.removeEventListener("change", listener);
   }, [query]);
 
   return matches;
@@ -94,7 +94,7 @@ function useMediaQuery(query: string): boolean {
 
 // Usage
 function Layout() {
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isMobile = useMediaQuery("(max-width: 768px)");
   return isMobile ? <MobileNav /> : <DesktopNav />;
 }
 ```
@@ -108,9 +108,9 @@ const handleClick = useCallback((id: string) => {
 }, []); // Empty deps = stable reference
 
 // useMemo: Memoize expensive calculations
-const sortedItems = useMemo(() =>
-  [...items].sort((a, b) => a.name.localeCompare(b.name)),
-  [items]
+const sortedItems = useMemo(
+  () => [...items].sort((a, b) => a.name.localeCompare(b.name)),
+  [items],
 );
 
 // When to use:
@@ -138,7 +138,9 @@ useEffect(() => {
   }
 
   fetchData();
-  return () => { cancelled = true };
+  return () => {
+    cancelled = true;
+  };
 }, []);
 ```
 

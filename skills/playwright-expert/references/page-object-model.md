@@ -4,7 +4,7 @@
 
 ```typescript
 // pages/LoginPage.ts
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 export class LoginPage {
   readonly page: Page;
@@ -15,14 +15,14 @@ export class LoginPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.emailInput = page.getByLabel('Email');
-    this.passwordInput = page.getByLabel('Password');
-    this.submitButton = page.getByRole('button', { name: 'Log in' });
-    this.errorMessage = page.getByRole('alert');
+    this.emailInput = page.getByLabel("Email");
+    this.passwordInput = page.getByLabel("Password");
+    this.submitButton = page.getByRole("button", { name: "Log in" });
+    this.errorMessage = page.getByRole("alert");
   }
 
   async goto() {
-    await this.page.goto('/login');
+    await this.page.goto("/login");
   }
 
   async login(email: string, password: string) {
@@ -41,23 +41,23 @@ export class LoginPage {
 
 ```typescript
 // tests/login.spec.ts
-import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
+import { test, expect } from "@playwright/test";
+import { LoginPage } from "../pages/LoginPage";
 
-test('successful login redirects to dashboard', async ({ page }) => {
+test("successful login redirects to dashboard", async ({ page }) => {
   const loginPage = new LoginPage(page);
 
   await loginPage.goto();
-  await loginPage.login('user@test.com', 'password123');
+  await loginPage.login("user@test.com", "password123");
 
   await expect(page).toHaveURL(/dashboard/);
 });
 
-test('invalid credentials show error', async ({ page }) => {
+test("invalid credentials show error", async ({ page }) => {
   const loginPage = new LoginPage(page);
 
   await loginPage.goto();
-  await loginPage.login('user@test.com', 'wrongpassword');
+  await loginPage.login("user@test.com", "wrongpassword");
 
   await expect(loginPage.errorMessage).toBeVisible();
 });
@@ -67,9 +67,9 @@ test('invalid credentials show error', async ({ page }) => {
 
 ```typescript
 // fixtures.ts
-import { test as base } from '@playwright/test';
-import { LoginPage } from './pages/LoginPage';
-import { DashboardPage } from './pages/DashboardPage';
+import { test as base } from "@playwright/test";
+import { LoginPage } from "./pages/LoginPage";
+import { DashboardPage } from "./pages/DashboardPage";
 
 type Fixtures = {
   loginPage: LoginPage;
@@ -89,22 +89,22 @@ export const test = base.extend<Fixtures>({
   authenticatedPage: async ({ page }, use) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
-    await loginPage.login('user@test.com', 'password123');
+    await loginPage.login("user@test.com", "password123");
     await page.waitForURL(/dashboard/);
     await use(page);
   },
 });
 
-export { expect } from '@playwright/test';
+export { expect } from "@playwright/test";
 ```
 
 ## Using Fixtures
 
 ```typescript
 // tests/dashboard.spec.ts
-import { test, expect } from '../fixtures';
+import { test, expect } from "../fixtures";
 
-test('shows user profile', async ({ authenticatedPage, dashboardPage }) => {
+test("shows user profile", async ({ authenticatedPage, dashboardPage }) => {
   await expect(dashboardPage.userProfile).toBeVisible();
 });
 ```
@@ -116,9 +116,10 @@ test('shows user profile', async ({ authenticatedPage, dashboardPage }) => {
 export class NavBar {
   constructor(private page: Page) {}
 
-  readonly homeLink = () => this.page.getByRole('link', { name: 'Home' });
-  readonly profileLink = () => this.page.getByRole('link', { name: 'Profile' });
-  readonly logoutButton = () => this.page.getByRole('button', { name: 'Logout' });
+  readonly homeLink = () => this.page.getByRole("link", { name: "Home" });
+  readonly profileLink = () => this.page.getByRole("link", { name: "Profile" });
+  readonly logoutButton = () =>
+    this.page.getByRole("button", { name: "Logout" });
 
   async logout() {
     await this.logoutButton().click();

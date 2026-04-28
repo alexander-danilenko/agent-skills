@@ -8,34 +8,27 @@
 ## Requirements
 
 ### Functional
+
 - [What the system must do]
 - [Core features and capabilities]
 
 ### Non-Functional
+
 - **Performance**: Response time < 200ms p95
 - **Availability**: 99.9% uptime (8.76 hours downtime/year)
 - **Scalability**: Support 10,000 concurrent users
 - **Security**: PCI DSS compliance required
 
 ### Constraints
+
 - Budget: $X/month for infrastructure
 - Timeline: MVP in 3 months
 - Team: 5 backend, 3 frontend engineers
 
 ## High-Level Architecture
-
 ```
 
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│   Client    │────▶│  API Gateway │────▶│  Service    │
-│   (Web)     │     │   (Kong)    │     │  (Node.js)  │
-└─────────────┘     └─────────────┘     └─────────────┘
-                           │                   │
-                           ▼                   ▼
-                    ┌─────────────┐     ┌─────────────┐
-                    │    Auth     │     │  Database   │
-                    │  (Auth0)    │     │ (PostgreSQL)│
-                    └─────────────┘     └─────────────┘
+┌─────────────┐ ┌─────────────┐ ┌─────────────┐ │ Client │────▶│ API Gateway │────▶│ Service │ │ (Web) │ │ (Kong) │ │ (Node.js) │ └─────────────┘ └─────────────┘ └─────────────┘ │ │ ▼ ▼ ┌─────────────┐ ┌─────────────┐ │ Auth │ │ Database │ │ (Auth0) │ │ (PostgreSQL)│ └─────────────┘ └─────────────┘
 
 ```yaml
 

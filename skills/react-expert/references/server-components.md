@@ -10,14 +10,16 @@ async function ProductList() {
   const products = await db.products.findMany();
   return (
     <ul>
-      {products.map(p => <ProductCard key={p.id} product={p} />)}
+      {products.map((p) => (
+        <ProductCard key={p.id} product={p} />
+      ))}
     </ul>
   );
 }
 
 // Client Component (explicit)
-'use client';
-import { useState } from 'react';
+("use client");
+import { useState } from "react";
 
 function AddToCartButton({ productId }: { productId: string }) {
   const [loading, setLoading] = useState(false);
@@ -35,9 +37,9 @@ function AddToCartButton({ productId }: { productId: string }) {
 // app/products/page.tsx
 export default async function ProductsPage() {
   // Runs on server only - no client bundle impact
-  const products = await fetch('https://api.example.com/products', {
-    next: { revalidate: 3600 } // Cache for 1 hour
-  }).then(res => res.json());
+  const products = await fetch("https://api.example.com/products", {
+    next: { revalidate: 3600 }, // Cache for 1 hour
+  }).then((res) => res.json());
 
   return <ProductGrid products={products} />;
 }
@@ -63,7 +65,7 @@ async function Dashboard() {
 ## Streaming with Suspense
 
 ```tsx
-import { Suspense } from 'react';
+import { Suspense } from "react";
 
 async function SlowComponent() {
   const data = await slowFetch(); // 3 second API call
@@ -106,16 +108,16 @@ async function ProductPage({ id }: { id: string }) {
 
 ```tsx
 // actions.ts
-'use server';
+"use server";
 
 export async function createPost(formData: FormData) {
-  const title = formData.get('title') as string;
+  const title = formData.get("title") as string;
   await db.posts.create({ data: { title } });
-  revalidatePath('/posts');
+  revalidatePath("/posts");
 }
 
 // page.tsx (Server Component)
-import { createPost } from './actions';
+import { createPost } from "./actions";
 
 export default function NewPost() {
   return (

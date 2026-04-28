@@ -40,7 +40,7 @@ ENTRYPOINT ["dotnet", "WebApi.dll"]
 ## Docker Compose for Development
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   api:
@@ -51,8 +51,8 @@ services:
       - "8080:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=${DB_CONNECTION_STRING}  # load from .env or secret manager
-      - JwtSettings__Secret=${JWT_SECRET}  # load from .env or secret manager; NEVER hardcode
+      - ConnectionStrings__DefaultConnection=${DB_CONNECTION_STRING} # load from .env or secret manager
+      - JwtSettings__Secret=${JWT_SECRET} # load from .env or secret manager; NEVER hardcode
     depends_on:
       - db
       - redis
@@ -63,7 +63,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=${SA_PASSWORD}  # load from .env or secret manager; NEVER hardcode
+      - SA_PASSWORD=${SA_PASSWORD} # load from .env or secret manager; NEVER hardcode
     ports:
       - "1433:1433"
     volumes:
@@ -369,43 +369,43 @@ spec:
         app: myapp-api
     spec:
       containers:
-      - name: api
-        image: myapp/api:latest
-        ports:
-        - containerPort: 8080
-          name: http
-        env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: "Production"
-        - name: ConnectionStrings__DefaultConnection
-          valueFrom:
-            secretKeyRef:
-              name: myapp-secrets
-              key: database-connection
-        - name: JwtSettings__Secret
-          valueFrom:
-            secretKeyRef:
-              name: myapp-secrets
-              key: jwt-secret
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
-        livenessProbe:
-          httpGet:
-            path: /health/live
-            port: 8080
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /health/ready
-            port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 5
+        - name: api
+          image: myapp/api:latest
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"
+            - name: ConnectionStrings__DefaultConnection
+              valueFrom:
+                secretKeyRef:
+                  name: myapp-secrets
+                  key: database-connection
+            - name: JwtSettings__Secret
+              valueFrom:
+                secretKeyRef:
+                  name: myapp-secrets
+                  key: jwt-secret
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
 
 ---
 apiVersion: v1
@@ -416,9 +416,9 @@ spec:
   selector:
     app: myapp-api
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 8080
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
   type: LoadBalancer
 
 ---
@@ -434,18 +434,18 @@ spec:
   minReplicas: 2
   maxReplicas: 10
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 70
-  - type: Resource
-    resource:
-      name: memory
-      target:
-        type: Utilization
-        averageUtilization: 80
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
 ```
 
 ## Distributed Caching with Redis

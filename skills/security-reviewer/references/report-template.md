@@ -2,51 +2,53 @@
 
 ## Full Report Template
 
-```markdown
+````markdown
 # Security Review Report
 
 ## Executive Summary
 
-| Field | Value |
-|-------|-------|
-| **Application** | [Application Name] |
-| **Review Date** | [YYYY-MM-DD] |
-| **Reviewer** | [Name] |
-| **Scope** | [Files/modules reviewed] |
+| Field                  | Value                      |
+| ---------------------- | -------------------------- |
+| **Application**        | [Application Name]         |
+| **Review Date**        | [YYYY-MM-DD]               |
+| **Reviewer**           | [Name]                     |
+| **Scope**              | [Files/modules reviewed]   |
 | **Overall Risk Level** | [Critical/High/Medium/Low] |
 
 ### Key Findings
+
 - X Critical vulnerabilities requiring immediate attention
 - Y High-severity issues to address before deployment
 - Z Medium/Low issues for future consideration
 
 ## Findings Summary
 
-| Severity | Count | Status |
-|----------|-------|--------|
-| Critical | X | Requires immediate fix |
-| High | X | Fix before deployment |
-| Medium | X | Fix in next sprint |
-| Low | X | Backlog |
+| Severity | Count | Status                 |
+| -------- | ----- | ---------------------- |
+| Critical | X     | Requires immediate fix |
+| High     | X     | Fix before deployment  |
+| Medium   | X     | Fix in next sprint     |
+| Low      | X     | Backlog                |
 
 ## Detailed Findings
 
 ### [CRITICAL] SQL Injection in User Search
 
-| Field | Value |
-|-------|-------|
-| **ID** | SEC-001 |
+| Field        | Value                 |
+| ------------ | --------------------- |
+| **ID**       | SEC-001               |
 | **Location** | `src/api/users.ts:45` |
-| **CWE** | CWE-89 |
-| **CVSS** | 9.8 (Critical) |
+| **CWE**      | CWE-89                |
+| **CVSS**     | 9.8 (Critical)        |
 
-**Description**
-User input directly concatenated into SQL query without sanitization.
+**Description** User input directly concatenated into SQL query without sanitization.
 
 **Vulnerable Code**
+
 ```typescript
 const query = `SELECT * FROM users WHERE name LIKE '%${searchTerm}%'`;
 ```
+````
 
 ### Proof of Concept
 
@@ -61,16 +63,14 @@ GET /api/users?search=' OR '1'='1
 - Data modification/deletion
 - Potential RCE via SQL features
 
-**Remediation**
-Use parameterized queries:
+**Remediation** Use parameterized queries:
 
 ```typescript
-const query = 'SELECT * FROM users WHERE name LIKE $1';
+const query = "SELECT * FROM users WHERE name LIKE $1";
 db.query(query, [`%${searchTerm}%`]);
 ```
 
-**Effort**: 1 hour
-**Priority**: Immediate
+**Effort**: 1 hour **Priority**: Immediate
 
 ---
 
@@ -83,8 +83,7 @@ db.query(query, [`%${searchTerm}%`]);
 | **CWE**      | CWE-521                     |
 | **CVSS**     | 7.5 (High)                  |
 
-**Description**
-Password policy requires only 6 characters with no complexity requirements.
+**Description** Password policy requires only 6 characters with no complexity requirements.
 
 #### Current Policy
 
@@ -97,8 +96,7 @@ const isValid = password.length >= 6;
 - Susceptible to brute force attacks
 - Dictionary attack vulnerability
 
-**Remediation**
-Implement stronger requirements:
+**Remediation** Implement stronger requirements:
 
 ```typescript
 const isValid =
@@ -109,8 +107,7 @@ const isValid =
   /[^A-Za-z0-9]/.test(password);
 ```
 
-**Effort**: 30 minutes
-**Priority**: Before deployment
+**Effort**: 30 minutes **Priority**: Before deployment
 
 ## Automated Scan Results
 
@@ -182,3 +179,4 @@ const isValid =
 | Detailed Findings | Technical details        |
 | Scan Results      | Automated tool output    |
 | Recommendations   | Prioritized action items |
+```
