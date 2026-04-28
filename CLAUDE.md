@@ -70,18 +70,11 @@ Every review — code review, audit, PR, self-check — must verify version bump
 4. **Over-bumped**: flag with a suggested downgrade; don't silently edit (may be intentional).
 5. **Asymmetric** (skill bumped but not plugin, or vice versa): fix the missing side and note it.
 
-## Markdown Validation
+## Markdown Formatting
 
-A markdown-touching task is not complete until `markdownlint-cli2` reports zero errors on every changed file:
+Run `./lint.sh` until it exits clean before completing any markdown task — see the script header for usage. Configs: `.prettierrc`, `.prettierignore`, `.markdownlint.json`.
 
-```bash
-npx -y markdownlint-cli2 path/to/file.md
-npx -y markdownlint-cli2 "skills/**/*.md"
-```
-
-Active rules and disables live in `.markdownlint.json` — read the config for current state. Add a disable only when the rule is genuinely wrong for this codebase, with a comment explaining why. Do not leave lint errors unresolved.
-
-Common pitfalls: nested triple-backtick fences (use 4+ backticks on the outer fence), missing language on fenced blocks, inconsistent list markers, trailing whitespace.
+Add a markdownlint disable only when the rule is genuinely wrong for this codebase, with a comment explaining why.
 
 ## Conventions
 
