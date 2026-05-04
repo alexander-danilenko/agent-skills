@@ -16,13 +16,12 @@ skills/<skill-name>/
 
 ## Skill Authoring — `/skill-creator` Required
 
-Creating, editing, condensing, or auditing any `SKILL.md` or its `references/` **requires the `/skill-creator` plugin** ([anthropics/skills](https://github.com/anthropics/skills/tree/main/skills/skill-creator)). It is the single source of truth for frontmatter fields, body-section order, progressive-disclosure conventions, reference-file layout, and token efficiency — this repo intentionally does not duplicate those rules.
+Creating, editing, condensing, or auditing any `SKILL.md` or its `references/` **requires the [`skill-creator` plugin](https://claude.com/plugins/skill-creator)**. It is the single source of truth for frontmatter fields, body-section order, progressive-disclosure conventions, reference-file layout, and token efficiency — this repo intentionally does not duplicate those rules.
 
 Install it once:
 
 ```bash
-claude plugin marketplace add anthropics/skills
-claude plugin install skill-creator@anthropics
+claude plugin install skill-creator@claude-plugins-official
 ```
 
 Then invoke `/skill-creator:skill-creator` for any skill-authoring task.
