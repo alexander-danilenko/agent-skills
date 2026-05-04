@@ -28,13 +28,13 @@ Skills become available as `/<skill-name>`, e.g. `/api-designer`.
 Install all skills:
 
 ```bash
-npx skills add alexander-danilenko/cortex-ai-skills --skill '*' --agent claude-code --global --copy
+npx skills add alexander-danilenko/cortex-ai-skills --skill '*' --agent claude-code
 ```
 
 Install a single skill:
 
 ```bash
-npx skills add alexander-danilenko/cortex-ai-skills --skill agents-md-pro
+npx skills add alexander-danilenko/cortex-ai-skills --skill python --agent claude-code
 ```
 
 To view the list of available skills, run:
@@ -44,19 +44,28 @@ npx skills add alexander-danilenko/cortex-ai-skills --list
 ```
 
 <details>
-<summary>Recommended skills from other repos</summary>
+<summary>Recommended Claude Code plugins</summary>
 
-- [anthropics/skills](https://github.com/anthropics/skills) — official Anthropic skills
-
-  ```bash
-  npx skills add anthropics/skills --skill skill-creator --agent claude-code --global --copy
-  ```
-
-- [obra/superpowers](https://github.com/obra/superpowers) — enhanced Claude Code workflows
+- [Official Claude Code plugins](https://claude.com/plugins):
 
   ```bash
-  claude plugin install superpowers@claude-plugins-official
+  CLAUDE_PLUGINS=(
+    "claude-code-setup"
+    "claude-md-management"
+    "code-review"
+    "code-simplifier"
+    "context7"
+    "feature-dev"
+    "skill-creator"
+    "csharp-lsp"
+    "rust-analyzer-lsp"
+    "typescript-lsp"
+  ) && for plugin in "${CLAUDE_PLUGINS[@]}"; do claude plugin install "${plugin}@claude-plugins-official"; done
   ```
+
+- [EveryInc/compound-engineering-plugin](https://github.com/EveryInc/compound-engineering-plugin)
+
+- [obra/superpowers](https://github.com/obra/superpowers)
 
 </details>
 
