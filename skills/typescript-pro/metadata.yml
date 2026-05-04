@@ -2,11 +2,9 @@
 authors:
   - https://github.com/Jeffallan
 license: MIT
-version: "1.0.0"
+version: "1.0.1"
 domain: language
 triggers: TypeScript, generics, type safety, conditional types, mapped types, tRPC, tsconfig, type guards, discriminated unions
 role: specialist
 scope: implementation
 output-format: code
-related-skills:
-  - api-designer

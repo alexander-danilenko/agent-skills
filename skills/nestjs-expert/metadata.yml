@@ -2,7 +2,7 @@
 authors:
   - https://github.com/Jeffallan
 license: MIT
-version: "1.0.0"
+version: "1.0.1"
 domain: backend
 triggers: NestJS, Nest, Node.js backend, TypeScript backend, dependency injection, controller, service, module, guard, interceptor
 role: specialist
@@ -10,4 +10,3 @@ scope: implementation
 output-format: code
 related-skills:
   - test-master
-  - devops-engineer

@@ -2,12 +2,11 @@
 authors:
   - https://github.com/Jeffallan
 license: MIT
-version: "1.0.0"
+version: "1.0.1"
 domain: backend
 triggers: .NET Core, .NET 8, ASP.NET Core, C# 12, minimal API, Entity Framework Core, microservices .NET, CQRS, MediatR
 role: specialist
 scope: implementation
 output-format: code
 related-skills:
-  - cloud-architect
   - test-master
