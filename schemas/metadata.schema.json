@@ -119,20 +119,20 @@
       "items": {
         "type": "string",
         "enum": [
-          "code-documenter",
-          "csharp-developer",
-          "dotnet-core-expert",
-          "humanizer",
-          "javascript-pro",
+          "csharp",
+          "documentation",
+          "dotnet-core",
+          "humanize-text",
+          "javascript",
           "jira-report-comment",
-          "legacy-modernizer",
-          "nestjs-expert",
-          "nextjs-developer",
-          "python-pro",
-          "react-expert",
-          "spec-miner",
-          "test-master",
-          "typescript-pro"
+          "legacy-modernization",
+          "nestjs",
+          "nextjs",
+          "python",
+          "react",
+          "spec-mining",
+          "testing",
+          "typescript"
         ]
       }
     }

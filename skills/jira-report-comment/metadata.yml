@@ -2,11 +2,11 @@
 authors:
   - https://github.com/alexander-danilenko
 license: MIT
-version: "2.0.0"
+version: "2.0.1"
 domain: workflow
 triggers: jira report, post update to jira, summarize commits, update ticket, implementation report, jira comment
 role: specialist
 scope: documentation
 output-format: report
 related-skills:
-  - humanizer
+  - humanize-text

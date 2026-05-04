@@ -122,7 +122,7 @@ Analyze the diffs with a **business lens**. Map every code change to a user-faci
 - Write for a PM, QA engineer, or architect who has not read the code
 - Describe outcomes, not implementation: "Medical credential verification now checks the NPI Registry" not "Added NpiRegistryService class with HTTP client"
 - Load **`references/formatting-rules.md`** and follow all rules strictly
-- If the `humanizer` skill is available, run the final report through it before presenting to the user
+- If the `humanize-text` skill is available, run the final report through it before presenting to the user
 
 ## Step 5: Save the Report
 
