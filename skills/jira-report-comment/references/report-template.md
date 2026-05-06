@@ -1,67 +1,22 @@
 # Report Template for Jira Comment
 
-Use this structure for the report. Omit any section that has no relevant content.
+The comment is a delta to the ticket, not a restatement. Include only what the reader does not already know from the ticket itself. If the work matches the ticket exactly, the entire comment is the summary line and nothing else.
 
 ---
 
-## Implementation Report: <ISSUE_KEY>
+## <ISSUE_KEY>
 
-### Summary
+One or two sentences. What was delivered, framed as outcome. Do not repeat the ticket title or requirements - assume the reader has read them.
 
-One to three sentences describing what was accomplished at a high level. Connect directly to the ticket's stated goal. Frame as outcomes, not activities.
+### Verify (optional)
 
-### What Changed
+Include only when the diff exposes a path that is not obvious from the ticket - a hidden flag, an edge case, a side effect, a non-trivial integration the reader could miss. Skip entirely for self-explanatory tickets.
 
-Group changes by functional area. Each item should be a complete thought understandable by a non-technical stakeholder.
+- Scenario and expected outcome
+- Another non-obvious path
 
-**[Area Name]** (e.g., "Member Verification", "Payment Processing", "API Endpoints")
+### Deploy (optional)
 
-- Description of what changed and why it matters
-- Another change in this area
+Include only for non-routine steps. Skip routine deploys such as pushing code, restarting services, clearing caches, or running standard migrations.
 
-**[Another Area Name]**
-
-- Description of change
-
-### What Was Added
-
-New capabilities, features, or integrations introduced. Skip this section if nothing new was added.
-
-- New capability and what it enables
-- Another addition
-
-### What Was Fixed
-
-Bug fixes or corrections. Frame in terms of the problem that was resolved, not the code that changed. Skip if no fixes.
-
-- Problem that was occurring and how it is now resolved
-- Another fix
-
-### What Was Removed or Changed
-
-Breaking changes, deprecations, or behavioral changes to existing functionality. Skip if none.
-
-- What changed and what the impact is
-
-### Impact Areas
-
-List the parts of the system affected by these changes. Helps QA know where to focus testing.
-
-| Area | Impact |
-| --- | --- |
-| e.g., Member Verification | New NPI Registry check added to verification flow |
-| e.g., API | New endpoint for provider lookup |
-
-### Testing Considerations
-
-Specific scenarios QA should verify. Be concrete about inputs and expected outcomes.
-
-- Scenario to test and expected outcome
-- Another scenario
-- Edge case to watch for
-
-### Configuration and Deployment Notes
-
-New environment variables, feature flags, database migrations, or deployment steps required. Skip if none.
-
-- Note about deployment requirement
+- Env var, feature flag, or migration the reader must act on

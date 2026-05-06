@@ -60,7 +60,7 @@ Extract and note:
 - **Issue type** — bug, story, task (shapes the report tone)
 - **Status** — current workflow state
 
-This context is essential. The report must map code changes back to what was actually requested in the ticket.
+This context is the **baseline** for the comment. The reader has already seen the ticket - the comment must add only what the ticket does not say. Hold this content in mind as the reference for what to omit.
 
 ## Step 3: Gather Commits and Diffs
 
@@ -109,22 +109,22 @@ Analyze the diffs with a **business lens**. Map every code change to a user-faci
 
 ### Analysis Checklist
 
-- What new capabilities were added?
-- What existing behavior was changed or fixed?
-- What was removed or deprecated?
-- Which parts of the application are affected (API endpoints, UI screens, background jobs, database)?
-- Are there new dependencies, configurations, or environment requirements?
-- What are the testing considerations for QA?
-- Are there any risks, limitations, or known issues?
+- Does the work match the ticket exactly? If yes, the comment is one summary sentence.
+- Are there decisions, trade-offs, or behaviors the diff reveals that the ticket did not specify?
+- Does QA need to test a path that is not obvious from the ticket?
+- Are there non-routine deploy steps (new env vars, feature flags, non-standard migrations)?
 
 ### Tone and Language
 
+- Assume the reader has read the ticket. Do not repeat title, description, or acceptance criteria.
 - Write for a PM, QA engineer, or architect who has not read the code
 - Describe outcomes, not implementation: "Medical credential verification now checks the NPI Registry" not "Added NpiRegistryService class with HTTP client"
 - Load **`references/formatting-rules.md`** and follow all rules strictly
 - If the `humanize-text` skill is available, run the final report through it before presenting to the user
 
 ## Step 5: Save the Report
+
+Draft the summary first. Then audit Verify and Deploy: if either section just restates the ticket or describes routine work, delete it. Default to summary-only.
 
 Write the report content to the reserved file path (overwriting the empty placeholder):
 
@@ -151,7 +151,8 @@ If the user requests changes, revise and overwrite the same file again.
 - NEVER fabricate changes not evidenced by the diffs
 - ALWAYS map back to the Jira issue's stated requirements when possible
 - ALWAYS write to the reserved file path from Step 1 — never create additional report files
-- Keep report length between 300-800 words
+- Keep report length between 60-100 words; default to summary-only when the work matches the ticket
+- NEVER restate the ticket's title, description, or acceptance criteria — the comment is a delta to the ticket
 
 ## Additional Resources
 
