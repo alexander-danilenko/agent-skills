@@ -19,10 +19,11 @@ Every public member still gets a one-line summary so generated docs and IDE tool
  */
 function calculateTotal(items: Item[], taxRate: number): number;
 
-// CORRECT — adds semantics the signature cannot express.
+// CORRECT — adds semantics the signature cannot express, on one line.
 /**
- * Applies tax once at the order level and rounds to two decimals so totals
- * reconcile with the invoicing system.
+ * Applies tax once at the order level, rounded to two decimals.
+ *
+ * The rounding matches the invoicing system, so totals reconcile with invoices.
  */
 function calculateTotal(items: Item[], taxRate: number): number;
 ```
@@ -88,6 +89,40 @@ id: string;
 ```
 
 TSDoc has two tag syntaxes. **Block tags** (`@param`, `@returns`, `@throws`, `@remarks`, `@inheritDoc`) start their own line and take no braces. **Inline tags** (`{@link}`) sit inside running text and require braces. `{@param}` with braces is invalid.
+
+### Length budget
+
+The block opens with **one summary line**, and that line is what an IDE tooltip and a review diff show. Below it, after a blank line, an optional detail passage runs **three lines at most** and states only primary ideas. Everything past that — branch behaviour, edge cases, the reasoning behind a constraint — is `@remarks`.
+
+The width is the project's, so measure after Prettier (or the project's formatter) has reflowed the block, counting the leading asterisk and its indent. A summary that comes back on two lines is over budget; cut words rather than accepting the wrap, and never let the overflow become a second sentence.
+
+```typescript
+// WRONG — the summary wraps, and the detail passage is really branch notes.
+/**
+ * Acquires a pooled connection, waiting for a free slot when the pool is
+ * saturated, and reports pool pressure to the metrics sink.
+ *
+ * When the pool is empty the caller queues in FIFO order. When the queue is
+ * also full the call rejects immediately. When a slot frees the oldest waiter
+ * wins it. Health checks run against the connection before it is handed back,
+ * and a failing connection is discarded and replaced.
+ */
+
+// CORRECT — one summary line, detail within three, branches demoted.
+/**
+ * Acquires a pooled connection, queueing when the pool is saturated.
+ *
+ * Waiters are served FIFO. Every connection is health-checked before it is
+ * handed to the caller, so an acquire can outlast the pool's idle timeout.
+ *
+ * @remarks
+ * - The queue itself is bounded: once it is full, acquire rejects rather than
+ *   waiting, which keeps a stalled upstream from consuming the whole request
+ *   pool.
+ * - A connection that fails its health check is discarded and replaced, so a
+ *   caller never observes the failed one.
+ */
+```
 
 ## Interfaces and Properties
 
@@ -192,8 +227,7 @@ Standalone functions and classes document their contract — what + why — neve
 
 ```typescript
 /**
- * Applies tax once at the order level and rounds to two decimals so totals
- * reconcile with the invoicing system.
+ * Applies tax once at the order level, rounded to two decimals.
  *
  * @param taxRate - Decimal fraction; `0.08` represents 8 %. Defaults to `0`.
  * @throws {Error} If `taxRate` is negative or `items` is empty.
@@ -284,7 +318,9 @@ class ApiRateLimiter {}
 
 ## Inline Implementation Comments
 
-Inline `//` comments inside a body briefly explain **how** a non-trivial block works. Use them sparingly — only when a reader would otherwise have to puzzle out the intent line by line — and keep each to one line where possible.
+Inline `//` comments inside a body briefly explain **how** a non-trivial block works. Use them sparingly — only when a reader would otherwise have to puzzle out the intent line by line.
+
+**One line is the target, three the ceiling**, measured after the formatter at the project's width. A comment that needs a fourth line is describing something the code should carry itself: extract a named helper or a named constant, and the comment shrinks with it.
 
 ```typescript
 function nextDelay(attempt: number): number {

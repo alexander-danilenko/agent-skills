@@ -55,6 +55,42 @@ def next_delay(attempt: int) -> float:
 
 `attempt` earns its `Args:` line because "zero-based" and the clamp are not in `int`. `Returns:` earns its line because the unit (seconds) and the cap are not in `float`.
 
+## Length Budget
+
+PEP 257 already asks for a one-line summary on the line that opens the docstring, and the budget below is that rule made explicit for the rest of the block:
+
+- **Summary — exactly one line**, ending in a period, directly after `"""`.
+- **Detail — three lines at most**, after a blank line, carrying primary ideas only.
+- **Inline `#` comments — three lines at most, one preferred.**
+
+Branch-by-branch behaviour and the reasoning behind a constraint go under `Note:` (Google), `Notes` (NumPy), or `.. note::` (Sphinx), so the opening of the docstring stays readable.
+
+Measure after the formatter. Black and Ruff do not reflow docstring prose, so the check is against the project's configured width (`line-length` in `pyproject.toml`, `max-line-length` in flake8 config, `.editorconfig`) — a summary that pushes past it must lose words, not gain a second line.
+
+```python
+# WRONG — the summary runs to a second line, and the detail is branch notes.
+def acquire(self, timeout: float | None = None) -> Connection:
+    """Acquire a pooled connection, waiting for a free slot when the pool
+    is saturated, and record pool pressure for the metrics sink.
+
+    When the pool is empty the caller queues in FIFO order. When the queue
+    is also full the call raises immediately. When a slot frees, the oldest
+    waiter wins it. Health checks run before the connection is handed back.
+    """
+
+# CORRECT — one summary line, detail within three, branches under Note:.
+def acquire(self, timeout: float | None = None) -> Connection:
+    """Acquire a pooled connection, queueing when the pool is saturated.
+
+    Waiters are served FIFO, and every connection is health-checked before
+    it reaches the caller, so an acquire can outlast the idle timeout.
+
+    Note:
+        The queue is bounded: once it is full, acquire raises rather than
+        waiting, which keeps a stalled upstream from consuming the pool.
+    """
+```
+
 ## Styles Differ in Syntax, Not in Discipline
 
 Pick one style per project. They lay the sections out differently; the bare-minimum rule applies to all three, and with type hints present none of them repeat the type.

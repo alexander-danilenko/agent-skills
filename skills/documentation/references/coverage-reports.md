@@ -14,6 +14,7 @@ A documentation report measures **health, not headcount**. A file where every me
 - **Intent summaries added**: 27 public members that had none
 - **`@throws` added**: 19 functions whose throw set was undocumented
 - **`@param`/`@returns` added**: 9 (only where they carry units, ranges, defaults, or edge-value/`null` semantics the signature can't)
+- **Over-long blocks reshaped**: 14 (summaries trimmed to one line, branch notes moved to `@remarks`)
 
 ## Coverage (floor signal only)
 
@@ -75,6 +76,8 @@ A coverage tool tells you what is _missing_; this checklist is how you tell what
 - [ ] Deleted commented-out code, changelog/journal notes, and attribution bylines
 - [ ] Corrected summaries that no longer match the code's behaviour
 - [ ] Reframed data-shape docs from WHY to WHAT (meaning, units, format, constraints)
+- [ ] Reshaped over-long blocks: summary back to one rendered line, detail within three, the rest demoted to `@remarks` / `Note:`
+- [ ] Inline comments cut to three lines or fewer, one where the code allows it
 
 ### Add (genuine gaps)
 
@@ -123,4 +126,5 @@ Judge the report by these, not by a coverage percentage.
 | Stale / contradicted docs | None found, or all corrected | Comments disagree with the code |
 | Functions that throw | All document `@throws` | Throw set undocumented |
 | Public members with intent summary | All | Gaps that mislead generated docs |
+| Doc-block shape | Summary on one line, detail within three | Summaries that wrap, prose walls before the first tag |
 | Code examples | All tested | Untested examples shipped |

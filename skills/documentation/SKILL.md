@@ -25,6 +25,18 @@ For `@param` and `@returns` specifically, **drop the tag entirely when it would 
 
 `@throws` is the opposite default — document it whenever code can throw, because the throw set is invisible from the signature.
 
+## The shape of a doc block
+
+A doc block is read in an IDE tooltip, a hover card, a code-review diff — surfaces that show the opening and truncate the rest. So the budget is counted in **rendered lines**, not sentences:
+
+- **Summary — exactly one line.** One sentence carrying intent, alone at the top of the block. Never two lines, never two sentences.
+- **Detail — three lines at most**, after a blank line, and only when the summary genuinely cannot carry the contract. Primary ideas only: what the operation does and the constraint that governs it, not how it branches.
+- **Inline `//` or `#` comments — three lines at most, one preferred.**
+
+Overflow is not fixed by reflowing; it means the content is in the wrong place. Branch-by-branch behaviour, edge cases, and the reasoning behind a constraint go to `@remarks` (`Note:` / `Notes` in Python), which exists so the opening of the block stays readable.
+
+**Measure after the formatter, not before.** Write the block, let the project's formatter reflow it at the configured width (detection order under Conventions), then count the lines it produced. A summary that came back wrapped onto two lines is over budget: cut words until it fits on one — do not split it into a second sentence, because that sentence is detail wearing the summary's clothes. The same check applies to an inline comment that a formatter or `max-len` rule pushed past three lines.
+
 ## How the prose reads
 
 Every sentence you produce here — summaries, the `@param` notes that survive, `@throws` conditions, endpoint descriptions — gets read mid-debug by someone who may not share your first language. Load the `simple-english` skill at practical depth (`/cortex:simple-english practical`) and hold its rules while you write. Reach for it before the first doc block, not as a cleanup pass: rewriting prose you already committed to costs more than writing it right once.
@@ -32,7 +44,7 @@ Every sentence you produce here — summaries, the `@param` notes that survive, 
 What it changes in a doc block specifically:
 
 - **One word per concept, file-wide.** A `@param` that says "validate" beside a summary that says "check" reads as two different operations, and the reader goes looking for the difference.
-- **25 words for a descriptive sentence, 20 for an imperative one.** A summary past that is carrying more than one fact and belongs in two sentences, or in `@remarks`.
+- **25 words for a descriptive sentence, 20 for an imperative one.** A summary past that is carrying more than one fact and belongs in `@remarks`. At a typical width the one-line budget binds first, so treat the word counts as the ceiling and the rendered line as the test.
 - **`can`, `will`, `must` — never `should`.** A contract that says a caller "should" pass a sorted array leaves the reader guessing whether the rule binds. Say `must`, or state what happens when they do not.
 - **Condition before consequence.** "If `retries` is `0`, the call fails immediately" beats the reverse ordering, because the reader knows whether the sentence applies to them before they parse the outcome.
 - **No adjective without a measurement behind it.** "Efficiently caches" earns nothing. Give the bound or drop the word.
